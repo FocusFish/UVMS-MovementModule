@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema targetNamespace="urn:common.movement.schema.fisheries.ec.europa.eu:v1"
-            xmlns:common="urn:common.movement.schema.fisheries.ec.europa.eu:v1" 
+<xsd:schema targetNamespace="urn:common.movement.schema.focus.fish:v1"
+            xmlns:common="urn:common.movement.schema.focus.fish:v1" 
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
             xmlns="http://schemas.xmlsoap.org/wsdl/">

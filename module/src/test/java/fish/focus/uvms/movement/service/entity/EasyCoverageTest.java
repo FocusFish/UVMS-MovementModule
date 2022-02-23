@@ -31,13 +31,13 @@ public class EasyCoverageTest extends Assert {
 		testSuiteProvider.setProvider(createInstanceProvider());
 
 		assertTrue(EXPECT_CLASSES_IN_PACKAGE,
-				checkAllClassesInPackage(testSuiteProvider, "eu.europa.ec.fisheries.uvms.movement.service.entity"));
+				checkAllClassesInPackage(testSuiteProvider, "fish.focus.uvms.movement.service.entity"));
 		assertTrue(EXPECT_CLASSES_IN_PACKAGE,
-				checkAllClassesInPackage(testSuiteProvider, "eu.europa.ec.fisheries.uvms.movement.service.entity.group"));
+				checkAllClassesInPackage(testSuiteProvider, "fish.focus.uvms.movement.service.entity.group"));
 		assertTrue(EXPECT_CLASSES_IN_PACKAGE,
-				checkAllClassesInPackage(testSuiteProvider, "eu.europa.ec.fisheries.uvms.movement.service.entity.alarm"));
+				checkAllClassesInPackage(testSuiteProvider, "fish.focus.uvms.movement.service.entity.alarm"));
 //		assertTrue(EXPECT_CLASSES_IN_PACKAGE,
-//				checkAllClassesInPackage(testSuiteProvider, "eu.europa.ec.fisheries.uvms.movement.service.dto"));
+//				checkAllClassesInPackage(testSuiteProvider, "fish.focus.uvms.movement.service.dto"));
 
 		testSuiteProvider.addClassChecker(BijectiveCompareToChecker.class);
 		testSuiteProvider.addClassChecker(ToStringNotNullChecker.class);

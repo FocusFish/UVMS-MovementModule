@@ -1,19 +1,19 @@
 <definitions name="ModuleObjectModule"
-             targetNamespace="urn:module.movement.schema.fisheries.ec.europa.eu:v1"
-             xmlns:module="urn:module.movement.schema.fisheries.ec.europa.eu:v1"
-             xmlns:search="urn:search.movement.schema.fisheries.ec.europa.eu:v1"
-             xmlns:common="urn:common.movement.schema.fisheries.ec.europa.eu:v1"
-             xmlns:movement="urn:movement.schema.fisheries.ec.europa.eu:v1"
+             targetNamespace="urn:module.movement.schema.focus.fish:v1"
+             xmlns:module="urn:module.movement.schema.focus.fish:v1"
+             xmlns:search="urn:search.movement.schema.focus.fish:v1"
+             xmlns:common="urn:common.movement.schema.focus.fish:v1"
+             xmlns:movement="urn:movement.schema.focus.fish:v1"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
              xmlns="http://schemas.xmlsoap.org/wsdl/">
 
     <types>
-        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  targetNamespace="urn:module.movement.schema.fisheries.ec.europa.eu:v1">
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"  targetNamespace="urn:module.movement.schema.focus.fish:v1">
             
-            <xsd:import namespace="urn:common.movement.schema.fisheries.ec.europa.eu:v1" schemaLocation="MovementCommon.xsd"/>
-            <xsd:import namespace="urn:search.movement.schema.fisheries.ec.europa.eu:v1" schemaLocation="MovementSearch.xsd"/>
-            <xsd:import namespace="urn:movement.schema.fisheries.ec.europa.eu:v1" schemaLocation="Movement.xsd"/>
+            <xsd:import namespace="urn:common.movement.schema.focus.fish:v1" schemaLocation="MovementCommon.xsd"/>
+            <xsd:import namespace="urn:search.movement.schema.focus.fish:v1" schemaLocation="MovementSearch.xsd"/>
+            <xsd:import namespace="urn:movement.schema.focus.fish:v1" schemaLocation="Movement.xsd"/>
             
             <!-- Mobile Terminal Base Request -->
             <xsd:simpleType name="MovementModuleMethod">

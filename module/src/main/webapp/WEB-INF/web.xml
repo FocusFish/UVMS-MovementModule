@@ -5,7 +5,7 @@
 
     <context-param>
         <param-name>usmApplication</param-name>
-        <param-value>Audit</param-value>
+        <param-value>Movement</param-value>
     </context-param>
 
     <context-param>
@@ -45,7 +45,7 @@
 
 	<filter>
 		<filter-name>RequestFilter</filter-name>
-		<filter-class>eu.europa.ec.fisheries.uvms.movement.rest.filter.RequestFilter</filter-class>
+		<filter-class>fish.focus.uvms.movement.rest.filter.RequestFilter</filter-class>
 		<async-supported>true</async-supported>
 	</filter>
 
@@ -56,7 +56,7 @@
 
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
-		<filter-class>eu.europa.ec.fisheries.uvms.rest.security.AuthenticationFilter</filter-class>
+		<filter-class>fish.focus.uvms.rest.security.AuthenticationFilter</filter-class>
 		<async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>
@@ -75,7 +75,7 @@
 
 	<filter>
 		<filter-name>MDCFilter</filter-name>
-		<filter-class>eu.europa.ec.fisheries.uvms.commons.rest.filter.MDCFilter</filter-class>
+		<filter-class>fish.focus.uvms.commons.rest.filter.MDCFilter</filter-class>
 		<async-supported>true</async-supported>
 	</filter>
 	<filter-mapping>

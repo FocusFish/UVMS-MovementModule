@@ -3,7 +3,7 @@
   <persistence-unit name="movementPU" transaction-type="JTA">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>jdbc/uvms_movement</jta-data-source>
-    <class>eu.europa.ec.fisheries.uvms.config.service.entity.Parameter</class>
+    <class>fish.focus.uvms.config.service.entity.Parameter</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="hibernate.dialect" value="${hibernate.spatial.dialect}"/>

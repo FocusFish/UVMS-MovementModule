@@ -16,11 +16,11 @@ public abstract class BuildMovementClientDeployment {
     public static Archive<?> createDeployment() {
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "movement.war");
         File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
-                    .resolve("eu.europa.ec.fisheries.uvms.movement:movement-module:jar:classes:?")
+                    .resolve("fish.focus.uvms.movement:movement-module:jar:classes:?")
                     .withTransitivity().asFile();
         testWar.addAsLibraries(files);
 
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.client");
+        testWar.addPackages(true, "fish.focus.uvms.movement.client");
 
         testWar.addAsResource("beans.xml", "META-INF/beans.xml");
 

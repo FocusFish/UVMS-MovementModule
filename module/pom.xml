@@ -62,11 +62,6 @@
             <version>${uvms.config.version}</version>
         </dependency>
         <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms</groupId>
-            <artifactId>uvms-longpolling</artifactId>
-            <version>${longpolling.version}</version>
-        </dependency>
-        <dependency>
             <groupId>fish.focus.uvms.user</groupId>
             <artifactId>user-model</artifactId>
             <version>${user.model.version}</version>

@@ -21,7 +21,6 @@
 		<docker.liquibase.changeLogFile>LIQUIBASE/changelog/db-changelog-master-postgres.xml</docker.liquibase.changeLogFile>
         <docker.liquibase.db.user>movement</docker.liquibase.db.user>
         <docker.liquibase.db.passwd>movement</docker.liquibase.db.passwd>
-		<longpolling.version>2.0.13</longpolling.version>
 		<user.model.version>2.2.5</user.model.version>
 		<audit.model.version>4.3.12</audit.model.version>
 		<exchange.model.version>5.3.25</exchange.model.version>

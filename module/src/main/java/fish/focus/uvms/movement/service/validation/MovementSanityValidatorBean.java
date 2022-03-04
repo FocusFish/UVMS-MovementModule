@@ -2,7 +2,6 @@ package fish.focus.uvms.movement.service.validation;
 
 import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.schema.movement.search.v1.ListPagination;
-import eu.europa.ec.fisheries.uvms.longpolling.notifications.NotificationMessage;
 import fish.focus.uvms.movement.model.constants.AuditObjectTypeEnum;
 import fish.focus.uvms.movement.model.constants.AuditOperationEnum;
 import fish.focus.uvms.movement.service.bean.AuditService;
@@ -42,15 +41,6 @@ public class MovementSanityValidatorBean {
     @Inject
     private MovementCreateBean movementCreate;
     
-    
-    @Inject
-    @AlarmReportEvent
-    private Event<NotificationMessage> alarmReportEvent;
-
-    @Inject
-    @AlarmReportCountEvent
-    private Event<NotificationMessage> alarmReportCountEvent;
-
     public UUID evaluateSanity(IncomingMovement movement) {
         UUID reportId = null;
         for (SanityRule sanityRule : SanityRule.values()) {
@@ -91,12 +81,6 @@ public class MovementSanityValidatorBean {
         alarmDAO.save(item);
 
         alarmReport.getAlarmItemList().add(item);
-
-        // Notify long-polling clients of the new alarm report
-        alarmReportEvent.fire(new NotificationMessage("guid", alarmReport.getId()));
-
-        // Notify long-polling clients of the change (no vlaue since FE will need to fetch it)
-        alarmReportCountEvent.fire(new NotificationMessage("alarmCount", null));
             
         auditService.sendAuditMessage(AuditObjectTypeEnum.ALARM, AuditOperationEnum.CREATE, alarmReport.getId().toString(), null, alarmReport.getUpdatedBy());
 

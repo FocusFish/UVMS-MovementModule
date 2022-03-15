@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response;
 import fish.focus.schema.movement.v1.MovementType;
 import fish.focus.schema.movement.v1.SegmentCategoryType;
 
-@Path("spatialSwe/spatialnonsecure/json")
+@Path("spatial/spatialnonsecure/json")
 @Stateless
 public class SpatialModuleMock {
 

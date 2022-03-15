@@ -9,7 +9,7 @@
     <parent>
         <groupId>fish.focus.uvms.movement</groupId>
         <artifactId>movement</artifactId>
-        <version>5.6.9</version>
+        <version>5.6.10</version>
     </parent>
 
     <properties>
@@ -60,11 +60,6 @@
             <groupId>fish.focus.uvms.lib</groupId>
             <artifactId>uvms-config</artifactId>
             <version>${uvms.config.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms</groupId>
-            <artifactId>uvms-longpolling</artifactId>
-            <version>${longpolling.version}</version>
         </dependency>
         <dependency>
             <groupId>fish.focus.uvms.user</groupId>

@@ -30,7 +30,6 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.time.Instant;
-import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -337,27 +336,36 @@ public class MovementDao {
 
     public List<Movement> getLatestNumberOfMovementsForAsset(UUID id, int number, List<MovementSourceType> sources){
         try {
-        	Integer currentYear = Year.now().getValue();
-        	List<Movement> latestListResult = queryCurrentYearPartitionForMovementsForAsset(currentYear.toString(), id, number, sources);
-            if(latestListResult.size() == number) {
-            	return latestListResult;
-            }
-            Integer perviousYear = currentYear-1;
-            List<Movement> latestListOneYearBackResult = queryCurrentYearPartitionForMovementsForAsset(perviousYear.toString(), id, number, sources);
-            return Stream.concat(latestListResult.stream(), latestListOneYearBackResult.stream())
-                    .collect(Collectors.toList());
+        	Instant nowInstant = Instant.now();
+        	Instant oneYearBackInstant = Instant.now().minus(365L, ChronoUnit.DAYS);
+    		
+    		TypedQuery<Movement> query = em.createNamedQuery(Movement.FIND_ALL_FOR_ASSET_BETWEEN_DATES, Movement.class);
+            query.setParameter("id", id);
+            query.setParameter("startDate", oneYearBackInstant);
+            query.setParameter("endDate", nowInstant);
+    	    query.setParameter("sources", sources);
+    	    query.setMaxResults(number);
+    	    
+    	    List<Movement> resultList =  query.getResultList();
+    	    
+    	    if(resultList.size() < number) {
+    	    	Instant twoYearBackInstant = oneYearBackInstant.minus(365L, ChronoUnit.DAYS);
+
+    	    	TypedQuery<Movement> queryLstYear = em.createNamedQuery(Movement.FIND_ALL_FOR_ASSET_BETWEEN_DATES, Movement.class);
+    	    	queryLstYear.setParameter("id", id);
+    	    	queryLstYear.setParameter("startDate", twoYearBackInstant);
+    	    	queryLstYear.setParameter("endDate", oneYearBackInstant);
+                queryLstYear.setParameter("sources", sources);
+    			queryLstYear.setMaxResults((number - resultList.size()));
+    			List<Movement> resultListLastYear = queryLstYear.getResultList();
+    			
+    			return Stream.concat(resultList.stream(), resultListLastYear.stream()).collect(Collectors.toList());
+    	    }
+    	    return resultList;
         } catch (NoResultException e) {
             LOG.debug("No positions found for asset {}", id);
             return new ArrayList<>();
         }
-    }
-    
-    private List<Movement> queryCurrentYearPartitionForMovementsForAsset(String currentYear, UUID id, int number, List<MovementSourceType> sources){
-		TypedQuery<Movement> query = em.createNamedQuery("SELECT m FROM Movement_"+ currentYear +" m WHERE m.movementConnect.id = :id AND m.source in :sources ORDER BY m.timestamp DESC", Movement.class);
-	    query.setParameter("id", id);
-	    query.setParameter("sources", sources);
-	    query.setMaxResults(number);
-	    return query.getResultList();
     }
 
     public List<MovementDto> getLatestWithLimit(Instant date, List<MovementSourceType> sources) {

@@ -30,10 +30,13 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 
 @Stateless
 public class MovementDao {
@@ -337,7 +340,7 @@ public class MovementDao {
     public List<Movement> getLatestNumberOfMovementsForAsset(UUID id, int number, List<MovementSourceType> sources){
         try {
         	Instant nowInstant = Instant.now();
-        	Instant oneYearBackInstant = Instant.now().minus(365L, ChronoUnit.DAYS);
+        	Instant oneYearBackInstant = LocalDate.now().with(firstDayOfYear()).atStartOfDay(ZoneOffset.UTC).toInstant();
     		
     		TypedQuery<Movement> query = em.createNamedQuery(Movement.FIND_ALL_FOR_ASSET_BETWEEN_DATES, Movement.class);
             query.setParameter("id", id);
@@ -354,7 +357,7 @@ public class MovementDao {
     	    	TypedQuery<Movement> queryLstYear = em.createNamedQuery(Movement.FIND_ALL_FOR_ASSET_BETWEEN_DATES, Movement.class);
     	    	queryLstYear.setParameter("id", id);
     	    	queryLstYear.setParameter("startDate", twoYearBackInstant);
-    	    	queryLstYear.setParameter("endDate", oneYearBackInstant);
+    	    	queryLstYear.setParameter("endDate", oneYearBackInstant.minus(1L, ChronoUnit.HOURS));
                 queryLstYear.setParameter("sources", sources);
     			queryLstYear.setMaxResults((number - resultList.size()));
     			List<Movement> resultListLastYear = queryLstYear.getResultList();

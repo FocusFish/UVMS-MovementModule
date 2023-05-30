@@ -358,14 +358,14 @@ public class MovementDao {
 
             if (resultList.size() < number) {
                 Instant twoYearBackInstant = oneYearBackInstant.minus(365L, ChronoUnit.DAYS);
-                TypedQuery<Movement> queryLstYear = em.createNamedQuery(Movement.FIND_ALL_FOR_ASSET_BETWEEN_DATES,
+                TypedQuery<Movement> queryLastYear = em.createNamedQuery(Movement.FIND_ALL_FOR_ASSET_BETWEEN_DATES,
                         Movement.class);
-                queryLstYear.setParameter("id", id);
-                queryLstYear.setParameter("startDate", twoYearBackInstant);
-                queryLstYear.setParameter("endDate", nowInstant);
-                queryLstYear.setParameter("sources", sources);
-                queryLstYear.setMaxResults(number);
-                return queryLstYear.getResultList();
+                queryLastYear.setParameter("id", id);
+                queryLastYear.setParameter("startDate", twoYearBackInstant);
+                queryLastYear.setParameter("endDate", nowInstant);
+                queryLastYear.setParameter("sources", sources);
+                queryLastYear.setMaxResults(number);
+                return queryLastYear.getResultList();
             }
 
             return resultList;

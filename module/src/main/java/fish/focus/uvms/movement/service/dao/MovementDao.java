@@ -34,8 +34,6 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 
 @Stateless

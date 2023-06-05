@@ -9,7 +9,7 @@
 
 	<groupId>fish.focus.uvms.movement</groupId>
 	<artifactId>movement</artifactId>
-	<version>5.6.10</version>
+	<version>5.6.11</version>
 	<packaging>pom</packaging>
 	<description>Maven project-archetype for UnionVms modules</description>
 
@@ -17,14 +17,14 @@
 		<movement.api.check.against.version>4.0.0</movement.api.check.against.version>
 
 		<uvms.pom.version>3.18</uvms.pom.version>
-		<docker.dev.version>4.1.5</docker.dev.version>
+		<docker.dev.version>4.2.5</docker.dev.version>
 		<docker.liquibase.changeLogFile>LIQUIBASE/changelog/db-changelog-master-postgres.xml</docker.liquibase.changeLogFile>
         <docker.liquibase.db.user>movement</docker.liquibase.db.user>
         <docker.liquibase.db.passwd>movement</docker.liquibase.db.passwd>
-		<user.model.version>2.2.5</user.model.version>
+		<user.model.version>2.2.6</user.model.version>
 		<audit.model.version>4.3.12</audit.model.version>
-		<exchange.model.version>5.3.25</exchange.model.version>
-		<asset.client.version>6.8.24</asset.client.version>
+		<exchange.model.version>5.3.27</exchange.model.version>
+		<asset.client.version>6.8.26</asset.client.version>
 		<movement-rules.model.version>2.4.16</movement-rules.model.version>
 		<installAtEnd>false</installAtEnd>
 

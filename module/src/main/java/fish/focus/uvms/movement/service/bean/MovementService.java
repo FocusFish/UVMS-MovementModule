@@ -206,11 +206,11 @@ public class MovementService {
         return movementDao.getLatestMovements(numberOfMovements);
     }
 
-    public Movement getPreviousVMS(UUID connectId, Instant timestamp) {
+    public Movement getPreviousVMSLastMonth(UUID connectId, Instant timestamp) {
         List<MovementSourceType> sources = Arrays.stream(MovementSourceType.values())
             .filter(source -> !source.equals(MovementSourceType.AIS))
             .collect(Collectors.toList());
-        return movementDao.getPreviousMovement(connectId, timestamp, sources);
+        return movementDao.getPreviousMovementBetweenDates(connectId, timestamp.minus(30, ChronoUnit.DAYS), timestamp, sources);
     }
 
 	private int getNumberOfPages(Long numberOfMovements, int listSize){

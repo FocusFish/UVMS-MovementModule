@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd"
+                   logicalFilePath="changelog/v5.6.12/db-changelog_add-partitions.xml">
+
+    <changeSet id="create_partition_2024" author="peerik">
+        <sql>
+            CREATE TABLE movement_2024
+            PARTITION OF movement
+            FOR VALUES FROM ('2024-01-01') TO ('2025-01-01');
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_partition_2025" author="peerik">
+        <sql>
+            CREATE TABLE movement_2025
+            PARTITION OF movement
+            FOR VALUES FROM ('2025-01-01') TO ('2026-01-01');
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_partition_2026" author="peerik">
+        <sql>
+            CREATE TABLE movement_2026
+            PARTITION OF movement
+            FOR VALUES FROM ('2026-01-01') TO ('2027-01-01');
+        </sql>
+    </changeSet>
+
+    <changeSet id="create_partition_2027" author="peerik">
+        <sql>
+            CREATE TABLE movement_2027
+            PARTITION OF movement
+            FOR VALUES FROM ('2027-01-01') TO ('2028-01-01');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

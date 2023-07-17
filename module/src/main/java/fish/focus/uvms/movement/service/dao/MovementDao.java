@@ -147,6 +147,21 @@ public class MovementDao {
         return singleResult;
     }
 
+    public Movement getPreviousMovementBetweenDates(UUID movementConnectId, Instant startDate, Instant endDate, List<MovementSourceType> sources) {
+        try {
+            TypedQuery<Movement> query = em.createNamedQuery(Movement.FIND_PREVIOUS_BETWEEN_DATES, Movement.class);
+            query.setParameter("id", movementConnectId);
+            query.setParameter("startDate", startDate);
+            query.setParameter("endDate", endDate);
+            query.setParameter("sources", sources);
+            query.setMaxResults(1);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            LOG.debug("No previous movement found between dates: {} - {} with connectId: {}", startDate, endDate, movementConnectId);
+        }
+        return null;
+    }
+
     public Movement getLatestMovement(UUID connectId) {
         try {
             TypedQuery<Movement> latestMovementQuery = em.createNamedQuery(MovementConnect.FIND_LATEST_MOVEMENT_BY_ID,

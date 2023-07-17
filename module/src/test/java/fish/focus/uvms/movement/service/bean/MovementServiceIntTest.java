@@ -107,8 +107,32 @@ public class MovementServiceIntTest extends TransactionalTests {
         movementType2.setSource(MovementSourceType.NAF);
         Movement createdMovement2 = movementService.createAndProcessMovement(movementType2);
 
-        Movement previousVMS = movementService.getPreviousVMS(connectId1, now.plus(1, ChronoUnit.MINUTES));
+        Movement previousVMS = movementService.getPreviousVMSLastMonth(connectId1, now.plus(1, ChronoUnit.MINUTES));
         assertNotNull(previousVMS);
+    }
+
+    @Test
+    @OperateOnDeployment("movementservice")
+    public void getPreviousVMSLastMonthMatch() {
+        UUID connectId = UUID.randomUUID();
+        Movement movement1 = MockData.createMovement(1d, 1d, connectId);
+        movement1.setTimestamp(Instant.now().minus(29, ChronoUnit.DAYS));
+        movementService.createAndProcessMovement(movement1);
+
+        Movement previousVMS = movementService.getPreviousVMSLastMonth(connectId, Instant.now());
+        assertNotNull(previousVMS);
+    }
+
+    @Test
+    @OperateOnDeployment("movementservice")
+    public void getPreviousVMSLastMonthNoMatch() {
+        UUID connectId = UUID.randomUUID();
+        Movement movement1 = MockData.createMovement(1d, 1d, connectId);
+        movement1.setTimestamp(Instant.now().minus(30, ChronoUnit.DAYS));
+        movementService.createAndProcessMovement(movement1);
+
+        Movement previousVMS = movementService.getPreviousVMSLastMonth(connectId, Instant.now());
+        assertNull(previousVMS);
     }
 
     @Test

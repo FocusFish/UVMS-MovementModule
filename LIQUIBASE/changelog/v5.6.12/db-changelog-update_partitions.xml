@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd"
+                   logicalFilePath="changelog/v5.6.12/db-changelog_update-partitions.xml">
+
+    <changeSet id="detach_2021" author="peerik">
+        <sql>
+            ALTER TABLE movement.movement
+            DETACH PARTITION movement.movement_2021;
+        </sql>
+    </changeSet>
+
+    <changeSet id="migrate_2021" author="peerik">
+        <sql>
+            <![CDATA[
+                WITH movements AS (
+                  DELETE FROM movement.movement_default
+                  WHERE timestamp >= '2019-01-01' and timestamp < '2022-01-01'
+                  RETURNING *
+                )
+                INSERT INTO movement.movement_2021
+                  SELECT * FROM movements;
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="attach_2021" author="peerik">
+        <sql>
+            ALTER TABLE movement.movement
+            ATTACH PARTITION movement.movement_2021
+            FOR VALUES FROM ('2019-01-01') TO ('2022-01-01');
+        </sql>
+    </changeSet>
+
+    <changeSet id="detach_2022" author="peerik">
+        <sql>
+            ALTER TABLE movement.movement
+            DETACH PARTITION movement.movement_2022;
+        </sql>
+    </changeSet>
+
+    <changeSet id="migrate_2022" author="peerik">
+        <sql>
+            <![CDATA[
+                WITH movements AS (
+                  DELETE FROM movement.movement_default
+                  WHERE timestamp >= '2022-01-01' and timestamp < '2023-01-01'
+                  RETURNING *
+                )
+                INSERT INTO movement.movement_2022
+                  SELECT * FROM movements;
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="attach_2022" author="peerik">
+        <sql>
+            ALTER TABLE movement.movement
+            ATTACH PARTITION movement.movement_2022
+            FOR VALUES FROM ('2022-01-01') TO ('2023-01-01');
+        </sql>
+    </changeSet>
+
+    <changeSet id="detach_2023" author="peerik">
+        <sql>
+            ALTER TABLE movement.movement
+            DETACH PARTITION movement.movement_2023;
+        </sql>
+    </changeSet>
+
+    <changeSet id="attach_2023" author="peerik">
+        <sql>
+            ALTER TABLE movement.movement
+            ATTACH PARTITION movement.movement_2023
+            FOR VALUES FROM ('2023-01-01') TO ('2024-01-01');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

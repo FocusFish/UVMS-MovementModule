@@ -58,4 +58,9 @@
     <include file="v5.6.8\db-changelog-movement-partition.xml" relativeToChangelogFile="true"/>
 
     <include file="v5.6.9\db-changelog-rename-movementconnect-columns.xml" relativeToChangelogFile="true"/>
+
+    <include file="v5.6.12\db-changelog-update_partitions.xml" relativeToChangelogFile="true"/>
+
+    <include file="v5.6.12\db-changelog-add_partitions.xml" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

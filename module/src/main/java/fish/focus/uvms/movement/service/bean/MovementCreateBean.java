@@ -139,7 +139,7 @@ public class MovementCreateBean {
                 currentLatestVMS.getTimestamp().isBefore(movement.getPositionTime())) {
             return currentLatestVMS;
         } else {
-            return movementService.getPreviousVMS(movementConnect.getId(), movement.getPositionTime());
+            return movementService.getPreviousVMSLastMonth(movementConnect.getId(), movement.getPositionTime());
         }
     }
 

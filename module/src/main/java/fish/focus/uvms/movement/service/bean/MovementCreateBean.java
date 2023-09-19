@@ -125,7 +125,7 @@ public class MovementCreateBean {
 
             return null;
         } catch (Exception e) {
-            throw new IllegalStateException("Could not process incoming movement", e);
+            throw new IllegalStateException("Could not process incoming movement");
         }
     }
 

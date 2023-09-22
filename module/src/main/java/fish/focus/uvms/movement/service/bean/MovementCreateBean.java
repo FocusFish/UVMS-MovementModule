@@ -27,12 +27,15 @@ import fish.focus.uvms.movement.service.message.ExchangeBean;
 import fish.focus.uvms.movement.service.message.MovementRulesBean;
 import fish.focus.uvms.movement.service.util.CalculationUtil;
 import fish.focus.uvms.movement.service.validation.MovementSanityValidatorBean;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.JMSException;
+import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -124,8 +127,10 @@ public class MovementCreateBean {
             exchangeBean.sendAckToExchange(MovementRefTypeType.MOVEMENT, createdMovement.getId(), incomingMovement.getAckResponseMessageId());
 
             return null;
-        } catch (Exception e) {
-            throw new IllegalStateException("Could not process incoming movement", e);
+        } catch (EntityNotFoundException e1) {
+            throw new IllegalStateException("Could not process incoming movement: " + ExceptionUtils.getRootCauseMessage(e1));
+        } catch (JMSException e2) {
+            throw new IllegalStateException("Could not process incoming movement ", e2);
         }
     }
 

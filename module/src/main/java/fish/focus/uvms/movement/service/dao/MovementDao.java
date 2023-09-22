@@ -323,11 +323,13 @@ public class MovementDao {
 
     public Movement createMovement(Movement entity) {
         em.persist(entity);
+        em.flush();
         return entity;
     }
 
     public MovementConnect createMovementConnect(MovementConnect movementConnect) {
         em.persist(movementConnect);
+        em.flush();
         return movementConnect;
     }
 

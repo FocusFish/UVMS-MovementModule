@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -34,27 +35,34 @@ public class IncomingMovementBean {
 
         Movement latestMovement = currentMovement.getMovementConnect().getLatestMovement();
         if (latestMovement == null) { // First position
-            currentMovement.getMovementConnect().setLatestMovement(currentMovement);
-            currentMovement.getMovementConnect().setLatestLocation(currentMovement.getLocation());
+            setLatest(currentMovement);
         } else {
-            if (currentMovement.getTimestamp().isAfter(latestMovement.getTimestamp())) {
-                // Normal case (latest position)
-                currentMovement.setPreviousMovement(latestMovement);
-                currentMovement.getMovementConnect().setLatestMovement(currentMovement);
-                currentMovement.getMovementConnect().setLatestLocation(currentMovement.getLocation());
-                trackService.upsertTrack(latestMovement, currentMovement);
-            } else {
-                Movement previousMovement = dao.getPreviousMovement(connectId, timeStamp);
-                if (previousMovement == null) { // Before first position
-                    Movement firstMovement = dao.getFirstMovement(connectId, currentMovement.getId());
-                    trackService.upsertTrack(firstMovement, currentMovement);
-                } else { // Between two positions
-                    currentMovement.setPreviousMovement(previousMovement);
-                    trackService.upsertTrack(previousMovement, currentMovement);
+            try {
+                if (currentMovement.getTimestamp().isAfter(latestMovement.getTimestamp())) {
+                    // Normal case (latest position)
+                    currentMovement.setPreviousMovement(latestMovement);
+                        setLatest(currentMovement);
+                    trackService.upsertTrack(latestMovement, currentMovement);
+                } else {
+                    Movement previousMovement = dao.getPreviousMovement(connectId, timeStamp);
+                    if (previousMovement == null) { // Before first position
+                        Movement firstMovement = dao.getFirstMovement(connectId, currentMovement.getId());
+                        trackService.upsertTrack(firstMovement, currentMovement);
+                    } else { // Between two positions
+                        currentMovement.setPreviousMovement(previousMovement);
+                        trackService.upsertTrack(previousMovement, currentMovement);
+                    }
                 }
+            } catch (EntityNotFoundException e){
+                LOG.error("Couldn't get latestMovement for movementConnect, source: {}, uuid: {}, timestamp: {}", currentMovement.getSource(), connectId, timeStamp);
+                setLatest(currentMovement);
             }
         }
         updateLatestVMS(currentMovement);
+    }
+    private static void setLatest(Movement currentMovement) {
+        currentMovement.getMovementConnect().setLatestMovement(currentMovement);
+        currentMovement.getMovementConnect().setLatestLocation(currentMovement.getLocation());
     }
 
     private void updateLatestVMS(Movement currentMovement) {

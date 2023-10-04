@@ -2,6 +2,7 @@ package fish.focus.uvms.movement.service.entity;
 
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

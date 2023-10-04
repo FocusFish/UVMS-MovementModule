@@ -12,7 +12,6 @@ package fish.focus.uvms.movement.service.dao;
 
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.uvms.commons.date.DateUtils;
-import fish.focus.uvms.movementrules.model.dto.VicinityInfoDTO;
 import fish.focus.uvms.movement.model.dto.MovementDto;
 import fish.focus.uvms.movement.service.dto.CursorPagination;
 import fish.focus.uvms.movement.service.entity.Movement;
@@ -21,6 +20,7 @@ import fish.focus.uvms.movement.service.entity.Track;
 import fish.focus.uvms.movement.service.mapper.search.SearchField;
 import fish.focus.uvms.movement.service.mapper.search.SearchValue;
 import fish.focus.uvms.movement.service.util.WKTUtil;
+import fish.focus.uvms.movementrules.model.dto.VicinityInfoDTO;
 import org.hibernate.HibernateException;
 import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
@@ -34,6 +34,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 
 @Stateless
@@ -323,13 +324,11 @@ public class MovementDao {
 
     public Movement createMovement(Movement entity) {
         em.persist(entity);
-        em.flush();
         return entity;
     }
 
     public MovementConnect createMovementConnect(MovementConnect movementConnect) {
         em.persist(movementConnect);
-        em.flush();
         return movementConnect;
     }
 

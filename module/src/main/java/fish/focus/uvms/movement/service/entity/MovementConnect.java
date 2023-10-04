@@ -14,6 +14,8 @@ package fish.focus.uvms.movement.service.entity;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
@@ -46,6 +48,7 @@ public class MovementConnect implements Serializable, Comparable<MovementConnect
     public static final String FIND_LATEST_MOVEMENT = "MovementConnect.findLatestMovement";
     public static final String FIND_LATEST_MOVEMENT_SINCE = "MovementConnect.findLatestMovementSince";
 
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -55,11 +58,13 @@ public class MovementConnect implements Serializable, Comparable<MovementConnect
     @JoinColumn(name = "latest_movement", referencedColumnName = "id")
     @JoinColumn(name = "latest_movement_timestamp", referencedColumnName = "timestamp")
     @OneToOne(fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private Movement latestMovement;
 
     @JoinColumn(name = "latest_vms", referencedColumnName = "id")
     @JoinColumn(name = "latest_vms_timestamp", referencedColumnName = "timestamp")
     @OneToOne(fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private Movement latestVMS;
 
     @NotNull

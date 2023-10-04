@@ -16,13 +16,15 @@ import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.movement.model.constants.SatId;
 import fish.focus.uvms.movement.service.mapper.SatelliteConverter;
 import org.apache.commons.lang3.ObjectUtils;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.*;
 import org.locationtech.jts.geom.Point;
 
 import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -82,6 +84,7 @@ public class Movement implements Serializable, Comparable<Movement> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "uuid", name = "id")
+    @NotFound(action = NotFoundAction.IGNORE)
     private UUID id;
 
     @NotNull
@@ -103,12 +106,14 @@ public class Movement implements Serializable, Comparable<Movement> {
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "movementconnect_id", referencedColumnName = "id")
     @ManyToOne(cascade = CascadeType.MERGE)
+    @NotFound(action = NotFoundAction.IGNORE)
     private MovementConnect movementConnect;
 
     @JsonbTransient
     @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "track_id", referencedColumnName = "trac_id")
     @ManyToOne(optional = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private Track track;
 
     @JsonbTransient
@@ -125,6 +130,7 @@ public class Movement implements Serializable, Comparable<Movement> {
 
     @Id
     @Column(name = "timestamp")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Instant timestamp;
     
     @Column(name = "lesreporttime")

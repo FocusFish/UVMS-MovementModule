@@ -1,5 +1,8 @@
 package fish.focus.uvms.movement.service.entity.alarm;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,6 +27,7 @@ public class AlarmItem {
     /*@JoinColumn(name = "alarmitem_alarmrep_id", referencedColumnName = "alarmrep_id")*/
     @JsonbTransient
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotFound(action = NotFoundAction.IGNORE)
     private AlarmReport alarmReport;
 
     public UUID getId() {

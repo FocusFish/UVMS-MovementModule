@@ -14,6 +14,8 @@ package fish.focus.uvms.movement.service.entity.group;
 import fish.focus.schema.movement.search.v1.SearchKeyType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -50,6 +52,7 @@ public class MovementFilter implements Serializable {
     private Instant updated;
 
     @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name="movefilt_movefiltgrp_id")
     private MovementFilterGroup filterGroup;
 

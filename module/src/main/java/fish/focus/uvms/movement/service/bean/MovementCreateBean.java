@@ -125,7 +125,6 @@ public class MovementCreateBean {
             // report ok to Exchange...
             // Tracer Id
             exchangeBean.sendAckToExchange(MovementRefTypeType.MOVEMENT, createdMovement.getId(), incomingMovement.getAckResponseMessageId());
-
             return null;
         } catch (EntityNotFoundException e1) {
             throw new IllegalStateException("Could not process incoming movement: " + ExceptionUtils.getRootCauseMessage(e1));
@@ -135,16 +134,20 @@ public class MovementCreateBean {
     }
 
     private Movement getPreviousVms(IncomingMovement movement, MovementConnect movementConnect) {
-        if (MovementSourceType.AIS.value().equals(movement.getMovementSourceType())
-                || movement.getPositionTime() == null) {
+        try {
+            if (MovementSourceType.AIS.value().equals(movement.getMovementSourceType())
+                    || movement.getPositionTime() == null) {
+                return null;
+            }
+            Movement currentLatestVMS = movementConnect.getLatestVMS();
+            if (currentLatestVMS != null &&
+                    currentLatestVMS.getTimestamp().isBefore(movement.getPositionTime())) {
+                return currentLatestVMS;
+            } else {
+                return movementService.getPreviousVMSLastMonth(movementConnect.getId(), movement.getPositionTime());
+            }
+        } catch (EntityNotFoundException e) {
             return null;
-        }
-        Movement currentLatestVMS = movementConnect.getLatestVMS();
-        if (currentLatestVMS != null &&
-                currentLatestVMS.getTimestamp().isBefore(movement.getPositionTime())) {
-            return currentLatestVMS;
-        } else {
-            return movementService.getPreviousVMSLastMonth(movementConnect.getId(), movement.getPositionTime());
         }
     }
 

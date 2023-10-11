@@ -41,6 +41,7 @@ import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.persistence.EntityNotFoundException;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -112,13 +113,17 @@ public class MovementService {
     }
 
     public MovementConnect getOrCreateMovementConnectByConnectId(MovementConnect connect) {
-        MovementConnect movementConnect;
+        MovementConnect movementConnect = null;
 
         if (connect == null) {
             return null;
         }
-        movementConnect = movementDao.getMovementConnectByConnectId(connect.getId());
-
+        try {
+            movementDao.flush();
+            movementConnect = movementDao.getMovementConnectByConnectId(connect.getId());
+        } catch (EntityNotFoundException e) {
+            LOG.info("Entity not found");
+        }
         if (movementConnect == null) {
             LOG.info("Creating new MovementConnect");
             return movementDao.createMovementConnect(connect);

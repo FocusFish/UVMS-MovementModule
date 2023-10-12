@@ -127,8 +127,6 @@ public class MovementCreateBean {
             exchangeBean.sendAckToExchange(MovementRefTypeType.MOVEMENT, createdMovement.getId(), incomingMovement.getAckResponseMessageId());
 
             return null;
-        } catch (EntityNotFoundException e1) {
-            throw new IllegalStateException("Could not process incoming movement: " + ExceptionUtils.getRootCauseMessage(e1));
         } catch (JMSException e2) {
             throw new IllegalStateException("Could not process incoming movement ", e2);
         }

@@ -11,10 +11,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.entity;
 
+import fish.focus.uvms.movement.service.dao.MovementDao;
 import org.apache.commons.lang3.ObjectUtils;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.locationtech.jts.geom.Point;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,7 +42,7 @@ import java.util.UUID;
 @DynamicUpdate
 @DynamicInsert
 public class MovementConnect implements Serializable, Comparable<MovementConnect> {
-
+    private static final Logger LOG = LoggerFactory.getLogger(MovementConnect.class);
     public static final String MOVEMENT_CONNECT_GET_ALL = "MovementConnect.findAll";
     public static final String FIND_NEAREST_AFTER = "MovementConnect.findVicinityAfter";
     public static final String FIND_LATEST_MOVEMENT_BY_ID = "MovementConnect.findLatestMovementById";
@@ -113,6 +117,14 @@ public class MovementConnect implements Serializable, Comparable<MovementConnect
     }
 
     public Movement getLatestVMS() {
+        if (!Hibernate.isInitialized(latestVMS)) {
+            try {
+                Hibernate.initialize(latestVMS);
+            } catch (EntityNotFoundException ex) {
+                LOG.error("loading latestVMS for MovementConnect.id={}", getId());
+                latestVMS = null;
+            }
+        }
         return latestVMS;
     }
 

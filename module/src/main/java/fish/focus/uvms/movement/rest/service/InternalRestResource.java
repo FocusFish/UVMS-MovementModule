@@ -156,6 +156,7 @@ public class InternalRestResource {
     @Path("/removeMovementConnect")
     public Response removeMovementConnect(@QueryParam(value = "MovementConnectId") String movementConnectId) {
         try {
+            LOG.info("Remove movement connect with id={}", movementConnectId);
             movementService.removeMovementConnect(movementConnectId);
             return Response.ok()
                     .header("MDC", MDC.get("requestId")).build();

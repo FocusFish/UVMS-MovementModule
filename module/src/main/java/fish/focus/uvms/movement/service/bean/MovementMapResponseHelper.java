@@ -82,7 +82,7 @@ public class MovementMapResponseHelper {
                 List<Track> tracks = MovementEntityToModelMapper.extractTracks(entries.getValue());
                 List<MovementTrack> extractTracks = new ArrayList<>();
                 for (Track track : tracks) {
-                    List<Geometry> points = movementDao.getPointsFromTrack(track,2000); //2k is a magical int that looks good........
+                    List<Geometry> points = movementDao.getPointsFromTrack(track,500); //Maybe will increase performance 4 times compared to 2000
                     extractTracks.add(MovementEntityToModelMapper.mapToMovementTrack(track, points));
                 }
 

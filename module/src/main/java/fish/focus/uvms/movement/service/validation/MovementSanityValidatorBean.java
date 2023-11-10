@@ -2,24 +2,18 @@ package fish.focus.uvms.movement.service.validation;
 
 import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.schema.movement.search.v1.ListPagination;
-import fish.focus.uvms.movement.model.constants.AuditObjectTypeEnum;
-import fish.focus.uvms.movement.model.constants.AuditOperationEnum;
-import fish.focus.uvms.movement.service.bean.AuditService;
 import fish.focus.uvms.movement.service.bean.MovementCreateBean;
 import fish.focus.uvms.movement.service.dao.AlarmDAO;
 import fish.focus.uvms.movement.service.dto.*;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmItem;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
-import fish.focus.uvms.movement.service.event.AlarmReportCountEvent;
-import fish.focus.uvms.movement.service.event.AlarmReportEvent;
 import fish.focus.uvms.movement.service.mapper.search.AlarmSearchFieldMapper;
 import fish.focus.uvms.movement.service.mapper.search.AlarmSearchValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.math.BigInteger;
 import java.time.Instant;
@@ -35,9 +29,6 @@ public class MovementSanityValidatorBean {
     @Inject
     private AlarmDAO alarmDAO;
 
-    @Inject
-    private AuditService auditService;
-    
     @Inject
     private MovementCreateBean movementCreate;
     
@@ -82,8 +73,6 @@ public class MovementSanityValidatorBean {
 
         alarmReport.getAlarmItemList().add(item);
             
-        auditService.sendAuditMessage(AuditObjectTypeEnum.ALARM, AuditOperationEnum.CREATE, alarmReport.getId().toString(), null, alarmReport.getUpdatedBy());
-
         return alarmReport.getId();
     }
 
@@ -136,7 +125,6 @@ public class MovementSanityValidatorBean {
 
         alarmDAO.merge(entity);
 
-        auditService.sendAuditMessage(AuditObjectTypeEnum.ALARM, AuditOperationEnum.UPDATE, entity.getId().toString(), null, alarm.getUpdatedBy());
         return entity;
     }
 
@@ -172,7 +160,7 @@ public class MovementSanityValidatorBean {
             // Mark the alarm as REPROCESSED before reprocessing. That will create a new alarm (if still wrong) with the items remaining.
             alarm.setStatus(AlarmStatusType.REPROCESSED);
             alarm = updateAlarmStatus(alarm);
-            auditService.sendAuditMessage(AuditObjectTypeEnum.ALARM, AuditOperationEnum.UPDATE, alarm.getId().toString(), null, username);
+
             IncomingMovement incomingMovement = alarm.getIncomingMovement();
             movementCreate.processIncomingMovement(incomingMovement);
         }

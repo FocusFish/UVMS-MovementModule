@@ -62,9 +62,6 @@ public class MovementService {
     private MovementDao movementDao;
     
     @Inject
-    private AuditService auditService;
-
-    @Inject
     private MovementMapResponseHelper movementMapResponseHelper;
 
     @Inject
@@ -81,9 +78,6 @@ public class MovementService {
         createMovement(movement);
         incomingMovementBean.processMovement(movement);
         fireMovementEvent(movement);
-        if (!movement.getSource().equals(MovementSourceType.AIS)) {
-            auditService.sendMovementCreatedAudit(movement, movement.getUpdatedBy());
-        }
         return movement;
     }
 

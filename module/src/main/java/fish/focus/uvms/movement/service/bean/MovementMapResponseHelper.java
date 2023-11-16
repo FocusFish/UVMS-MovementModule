@@ -8,6 +8,9 @@ import fish.focus.schema.movement.source.v1.GetMovementMapByQueryResponse;
 import fish.focus.schema.movement.v1.MovementSegment;
 import fish.focus.schema.movement.v1.MovementTrack;
 import fish.focus.schema.movement.v1.MovementType;
+import fish.focus.uvms.config.exception.ConfigServiceException;
+import fish.focus.uvms.config.service.ParameterService;
+import fish.focus.uvms.movement.service.constant.ParameterKey;
 import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.entity.Track;
@@ -17,7 +20,10 @@ import fish.focus.uvms.movement.service.mapper.search.SearchField;
 import fish.focus.uvms.movement.service.mapper.search.SearchFieldMapper;
 import fish.focus.uvms.movement.service.mapper.search.SearchValue;
 import org.locationtech.jts.geom.Geometry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.*;
@@ -25,9 +31,15 @@ import java.util.stream.Collectors;
 
 @Stateless
 public class MovementMapResponseHelper {
+    private static final Logger LOG = LoggerFactory.getLogger(MovementMapResponseHelper.class);
+
+    @EJB
+    private ParameterService parameterService;
 
     @Inject
     private MovementDao movementDao;
+
+    private boolean trackInMovementEnabled = true;
 
     public GetMovementMapByQueryResponse getMapByQuery(MovementQuery query) {
 
@@ -79,17 +91,26 @@ public class MovementMapResponseHelper {
                 List<MovementType> mapToMovementType = MovementEntityToModelMapper.mapToMovementType(entries.getValue());
                 responseType.getMovements().addAll(mapToMovementType);
 
-                List<Track> tracks = MovementEntityToModelMapper.extractTracks(entries.getValue());
-                List<MovementTrack> extractTracks = new ArrayList<>();
-                for (Track track : tracks) {
-                    List<Geometry> points = movementDao.getPointsFromTrack(track,2000); //2k is a magical int that looks good........
-                    extractTracks.add(MovementEntityToModelMapper.mapToMovementTrack(track, points));
+                try {
+                    if ("false".equalsIgnoreCase(parameterService.getStringValue(ParameterKey.TRACK_IN_MOVEMENT_ENABLED.getKey()))) {
+                        trackInMovementEnabled = false;
+                    }
+                } catch (ConfigServiceException e) {
+                    LOG.info("Cannot find parameter {} ", ParameterKey.TRACK_IN_MOVEMENT_ENABLED.getKey());
                 }
+                if (trackInMovementEnabled) {
+                    List<Track> tracks = MovementEntityToModelMapper.extractTracks(entries.getValue());
+                    List<MovementTrack> extractTracks = new ArrayList<>();
+                    for (Track track : tracks) {
+                        List<Geometry> points = movementDao.getPointsFromTrack(track, 500); //Maybe will increase performance 4 times compared to 2000
+                        extractTracks.add(MovementEntityToModelMapper.mapToMovementTrack(track, points));
+                    }
 
-                // In the rare event of segments that are attached to two different tracks, the track that is not
-                //connected to the any relevant Movement should be removed from the search result.
-                removeTrackMismatches(extractTracks, entries.getValue());
-                responseType.getTracks().addAll(extractTracks);
+                    // In the rare event of segments that are attached to two different tracks, the track that is not
+                    //connected to the any relevant Movement should be removed from the search result.
+                    removeTrackMismatches(extractTracks, entries.getValue());
+                    responseType.getTracks().addAll(extractTracks);
+                }
 
                 mapResponse.add(responseType);
 

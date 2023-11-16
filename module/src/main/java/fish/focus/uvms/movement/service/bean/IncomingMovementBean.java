@@ -1,12 +1,16 @@
 package fish.focus.uvms.movement.service.bean;
 
 import fish.focus.schema.movement.v1.MovementSourceType;
+import fish.focus.uvms.config.exception.ConfigServiceException;
+import fish.focus.uvms.config.service.ParameterService;
+import fish.focus.uvms.movement.service.constant.ParameterKey;
 import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.Movement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
@@ -20,6 +24,9 @@ public class IncomingMovementBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(IncomingMovementBean.class);
 
+    @EJB
+    private ParameterService parameterService;
+
     @Inject
     private TrackService trackService;
 
@@ -27,6 +34,14 @@ public class IncomingMovementBean {
     private MovementDao dao;
 
     public void processMovement(Movement currentMovement) {
+        boolean trackInMovementEnabled = true;
+        try {
+            if ("false".equalsIgnoreCase(parameterService.getStringValue(ParameterKey.TRACK_IN_MOVEMENT_ENABLED.getKey()))) {
+                trackInMovementEnabled = false;
+            }
+        } catch (ConfigServiceException e) {
+            LOG.info("Cannot find parameter {} !", ParameterKey.TRACK_IN_MOVEMENT_ENABLED.getKey());
+        }
         if (currentMovement == null) {
             throw new IllegalArgumentException("Movement to process is null!");
         }
@@ -42,15 +57,21 @@ public class IncomingMovementBean {
                     // Normal case (latest position)
                     currentMovement.setPreviousMovement(latestMovement);
                         setLatest(currentMovement);
-                    trackService.upsertTrack(latestMovement, currentMovement);
+                    if (trackInMovementEnabled) {
+                        trackService.upsertTrack(latestMovement, currentMovement);
+                    }
                 } else {
                     Movement previousMovement = dao.getPreviousMovement(connectId, timeStamp);
                     if (previousMovement == null) { // Before first position
-                        Movement firstMovement = dao.getFirstMovement(connectId, currentMovement.getId());
-                        trackService.upsertTrack(firstMovement, currentMovement);
+                        if (trackInMovementEnabled) {
+                            Movement firstMovement = dao.getFirstMovement(connectId, currentMovement.getId());
+                            trackService.upsertTrack(firstMovement, currentMovement);
+                        }
                     } else { // Between two positions
                         currentMovement.setPreviousMovement(previousMovement);
-                        trackService.upsertTrack(previousMovement, currentMovement);
+                        if (trackInMovementEnabled) {
+                            trackService.upsertTrack(previousMovement, currentMovement);
+                        }
                     }
                 }
             } catch (EntityNotFoundException e){

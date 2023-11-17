@@ -14,8 +14,6 @@ package fish.focus.uvms.movement.service.constant;
 public enum ParameterKey {
 
     USE_NATIONAL("mobileterminal.national.use"),
-    TRACK_IN_MOVEMENT_ENABLED("track.in.movement.enabled"),
-
     MAX_DISTANCE("maxDistance");
 
     private final String key;

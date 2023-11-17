@@ -8,9 +8,6 @@ import fish.focus.schema.movement.source.v1.GetMovementMapByQueryResponse;
 import fish.focus.schema.movement.v1.MovementSegment;
 import fish.focus.schema.movement.v1.MovementTrack;
 import fish.focus.schema.movement.v1.MovementType;
-import fish.focus.uvms.config.exception.ConfigServiceException;
-import fish.focus.uvms.config.service.ParameterService;
-import fish.focus.uvms.movement.service.constant.ParameterKey;
 import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.entity.Track;
@@ -23,7 +20,7 @@ import org.locationtech.jts.geom.Geometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.EJB;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.*;
@@ -33,16 +30,18 @@ import java.util.stream.Collectors;
 public class MovementMapResponseHelper {
     private static final Logger LOG = LoggerFactory.getLogger(MovementMapResponseHelper.class);
 
-    @EJB
-    private ParameterService parameterService;
-
     @Inject
     private MovementDao movementDao;
 
-    private boolean trackInMovementEnabled = true;
+    private boolean trackInMovementDisabled = false;
+
+    @PostConstruct
+    public void init() {
+        trackInMovementDisabled = "true".equalsIgnoreCase(System.getProperty("track.in.movement.disabled"));
+        LOG.info("MovementMapResponseHelper, trackInMovementDisabled={}", trackInMovementDisabled);
+    }
 
     public GetMovementMapByQueryResponse getMapByQuery(MovementQuery query) {
-
         validateQuery(query);
 
         boolean getLatestReports = query.getMovementSearchCriteria()
@@ -91,14 +90,7 @@ public class MovementMapResponseHelper {
                 List<MovementType> mapToMovementType = MovementEntityToModelMapper.mapToMovementType(entries.getValue());
                 responseType.getMovements().addAll(mapToMovementType);
 
-                try {
-                    if ("false".equalsIgnoreCase(parameterService.getStringValue(ParameterKey.TRACK_IN_MOVEMENT_ENABLED.getKey()))) {
-                        trackInMovementEnabled = false;
-                    }
-                } catch (ConfigServiceException e) {
-                    LOG.info("Cannot find parameter {} ", ParameterKey.TRACK_IN_MOVEMENT_ENABLED.getKey());
-                }
-                if (trackInMovementEnabled) {
+                if (!trackInMovementDisabled) {
                     List<Track> tracks = MovementEntityToModelMapper.extractTracks(entries.getValue());
                     List<MovementTrack> extractTracks = new ArrayList<>();
                     for (Track track : tracks) {

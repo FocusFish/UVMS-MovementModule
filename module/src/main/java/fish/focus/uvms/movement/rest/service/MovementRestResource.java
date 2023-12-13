@@ -74,6 +74,7 @@ public class MovementRestResource {
 
     @PostConstruct
     public void init(){
+        LOG.info("Initializing MovementRestResource");
         jsonb = new JsonBConfiguratorMovement().getContext(null);
     }
 

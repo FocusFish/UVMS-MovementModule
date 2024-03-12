@@ -32,6 +32,7 @@ public class IncomingMovementBean {
     @PostConstruct
     public void init() {
         trackInMovementDisabled = "true".equalsIgnoreCase(System.getProperty("track.in.movement.disabled"));
+        LOG.info("Initializing IncomingMovementBean");
         LOG.info("IncomingMovementBean, trackInMovementDisabled={}", trackInMovementDisabled);
     }
 

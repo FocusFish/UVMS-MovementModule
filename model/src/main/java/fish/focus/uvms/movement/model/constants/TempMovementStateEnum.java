@@ -17,19 +17,20 @@ public enum TempMovementStateEnum {
 
     private int id;
 
-    private  TempMovementStateEnum(int id){
+    private TempMovementStateEnum(int id) {
         this.id = id;
     }
+
     public int getId() {
         return id;
     }
 
-    public TempMovementStateEnum getType(int id){
-            for (TempMovementStateEnum state : TempMovementStateEnum.values()){
-                if(state.id == id){
-                    return state;
-                }
+    public TempMovementStateEnum getType(int id) {
+        for (TempMovementStateEnum state : TempMovementStateEnum.values()) {
+            if (state.id == id) {
+                return state;
             }
+        }
         return null;
     }
 

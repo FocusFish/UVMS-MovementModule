@@ -4,13 +4,12 @@ import fish.focus.schema.movement.asset.v1.VesselType;
 import fish.focus.schema.movement.v1.MovementPoint;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.uvms.commons.message.api.MessageConstants;
-import fish.focus.uvms.movement.service.TransactionalTests;
-import fish.focus.uvms.movement.service.message.JMSHelper;
 import fish.focus.uvms.movement.model.dto.MovementDto;
-import fish.focus.uvms.movement.service.bean.ManualMovementService;
+import fish.focus.uvms.movement.service.TransactionalTests;
 import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.dto.ManualMovementDto;
 import fish.focus.uvms.movement.service.entity.Movement;
+import fish.focus.uvms.movement.service.message.JMSHelper;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
@@ -35,17 +34,14 @@ import static org.junit.Assert.*;
 @RunWith(Arquillian.class)
 public class ManualMovementServiceTest extends TransactionalTests {
 
-    @Resource(mappedName = "java:/ConnectionFactory")
-    private ConnectionFactory connectionFactory;
-
-    @EJB
-    private ManualMovementService manualMovementService;
-
+    private static String exchange = MessageConstants.QUEUE_EXCHANGE_EVENT_NAME;
     @Inject
     MovementDao movementDao;
-
-    private static String exchange = MessageConstants.QUEUE_EXCHANGE_EVENT_NAME;
     JMSHelper jmsHelper;
+    @Resource(mappedName = "java:/ConnectionFactory")
+    private ConnectionFactory connectionFactory;
+    @EJB
+    private ManualMovementService manualMovementService;
 
     @Before
     public void init() throws Exception {

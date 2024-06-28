@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsd:schema xmlns:movement="urn:movement.schema.focus.fish:v1" 
+<xsd:schema xmlns:movement="urn:movement.schema.focus.fish:v1"
             xmlns:asset="urn:asset.movement.schema.focus.fish:v1"
-            xmlns:mobterm="urn:mobileterminal.movement.schema.focus.fish:v1"
-            targetNamespace="urn:movement.schema.focus.fish:v1"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+            targetNamespace="urn:movement.schema.focus.fish:v1"
             xmlns="http://schemas.xmlsoap.org/wsdl/">
-    
+
     <xsd:import namespace="urn:asset.movement.schema.focus.fish:v1" schemaLocation="Asset.xsd"/>
     <xsd:import namespace="urn:mobileterminal.movement.schema.focus.fish:v1" schemaLocation="MobileTerminal.xsd"/>
-    
+
     <xsd:simpleType name="SegmentCategoryType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="GAP"/>
@@ -23,7 +21,7 @@
             <xsd:enumeration value="OTHER"/>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <xsd:simpleType name="MovementActivityTypeType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="COE"/>
@@ -48,7 +46,7 @@
             <xsd:enumeration value="OTH"/>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <xsd:simpleType name="MovementTypeType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="POS"/>
@@ -57,7 +55,7 @@
             <xsd:enumeration value="MAN"/>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <xsd:simpleType name="MovementSourceType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="INMARSAT_C"/>
@@ -69,7 +67,7 @@
             <xsd:enumeration value="FLUX"/>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <xsd:simpleType name="MovementComChannelType">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="FLUX"/>
@@ -87,7 +85,7 @@
             <xsd:enumeration value="DELETED"/>
         </xsd:restriction>
     </xsd:simpleType>
-    
+
     <xsd:complexType name="MovementBaseType">
         <xsd:sequence>
             <xsd:element name="guid" type="xsd:string"/>
@@ -104,14 +102,14 @@
             <xsd:element name="tripNumber" type="xsd:double" nillable="true"/>
             <xsd:element name="internalReferenceNumber" type="xsd:string"/>
 
-            <xsd:element name="processed" type="xsd:boolean" />
-            <xsd:element name="duplicate" type="xsd:boolean" />
-            <xsd:element name="duplicates" type="xsd:string" />
+            <xsd:element name="processed" type="xsd:boolean"/>
+            <xsd:element name="duplicate" type="xsd:boolean"/>
+            <xsd:element name="duplicates" type="xsd:string"/>
 
-			<xsd:element name="lesReportTime" type="xsd:dateTime"/>
+            <xsd:element name="lesReportTime" type="xsd:dateTime"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="MovementType">
         <xsd:complexContent>
             <xsd:extension base="movement:MovementBaseType">
@@ -119,13 +117,13 @@
                     <xsd:element name="calculatedCourse" type="xsd:double" nillable="true"/>
                     <xsd:element name="calculatedSpeed" type="xsd:double" nillable="true"/>
                     <xsd:element name="comChannelType" type="movement:MovementComChannelType"/>
-                    <xsd:element name="segmentIds" type="xsd:string"  minOccurs="1" maxOccurs="2"/>
+                    <xsd:element name="segmentIds" type="xsd:string" minOccurs="1" maxOccurs="2"/>
                     <xsd:element name="wkt" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
-    
+
     <xsd:complexType name="RemoteIdType" abstract="true">
         <xsd:sequence>
             <xsd:element name="remoteId" type="xsd:string"/>
@@ -133,7 +131,7 @@
             <xsd:element name="name" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="ClosestLocationType">
         <xsd:complexContent>
             <xsd:extension base="movement:RemoteIdType">
@@ -166,7 +164,7 @@
             <xsd:element name="callback" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="MovementSegment">
         <xsd:sequence>
             <xsd:element name="id" type="xsd:string"/>
@@ -179,7 +177,7 @@
             <xsd:element name="wkt" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="MovementTrack">
         <xsd:sequence>
             <xsd:element name="id" type="xsd:string"/>
@@ -189,7 +187,7 @@
             <xsd:element name="wkt" type="xsd:string"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
     <xsd:complexType name="MovementPoint">
         <xsd:sequence>
             <xsd:element name="longitude" type="xsd:double" nillable="true"/>
@@ -197,5 +195,5 @@
             <xsd:element name="altitude" type="xsd:double" nillable="true"/>
         </xsd:sequence>
     </xsd:complexType>
-    
+
 </xsd:schema>

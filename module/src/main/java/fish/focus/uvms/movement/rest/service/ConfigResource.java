@@ -16,10 +16,10 @@ import fish.focus.schema.movement.v1.MovementActivityTypeType;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.schema.movement.v1.SegmentCategoryType;
-import fish.focus.uvms.rest.security.RequiresFeature;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
 import fish.focus.uvms.movement.rest.dto.MovementMockConfig;
 import fish.focus.uvms.movement.service.dto.AlarmStatusType;
+import fish.focus.uvms.rest.security.RequiresFeature;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

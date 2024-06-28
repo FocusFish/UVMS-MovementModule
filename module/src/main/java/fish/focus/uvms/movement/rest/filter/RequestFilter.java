@@ -11,9 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.rest.filter;
 
+import fish.focus.uvms.movement.rest.constants.RestConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import fish.focus.uvms.movement.rest.constants.RestConstants;
+
 import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -51,7 +52,7 @@ public class RequestFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String origin = httpServletRequest.getHeader("ORIGIN");
 
-        if(origin != null && validateOrigin(origin)) {
+        if (origin != null && validateOrigin(origin)) {
             HttpServletResponse response = (HttpServletResponse) res;
             response.setHeader(RestConstants.ACCESS_CONTROL_ALLOW_ORIGIN, origin);
             response.setHeader(RestConstants.ACCESS_CONTROL_ALLOW_METHODS, RestConstants.ACCESS_CONTROL_ALLOWED_METHODS);

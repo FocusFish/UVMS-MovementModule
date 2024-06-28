@@ -21,13 +21,13 @@ public class CursorPagination {
 
     private Instant timestampCursor;
     private UUID idCursor;
-    
+
     private Instant from;
     private Instant to;
-    
+
     private List<UUID> connectIds;
     private List<MovementSourceType> sources;
-    
+
     private Integer limit;
 
     public Instant getTimestampCursor() {
@@ -86,5 +86,5 @@ public class CursorPagination {
         this.limit = limit;
     }
 
-    
+
 }

@@ -33,7 +33,7 @@ import javax.jms.TextMessage;
 public class MovementEventBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(MovementEventBean.class);
-    
+
     private static final int MAXIMUM_REDELIVERIES = 6;
 
     @Inject
@@ -46,14 +46,14 @@ public class MovementEventBean {
     @ErrorEvent
     private Event<EventMessage> errorEvent;
 
-    
+
     public void getMovementListByQuery(TextMessage jmsMessage) {
         try {
             GetMovementListByQueryRequest request = JAXBMarshaller.unmarshallTextMessage(jmsMessage, GetMovementListByQueryRequest.class);
             GetMovementListByQueryResponse movementList = movementService.getList(request.getQuery());
             String responseString = MovementModuleResponseMapper.mapTogetMovementListByQueryResponse(movementList.getMovement());
             messageProducer.sendResponseMessageToSender(jmsMessage, responseString);
-            LOG.info("Response sent back to requestor on queue [ {} ]", jmsMessage!= null ? jmsMessage.getJMSReplyTo() : "Null!!!");
+            LOG.info("Response sent back to requestor on queue [ {} ]", jmsMessage != null ? jmsMessage.getJMSReplyTo() : "Null!!!");
         } catch (Exception ex) {
             LOG.error("[ Error on getMovementListByQuery ] ", ex);
             if (maxRedeliveriesReached(jmsMessage)) {
@@ -63,7 +63,7 @@ public class MovementEventBean {
             throw new EJBException(ex);
         }
     }
-    
+
     public void getMovementMapByQuery(TextMessage jmsMessage) {
         try {
             LOG.info("Get Movement By Query Received.. processing request in MovementEventServiceBean : {}", jmsMessage.getText());
@@ -72,7 +72,7 @@ public class MovementEventBean {
             String responseString = MovementModuleResponseMapper.mapToMovementMapResponse(movementList.getMovementMap());
 
             messageProducer.sendResponseMessageToSender(jmsMessage, responseString);
-            LOG.info("Response sent back to requestor on queue [ {} ]", jmsMessage!= null ? jmsMessage.getJMSReplyTo() : "Null!!!");
+            LOG.info("Response sent back to requestor on queue [ {} ]", jmsMessage != null ? jmsMessage.getJMSReplyTo() : "Null!!!");
         } catch (Exception ex) {
             LOG.error("[ Error when creating getMovementMapByQuery ] ", ex);
             if (maxRedeliveriesReached(jmsMessage)) {
@@ -82,7 +82,7 @@ public class MovementEventBean {
             throw new EJBException(ex);
         }
     }
-    
+
     public void ping(TextMessage message) {
         try {
             PingResponse pingResponse = new PingResponse();
@@ -94,7 +94,7 @@ public class MovementEventBean {
         }
     }
 
-    
+
     private boolean maxRedeliveriesReached(TextMessage message) {
         try {
             if (message != null) {

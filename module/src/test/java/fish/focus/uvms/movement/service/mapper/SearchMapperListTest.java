@@ -11,20 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.mapper;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.hamcrest.CoreMatchers;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import fish.focus.schema.movement.search.v1.ListCriteria;
 import fish.focus.schema.movement.search.v1.SearchKey;
-import fish.focus.schema.movement.v1.MovementActivityTypeType;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.schema.movement.v1.SegmentCategoryType;
@@ -32,9 +20,19 @@ import fish.focus.uvms.movement.service.TransactionalTests;
 import fish.focus.uvms.movement.service.mapper.search.SearchField;
 import fish.focus.uvms.movement.service.mapper.search.SearchFieldMapper;
 import fish.focus.uvms.movement.service.mapper.search.SearchValue;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-/**
- **/
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(Arquillian.class)
 public class SearchMapperListTest extends TransactionalTests {
 
@@ -46,9 +44,9 @@ public class SearchMapperListTest extends TransactionalTests {
     @OperateOnDeployment("movementservice")
     public void testCreateSearchSql() {
         String data = SearchFieldMapper.createSelectSearchSql(null, true);
-        assertEquals(INITIAL_SELECT +NO_DUPLICATE + ORDER_BY, data);
+        assertEquals(INITIAL_SELECT + NO_DUPLICATE + ORDER_BY, data);
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetOrdinalValueFromEnum() {
@@ -72,7 +70,7 @@ public class SearchMapperListTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void testCreateMinimalSelectSearchSql() {
-    	List<ListCriteria> listCriterias = new ArrayList<>();
+        List<ListCriteria> listCriterias = new ArrayList<>();
 
         ListCriteria criteria = new ListCriteria();
         criteria.setKey(SearchKey.CATEGORY);
@@ -90,13 +88,13 @@ public class SearchMapperListTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void testMultipleSearchFieldCategorys() {
-    	List<ListCriteria> listCriterias = new ArrayList<>();
+        List<ListCriteria> listCriterias = new ArrayList<>();
 
         ListCriteria criteria = new ListCriteria();
         criteria.setKey(SearchKey.STATUS);
         criteria.setValue("11");
         listCriterias.add(criteria);
-        
+
         criteria = new ListCriteria();
         criteria.setKey(SearchKey.SOURCE);
         criteria.setValue(MovementSourceType.MANUAL.name());
@@ -107,14 +105,14 @@ public class SearchMapperListTest extends TransactionalTests {
         assertTrue(mapSearchField.size() == 2);
 
         String data = SearchFieldMapper.createSelectSearchSql(mapSearchField, false);
-        assertThat(data, CoreMatchers.containsString("m.status = '11'"));
-        assertThat(data, CoreMatchers.containsString("m.source = 3"));
+        assertThat(data, containsString("m.status = '11'"));
+        assertThat(data, containsString("m.source = 3"));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void testCreateCountSearchSql() {
-    	List<ListCriteria> listCriterias = new ArrayList<>();
+        List<ListCriteria> listCriterias = new ArrayList<>();
 
         ListCriteria criteria = new ListCriteria();
         criteria.setKey(SearchKey.SOURCE);
@@ -127,7 +125,7 @@ public class SearchMapperListTest extends TransactionalTests {
 
         String data = SearchFieldMapper.createCountSearchSql(mapSearchField, true);
         String correctOutput = "SELECT COUNT( m) FROM Movement m  INNER JOIN m.movementConnect mc  LEFT JOIN m.track tra "
-        		+ " WHERE m.source = 3";
+                + " WHERE m.source = 3";
         assertEquals(correctOutput, data);
     }
 

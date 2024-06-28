@@ -23,14 +23,11 @@ import javax.json.bind.Jsonb;
 public class EventStreamSender {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventStreamSender.class);
-
-    @Resource(mappedName = "java:/" + MessageConstants.EVENT_STREAM_TOPIC)
-    private Destination destination;
-
     @Inject
     @JMSConnectionFactory("java:/ConnectionFactory")
     JMSContext context;
-
+    @Resource(mappedName = "java:/" + MessageConstants.EVENT_STREAM_TOPIC)
+    private Destination destination;
     private Jsonb jsonb;
 
     @PostConstruct
@@ -38,7 +35,7 @@ public class EventStreamSender {
         jsonb = new JsonBConfiguratorMovement().getContext(null);
     }
 
-    public void createdMovement(@Observes(during = TransactionPhase.AFTER_SUCCESS) @CreatedMovement Movement move){
+    public void createdMovement(@Observes(during = TransactionPhase.AFTER_SUCCESS) @CreatedMovement Movement move) {
         try {
             if (move != null) {
                 MovementDto dto = MovementMapper.mapToMovementDto(move);
@@ -53,7 +50,7 @@ public class EventStreamSender {
                 context.createProducer().setDeliveryMode(DeliveryMode.NON_PERSISTENT).send(destination, message);
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Error while sending update event to event stream topic: ", e);
             throw new RuntimeException(e);
         }

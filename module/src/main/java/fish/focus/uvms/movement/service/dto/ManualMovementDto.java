@@ -13,6 +13,7 @@ package fish.focus.uvms.movement.service.dto;
 
 import fish.focus.schema.movement.asset.v1.VesselType;
 import fish.focus.uvms.movement.model.dto.MovementDto;
+
 import java.io.Serializable;
 
 public class ManualMovementDto implements Serializable {

@@ -11,14 +11,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.rest.service;
 
-import fish.focus.uvms.rest.security.RequiresFeature;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
 import fish.focus.uvms.movement.rest.filter.AppError;
 import fish.focus.uvms.movement.service.bean.ManualMovementService;
 import fish.focus.uvms.movement.service.dto.ManualMovementDto;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmItem;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
 import fish.focus.uvms.movement.service.validation.MovementSanityValidatorBean;
+import fish.focus.uvms.rest.security.RequiresFeature;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -59,7 +59,7 @@ public class ManualMovementRestResource {
         LOG.debug("Create manual movement invoked in rest layer");
         try {
             UUID reportId = service.sendManualMovement(data, request.getRemoteUser());
-            if(reportId == null){
+            if (reportId == null) {
                 return Response.ok().header("MDC", MDC.get("requestId")).build();
             } else {
                 AlarmReport report = validationService.getAlarmReportByGuid(reportId);

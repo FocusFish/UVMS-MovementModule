@@ -12,23 +12,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.movement.service.mapper.search;
 
 /**
+ *
  **/
 public interface SearchFieldType {
 
     /**
-     *
      * @return The fieldname in the Entity. Must be exact
      */
     public String getFieldName();
 
     /**
-     *
      * @return
      */
     public SearchTables getSearchTables();
 
     /**
-     *
      * @return
      */
     public Class getClazz();

@@ -25,13 +25,35 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
 public class AlarmRestResourceTest extends BuildMovementRestDeployment {
 
     @Inject
     private AlarmDAO alarmDao;
+
+    private static AlarmReport getBasicAlarmReport() {
+        AlarmReport alarmReport = new AlarmReport();
+        alarmReport.setAssetGuid(UUID.randomUUID().toString());
+        alarmReport.setStatus(AlarmStatusType.OPEN);
+        alarmReport.setUpdated(Instant.now());
+        alarmReport.setCreatedDate(Instant.now());
+        alarmReport.setUpdatedBy("Test user");
+        return alarmReport;
+    }
+
+    private static AlarmQuery getBasicAlarmQuery() {
+        AlarmQuery query = new AlarmQuery();
+        query.setDynamic(true);
+        ListPagination pagination = new ListPagination();
+        pagination.setPage(BigInteger.valueOf(1));
+        pagination.setListSize(BigInteger.valueOf(100));
+        query.setPagination(pagination);
+        return query;
+    }
 
     @Test
     @OperateOnDeployment("movementservice")
@@ -42,7 +64,7 @@ public class AlarmRestResourceTest extends BuildMovementRestDeployment {
         criteria.setValue("TEST_GUID");
         basicAlarmQuery.getAlarmSearchCriteria().add(criteria);
 
-        AlarmListResponseDto alarmList  = getWebTarget()
+        AlarmListResponseDto alarmList = getWebTarget()
                 .path("alarms/list")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getToken())
@@ -292,25 +314,5 @@ public class AlarmRestResourceTest extends BuildMovementRestDeployment {
 
         alarmDao.removeAlarmReportAfterTests(alarmReport);
         alarmDao.removeAlarmReportAfterTests(alarmReport2);
-    }
-
-    private static AlarmReport getBasicAlarmReport() {
-        AlarmReport alarmReport = new AlarmReport();
-        alarmReport.setAssetGuid(UUID.randomUUID().toString());
-        alarmReport.setStatus(AlarmStatusType.OPEN);
-        alarmReport.setUpdated(Instant.now());
-        alarmReport.setCreatedDate(Instant.now());
-        alarmReport.setUpdatedBy("Test user");
-        return alarmReport;
-    }
-
-    private static AlarmQuery getBasicAlarmQuery() {
-        AlarmQuery query = new AlarmQuery();
-        query.setDynamic(true);
-        ListPagination pagination = new ListPagination();
-        pagination.setPage(BigInteger.valueOf(1));
-        pagination.setListSize(BigInteger.valueOf(100));
-        query.setPagination(pagination);
-        return query;
     }
 }

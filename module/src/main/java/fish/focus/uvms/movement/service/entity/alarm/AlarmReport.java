@@ -3,6 +3,7 @@ package fish.focus.uvms.movement.service.entity.alarm;
 import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.uvms.movement.service.dto.AlarmStatusType;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;

@@ -1,25 +1,24 @@
 package fish.focus.uvms.movement.service.message;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import fish.focus.schema.exchange.plugin.types.v1.PluginType;
+import fish.focus.schema.movement.asset.v1.AssetType;
+import fish.focus.schema.movement.search.v1.*;
+import fish.focus.schema.movement.v1.MovementActivityTypeType;
+import fish.focus.schema.movement.v1.MovementComChannelType;
+import fish.focus.schema.movement.v1.MovementSourceType;
+import fish.focus.schema.movement.v1.MovementTypeType;
+import fish.focus.uvms.movement.service.entity.IncomingMovement;
+
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
 
-import fish.focus.schema.exchange.plugin.types.v1.PluginType;
-import fish.focus.schema.movement.asset.v1.AssetType;
-import fish.focus.schema.movement.search.v1.ListCriteria;
-import fish.focus.schema.movement.search.v1.ListPagination;
-import fish.focus.schema.movement.search.v1.MovementQuery;
-import fish.focus.schema.movement.search.v1.RangeCriteria;
-import fish.focus.schema.movement.search.v1.RangeKeyType;
-import fish.focus.schema.movement.search.v1.SearchKey;
-import fish.focus.schema.movement.v1.*;
-import fish.focus.uvms.movement.service.entity.IncomingMovement;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class MovementTestHelper {
 
@@ -50,10 +49,10 @@ public class MovementTestHelper {
     }
 
     public static IncomingMovement createIncomingMovementType() {
-        return MovementTestHelper.createIncomingMovement(0D,0D);
+        return MovementTestHelper.createIncomingMovement(0D, 0D);
     }
 
-    public static IncomingMovement createIncomingMovementType(Double longitude , Double latitude) {
+    public static IncomingMovement createIncomingMovementType(Double longitude, Double latitude) {
 
         IncomingMovement movementBase = new IncomingMovement();
         movementBase.setMovementType(MovementTypeType.POS.value());
@@ -84,17 +83,17 @@ public class MovementTestHelper {
         MovementQuery movementQuery = new MovementQuery();
         movementQuery.setExcludeFirstAndLastSegment(true);
 
-        if(useListPagination) {
+        if (useListPagination) {
             ListPagination listPagination = createListPagination();
             movementQuery.setPagination(listPagination);
         }
 
-        if(useListCriteria) {
+        if (useListCriteria) {
             List<ListCriteria> listOfListCriteria = createListOfListCriteria();
             movementQuery.getMovementSearchCriteria().addAll(listOfListCriteria);
         }
 
-        if(useRangeCriteria) {
+        if (useRangeCriteria) {
             List<RangeCriteria> listOfRangeCriteria = createListOfRangeCriteria();
             movementQuery.getMovementRangeSearchCriteria().addAll(listOfRangeCriteria);
         }

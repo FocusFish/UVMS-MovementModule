@@ -27,6 +27,9 @@ import java.util.UUID;
 public class AssetMTRestMock {
 
 
+    private static final String DNID = "DNID";
+    private static final String MEMBER_NUMBER = "MEMBER_NUMBER";
+
     @POST
     @Path("collectassetmt")
     @Consumes(value = {MediaType.APPLICATION_JSON})
@@ -43,13 +46,13 @@ public class AssetMTRestMock {
             response = enrichementHelper(request, response, MT);
 
 
-            if(request.getIrcsValue() != null && request.getIrcsValue().startsWith("TestIrcs:")){
+            if (request.getIrcsValue() != null && request.getIrcsValue().startsWith("TestIrcs:")) {
                 response.setAssetUUID(request.getIrcsValue().split(":")[1]);
                 response.setAssetHistoryId(request.getIrcsValue().split(":")[1]);
             }
             Response r = Response.ok(response).build();
             return r;
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Ooooops");
             return Response.status(500).build();
         }
@@ -90,9 +93,6 @@ public class AssetMTRestMock {
         return asset;
     }
 
-    private static final String DNID = "DNID";
-    private static final String MEMBER_NUMBER = "MEMBER_NUMBER";
-
     private AssetMTEnrichmentResponse enrichementHelper(AssetMTEnrichmentResponse resp, Asset asset) {
         resp.setAssetUUID(asset.getAssetId() == null ? null : asset.getAssetId().getGuid());
         resp.setAssetName(asset.getName());
@@ -126,17 +126,17 @@ public class AssetMTRestMock {
             resp.setMobileTerminalConnectId(connectidUUID == null ? null : connectidUUID.toString());
         }
         resp.setMobileTerminalType(mobTerm.getType());
-        if(mobTerm.getMobileTerminalId() != null) {
+        if (mobTerm.getMobileTerminalId() != null) {
             resp.setMobileTerminalGuid(mobTerm.getMobileTerminalId().getGuid());
         }
         resp.setMobileTerminalIsInactive(mobTerm.isInactive());
 
-        if(mobTerm.getChannels() != null){
+        if (mobTerm.getChannels() != null) {
             List<ComChannelType> channelTypes = mobTerm.getChannels();
-            for(ComChannelType channelType : channelTypes){
+            for (ComChannelType channelType : channelTypes) {
 
                 List<ComChannelAttribute> attributes = channelType.getAttributes();
-                for(ComChannelAttribute attr : attributes){
+                for (ComChannelAttribute attr : attributes) {
                     String type = attr.getType();
                     String val = attr.getValue();
                     if (DNID.equals(type)) {

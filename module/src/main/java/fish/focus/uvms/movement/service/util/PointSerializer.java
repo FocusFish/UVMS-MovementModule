@@ -13,7 +13,7 @@ public class PointSerializer implements JsonbSerializer<Point> {
             MovementPoint point = new MovementPoint();
             point.setLatitude(location.getY());
             point.setLongitude(location.getX());
-            serializationContext.serialize( point, jsonGenerator);
+            serializationContext.serialize(point, jsonGenerator);
         } else {
             serializationContext.serialize(null, jsonGenerator);
         }

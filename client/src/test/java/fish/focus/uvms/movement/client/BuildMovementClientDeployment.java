@@ -16,8 +16,8 @@ public abstract class BuildMovementClientDeployment {
     public static Archive<?> createDeployment() {
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "movement.war");
         File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
-                    .resolve("fish.focus.uvms.movement:movement-module:jar:classes:?")
-                    .withTransitivity().asFile();
+                .resolve("fish.focus.uvms.movement:movement-module:jar:classes:?")
+                .withTransitivity().asFile();
         testWar.addAsLibraries(files);
 
         testWar.addPackages(true, "fish.focus.uvms.movement.client");

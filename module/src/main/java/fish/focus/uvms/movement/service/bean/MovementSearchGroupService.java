@@ -17,6 +17,7 @@ import fish.focus.uvms.movement.service.entity.group.MovementFilterGroup;
 import fish.focus.uvms.movement.service.mapper.MovementGroupMapper;
 import fish.focus.uvms.movement.service.util.CalculationUtil;
 import fish.focus.uvms.movement.service.validation.MovementGroupValidatorBean;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
@@ -29,47 +30,47 @@ public class MovementSearchGroupService {
     private MovementSearchGroupDao dao;
 
     public MovementFilterGroup createMovementFilterGroup(MovementSearchGroup searchGroup, String username) {
-        if(searchGroup.getName() == null || searchGroup.getName().isEmpty()){
+        if (searchGroup.getName() == null || searchGroup.getName().isEmpty()) {
             throw new IllegalArgumentException("Search group must have a name");
         }
-        if(username == null){
+        if (username == null) {
             throw new IllegalArgumentException("Create MovementSearchGroup must have username set, cannot be null");
         }
-            if (MovementGroupValidatorBean.isMovementGroupOk(searchGroup)) {
-                MovementFilterGroup filterGroup = MovementGroupMapper.toGroupEntity(searchGroup, username);
-                return dao.createMovementFilterGroup(filterGroup);
-            } else {
-                throw new IllegalArgumentException("One or several movement types are misspelled or non existent." +
-                        " Allowed values are: [ " + MovementGroupValidatorBean.ALLOWED_FIELD_VALUES + " ]");
-            }
+        if (MovementGroupValidatorBean.isMovementGroupOk(searchGroup)) {
+            MovementFilterGroup filterGroup = MovementGroupMapper.toGroupEntity(searchGroup, username);
+            return dao.createMovementFilterGroup(filterGroup);
+        } else {
+            throw new IllegalArgumentException("One or several movement types are misspelled or non existent." +
+                    " Allowed values are: [ " + MovementGroupValidatorBean.ALLOWED_FIELD_VALUES + " ]");
+        }
     }
 
     public MovementFilterGroup getMovementFilterGroup(UUID id) {
-            MovementFilterGroup filterGroup = dao.getMovementFilterGroupById(id);
-            if (filterGroup == null) {
-                throw new IllegalArgumentException("Could not get movement search group by group ID:"
-                        + id);
-            }
-            return filterGroup;
+        MovementFilterGroup filterGroup = dao.getMovementFilterGroupById(id);
+        if (filterGroup == null) {
+            throw new IllegalArgumentException("Could not get movement search group by group ID:"
+                    + id);
+        }
+        return filterGroup;
     }
 
-    public List<MovementFilterGroup> getMovementFilterGroupsByUser(String user){
-            return dao.getMovementFilterGroupsByUser(user);
+    public List<MovementFilterGroup> getMovementFilterGroupsByUser(String user) {
+        return dao.getMovementFilterGroupsByUser(user);
 
     }
 
     public MovementFilterGroup updateMovementFilterGroup(MovementSearchGroup updatedDTO, String username) {
-        if(updatedDTO.getId() == null || username == null){
+        if (updatedDTO.getId() == null || username == null) {
             throw new IllegalArgumentException("Error when updating movement search group." +
                     " MovementSearchGroup has no id set or the username is null");
         }
-            MovementFilterGroup currentGroup = dao.getMovementFilterGroupById(CalculationUtil.convertFromBigInteger(updatedDTO.getId()));
-            if(!currentGroup.getUser().equalsIgnoreCase(updatedDTO.getUser())){
-                throw new IllegalArgumentException("Could not update movement search groups due to invalid username");
-            }
+        MovementFilterGroup currentGroup = dao.getMovementFilterGroupById(CalculationUtil.convertFromBigInteger(updatedDTO.getId()));
+        if (!currentGroup.getUser().equalsIgnoreCase(updatedDTO.getUser())) {
+            throw new IllegalArgumentException("Could not update movement search groups due to invalid username");
+        }
 
-            currentGroup = MovementGroupMapper.toGroupEntity(currentGroup, updatedDTO, username);
-            return dao.updateMovementFilterGroup(currentGroup);
+        currentGroup = MovementGroupMapper.toGroupEntity(currentGroup, updatedDTO, username);
+        return dao.updateMovementFilterGroup(currentGroup);
     }
 
     public MovementFilterGroup deleteMovementFilterGroup(UUID id) {

@@ -11,15 +11,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.dto;
 
+import fish.focus.uvms.movement.model.dto.MovementDto;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import fish.focus.uvms.movement.model.dto.MovementDto;
 import java.math.BigInteger;
 import java.util.List;
 
 /**
+ *
  **/
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "movementQueryListDto")

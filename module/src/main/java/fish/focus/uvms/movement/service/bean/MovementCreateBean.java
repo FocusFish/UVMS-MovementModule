@@ -17,8 +17,6 @@ import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.asset.client.AssetClient;
 import fish.focus.uvms.asset.client.model.AssetMTEnrichmentRequest;
 import fish.focus.uvms.asset.client.model.AssetMTEnrichmentResponse;
-import fish.focus.uvms.movementrules.model.dto.MovementDetails;
-import fish.focus.uvms.movementrules.model.dto.VicinityInfoDTO;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.entity.MovementConnect;
@@ -27,7 +25,8 @@ import fish.focus.uvms.movement.service.message.ExchangeBean;
 import fish.focus.uvms.movement.service.message.MovementRulesBean;
 import fish.focus.uvms.movement.service.util.CalculationUtil;
 import fish.focus.uvms.movement.service.validation.MovementSanityValidatorBean;
-import org.apache.commons.lang3.exception.ExceptionUtils;
+import fish.focus.uvms.movementrules.model.dto.MovementDetails;
+import fish.focus.uvms.movementrules.model.dto.VicinityInfoDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +34,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSException;
-import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +51,7 @@ public class MovementCreateBean {
 
     @Inject
     private IncomingMovementBean incomingMovementBean;
-    
+
     @Inject
     private AssetClient assetClient;
 
@@ -74,7 +72,7 @@ public class MovementCreateBean {
             enrichIncomingMovement(incomingMovement, assetResponse);
 
             incomingMovementBean.checkAndSetDuplicate(incomingMovement);
-            if (incomingMovement.isDuplicate() && 
+            if (incomingMovement.isDuplicate() &&
                     incomingMovement.getMovementSourceType().equals(MovementSourceType.AIS.value())) {
                 LOG.warn("Ignoring duplicate AIS position for {} ({}) with timestamp {}",
                         incomingMovement.getAssetName(), incomingMovement.getAssetMMSI(), incomingMovement.getPositionTime());
@@ -83,13 +81,13 @@ public class MovementCreateBean {
 
             Movement previousVms = null;
             MovementConnect movementConnect = null;
-            if(incomingMovement.getAssetGuid() != null && !incomingMovement.getAssetGuid().isEmpty()) {
+            if (incomingMovement.getAssetGuid() != null && !incomingMovement.getAssetGuid().isEmpty()) {
                 MovementConnect newMovementConnect = IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy());
                 movementConnect = movementService.getOrCreateMovementConnectByConnectId(newMovementConnect);
                 previousVms = getPreviousVms(incomingMovement, movementConnect);
             }
 
-            if(MovementTypeType.EXI.value().equals(incomingMovement.getMovementType()) && previousVms != null){
+            if (MovementTypeType.EXI.value().equals(incomingMovement.getMovementType()) && previousVms != null) {
                 incomingMovement.setLongitude(previousVms.getLocation().getX());
                 incomingMovement.setLatitude(previousVms.getLocation().getY());
             }
@@ -102,8 +100,8 @@ public class MovementCreateBean {
 
             Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
             movement.setMovementConnect(movementConnect);
-            
-            if (previousVms != null && !MovementSourceType.AIS.value().equals(movement.getSource().value()) ) {
+
+            if (previousVms != null && !MovementSourceType.AIS.value().equals(movement.getSource().value())) {
                 movement.setCalculatedSpeed(CalculationUtil.getPositionCalculations(previousVms, movement).getAvgSpeed());
             }
 

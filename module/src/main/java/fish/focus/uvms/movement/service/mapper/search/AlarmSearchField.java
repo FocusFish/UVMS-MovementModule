@@ -34,7 +34,6 @@ public enum AlarmSearchField {
     }
 
     /**
-     *
      * @return The field name in the Alarm entity. Must be exact.
      */
     public String getFieldName() {
@@ -42,7 +41,6 @@ public enum AlarmSearchField {
     }
 
     /**
-     *
      * @return
      */
     public AlarmSearchTables getSearchTables() {
@@ -50,7 +48,6 @@ public enum AlarmSearchField {
     }
 
     /**
-     *
      * @return
      */
     public Class getClazz() {

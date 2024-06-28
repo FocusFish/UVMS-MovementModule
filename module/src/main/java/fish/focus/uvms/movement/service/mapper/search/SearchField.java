@@ -19,6 +19,7 @@ import org.locationtech.jts.geom.Geometry;
 import java.time.Instant;
 
 /**
+ *
  **/
 public enum SearchField implements SearchFieldType {
 
@@ -107,7 +108,6 @@ public enum SearchField implements SearchFieldType {
     }
 
     /**
-     *
      * @return The fieldname in the Entity. Must be exact
      */
     @Override
@@ -116,7 +116,6 @@ public enum SearchField implements SearchFieldType {
     }
 
     /**
-     *
      * @return
      */
     @Override
@@ -125,7 +124,6 @@ public enum SearchField implements SearchFieldType {
     }
 
     /**
-     *
      * @return
      */
     @Override

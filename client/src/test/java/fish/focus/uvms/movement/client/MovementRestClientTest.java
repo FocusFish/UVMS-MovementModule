@@ -7,10 +7,8 @@ import fish.focus.schema.movement.search.v1.RangeKeyType;
 import fish.focus.schema.movement.v1.MovementActivityTypeType;
 import fish.focus.schema.movement.v1.MovementPoint;
 import fish.focus.schema.movement.v1.MovementSourceType;
-import fish.focus.schema.movement.v1.MovementType;
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.asset.client.model.AssetDTO;
-import fish.focus.uvms.movement.client.MovementRestClient;
 import fish.focus.uvms.movement.client.model.CursorPagination;
 import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.model.constants.SatId;
@@ -19,7 +17,6 @@ import fish.focus.uvms.movement.service.bean.MovementService;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.mapper.IncomingMovementMapper;
-import org.hamcrest.CoreMatchers;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,13 +25,13 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
 import java.math.BigInteger;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
@@ -46,6 +43,48 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
     @Inject
     private MovementService movementService;
 
+    private static AssetDTO createBasicAsset() {
+        AssetDTO asset = new AssetDTO();
+
+        asset.setActive(true);
+        asset.setId(UUID.randomUUID());
+
+        asset.setName("Ship" + generateARandomStringWithMaxLength(10));
+        asset.setCfr("CFR" + generateARandomStringWithMaxLength(9));
+        asset.setFlagStateCode("SWE");
+        asset.setIrcsIndicator(true);
+        asset.setIrcs("F" + generateARandomStringWithMaxLength(7));
+        asset.setExternalMarking("EXT3");
+        asset.setImo("0" + generateARandomStringWithMaxLength(6));
+        asset.setMmsi(generateARandomStringWithMaxLength(9));
+
+        asset.setSource("INTERNAL");
+
+        asset.setMainFishingGearCode("DERMERSAL");
+        asset.setHasLicence(true);
+        asset.setLicenceType("MOCK-license-DB");
+        asset.setPortOfRegistration("TEST_GOT");
+        asset.setLengthOverAll(15.0);
+        asset.setLengthBetweenPerpendiculars(3.0);
+        asset.setGrossTonnage(200.0);
+
+        asset.setGrossTonnageUnit("OSLO");
+        asset.setSafteyGrossTonnage(80.0);
+        asset.setPowerOfMainEngine(10.0);
+        asset.setPowerOfAuxEngine(10.0);
+
+        return asset;
+    }
+
+    public static String generateARandomStringWithMaxLength(int len) {
+        StringBuilder ret = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            int randomInt = new Random().nextInt(10);
+            ret.append(randomInt);
+        }
+        return ret.toString();
+    }
+
     @Before
     public void before() throws NamingException {
         InitialContext ctx = new InitialContext();
@@ -56,7 +95,7 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
     public void pingTest() {
         String expected = "pong";
         String ping = movementRestClient.ping();
-        assertThat(ping, CoreMatchers.is(expected));
+        assertThat(ping, is(expected));
     }
 
     @Test
@@ -66,7 +105,7 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
         Instant positionTime = Instant.parse("2019-01-24T09:00:00Z");
 
         IncomingMovement incomingMovement = createIncomingMovement(asset, positionTime);
-        incomingMovement.setSourceSatelliteId((short)3);
+        incomingMovement.setSourceSatelliteId((short) 3);
         Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         movementService.createAndProcessMovement(movement);
@@ -141,7 +180,6 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
         assertTrue(jsonOutput.contains(createdMovement2.getId().toString()));
     }
 
-
     @Test
     public void getMovementsForConnectIdsBetweenDatesNullDates() {
         // Given
@@ -157,7 +195,7 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
 
 
         // When
-        String jsonOutput =  movementRestClient.getMovementsForConnectIdsBetweenDates(connectIds, null, null, new ArrayList<>());
+        String jsonOutput = movementRestClient.getMovementsForConnectIdsBetweenDates(connectIds, null, null, new ArrayList<>());
 
         // Then
         assertTrue(jsonOutput, jsonOutput.contains(createdMovement.getId().toString()));
@@ -172,7 +210,7 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         Movement createdMovement = movementService.createAndProcessMovement(movement);
 
-       // When
+        // When
         MovementDto movementById = movementRestClient.getMovementById(createdMovement.getId());
 
         // Then
@@ -208,102 +246,102 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
         assertEquals(createdMovement.getSpeed().doubleValue(), movementById.getSpeed().doubleValue(), 0);
         assertEquals(createdMovement.getTimestamp().truncatedTo(ChronoUnit.MILLIS), movementById.getTimestamp());
     }
-    
+
     @Test
     public void getMovementListByQueryResponseDateTest() {
         AssetDTO asset = createBasicAsset();
-        IncomingMovement incomingMovement = createIncomingMovement(asset,  Instant.now());
+        IncomingMovement incomingMovement = createIncomingMovement(asset, Instant.now());
         Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         movement.setTimestamp(Instant.now());
         Movement createdMovement = movementService.createAndProcessMovement(movement);
-   
+
         MovementQuery movementQuery = new MovementQuery();
         movementQuery.setPagination(listPaginationDefault());
         movementQuery.getMovementRangeSearchCriteria().add(createRangeCriteriaDate(1));
         GetMovementListByQueryResponse movementListBy = movementRestClient.getMovementList(movementQuery);
-       
+
         assertNotNull(movementListBy);
         assertTrue(movementListBy.getMovement().size() > 0);
         assertTrue(movementListBy.getMovement().stream().anyMatch(m -> m.getGuid().equals(createdMovement.getId().toString())));
-        assertTrue(movementListBy.getMovement().stream().anyMatch(m -> m.getConnectId().equals(asset.getId().toString())));   
+        assertTrue(movementListBy.getMovement().stream().anyMatch(m -> m.getConnectId().equals(asset.getId().toString())));
     }
-    
+
     @Test
     public void getMovementListByQueryResponseTwoYearsBackTest() {
         AssetDTO asset = createBasicAsset();
-        IncomingMovement incomingMovement = createIncomingMovement(asset,  Instant.now());
+        IncomingMovement incomingMovement = createIncomingMovement(asset, Instant.now());
         Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
-       
+
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
-        movement.setTimestamp(Instant.now().minus(730,ChronoUnit.DAYS));
-        movement.setUpdated(Instant.now().minus(730,ChronoUnit.DAYS));
+        movement.setTimestamp(Instant.now().minus(730, ChronoUnit.DAYS));
+        movement.setUpdated(Instant.now().minus(730, ChronoUnit.DAYS));
         Movement createdMovement = movementService.createAndProcessMovement(movement);
-   
+
         MovementQuery movementQuery = new MovementQuery();
         movementQuery.setPagination(listPaginationDefault());
         movementQuery.getMovementRangeSearchCriteria().add(createRangeCriteriaDate(731));
-    	
+
         GetMovementListByQueryResponse movementListBy = movementRestClient.getMovementList(movementQuery);
-        
+
         assertNotNull(movementListBy);
         assertTrue(movementListBy.getMovement().size() > 0);
         assertTrue(movementListBy.getMovement().stream().anyMatch(m -> m.getGuid().equals(createdMovement.getId().toString())));
-        assertTrue(movementListBy.getMovement().stream().anyMatch(m -> m.getConnectId().equals(asset.getId().toString())));  
+        assertTrue(movementListBy.getMovement().stream().anyMatch(m -> m.getConnectId().equals(asset.getId().toString())));
     }
-    
+
     @Test
     public void getCursorBasedListTest() {
         AssetDTO asset = createBasicAsset();
-        IncomingMovement incomingMovement = createIncomingMovement(asset,  Instant.now());
+        IncomingMovement incomingMovement = createIncomingMovement(asset, Instant.now());
         Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         movement.setTimestamp(Instant.now());
         Movement createdMovement = movementService.createAndProcessMovement(movement);
-   
+
         CursorPagination cursorPagination = new CursorPagination();
         cursorPagination.setFrom(createdMovement.getTimestamp().minus(1, ChronoUnit.HOURS));
         cursorPagination.setTo(createdMovement.getTimestamp().plus(1, ChronoUnit.HOURS));
         cursorPagination.setConnectIds(Arrays.asList(createdMovement.getMovementConnect().getId()));
         List<MovementDto> movements = movementRestClient.getCursorBasedList(cursorPagination);
-       
+
         assertNotNull(movements);
         assertTrue(movements.size() > 0);
         assertTrue(movements.stream().anyMatch(m -> m.getId().equals(createdMovement.getId())));
         assertTrue(movements.stream().anyMatch(m -> m.getAsset().equals(asset.getId().toString())));
     }
-    
+
     @Test
     public void getMovementByIdListTest() {
         AssetDTO asset = createBasicAsset();
-        IncomingMovement incomingMovement = createIncomingMovement(asset,  Instant.now());
-        Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());    
+        IncomingMovement incomingMovement = createIncomingMovement(asset, Instant.now());
+        Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         Movement createdMovement = movementService.createAndProcessMovement(movement);
-        
+
         List<UUID> ids = new ArrayList<UUID>();
         ids.add(createdMovement.getId());
         List<MovementDto> microMovementList = movementRestClient.getMovementDtoByIdList(ids);
         assertNotNull(microMovementList);
         assertTrue(microMovementList.size() == 1);
-        assertTrue( microMovementList.get(0).getId().equals(createdMovement.getId() ) );
-        assertTrue(microMovementList.get(0).getHeading() == (double)createdMovement.getHeading());
+        assertTrue(microMovementList.get(0).getId().equals(createdMovement.getId()));
+        assertTrue(microMovementList.get(0).getHeading() == (double) createdMovement.getHeading());
     }
-    
+
     @Test
     public void getMicroMovementByIdListTwoIdsTest() {
         AssetDTO asset = createBasicAsset();
-        IncomingMovement incomingMovement = createIncomingMovement(asset,  Instant.now());
-        Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());    
+        IncomingMovement incomingMovement = createIncomingMovement(asset, Instant.now());
+        Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         Movement createdMovement = movementService.createAndProcessMovement(movement);
-        
+
         AssetDTO asset2 = createBasicAsset();
-        IncomingMovement incomingMovement2 = createIncomingMovement(asset2,  Instant.now());
-        Movement movement2 = IncomingMovementMapper.mapNewMovementEntity(incomingMovement2, incomingMovement2.getUpdatedBy());    
+        IncomingMovement incomingMovement2 = createIncomingMovement(asset2, Instant.now());
+        Movement movement2 = IncomingMovementMapper.mapNewMovementEntity(incomingMovement2, incomingMovement2.getUpdatedBy());
         movement2.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement2, incomingMovement2.getUpdatedBy()));
         Movement createdMovement2 = movementService.createAndProcessMovement(movement2);
-        
+
         List<UUID> ids = new ArrayList<UUID>();
         ids.add(createdMovement.getId());
         ids.add(createdMovement2.getId());
@@ -315,7 +353,7 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
     @Test
     public void getMovementDtoByIdListTest() {
         AssetDTO asset = createBasicAsset();
-        IncomingMovement incomingMovement = createIncomingMovement(asset,  Instant.now());
+        IncomingMovement incomingMovement = createIncomingMovement(asset, Instant.now());
         Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         movement.setMovementType(MovementTypeType.EXI);
@@ -326,21 +364,21 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
         List<MovementDto> MovementDtoList = movementRestClient.getMovementDtoByIdList(ids);
         assertNotNull(MovementDtoList);
         assertTrue(MovementDtoList.size() == 1);
-        assertTrue( MovementDtoList.get(0).getId().equals(createdMovement.getId() ) );
-        assertTrue(MovementDtoList.get(0).getHeading() == (double)createdMovement.getHeading());
+        assertTrue(MovementDtoList.get(0).getId().equals(createdMovement.getId()));
+        assertTrue(MovementDtoList.get(0).getHeading() == (double) createdMovement.getHeading());
         assertEquals(createdMovement.getMovementType(), MovementDtoList.get(0).getMovementType());
     }
 
     @Test
     public void getMovementDtoByIdListTwoIdsTest() {
         AssetDTO asset = createBasicAsset();
-        IncomingMovement incomingMovement = createIncomingMovement(asset,  Instant.now());
+        IncomingMovement incomingMovement = createIncomingMovement(asset, Instant.now());
         Movement movement = IncomingMovementMapper.mapNewMovementEntity(incomingMovement, incomingMovement.getUpdatedBy());
         movement.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement, incomingMovement.getUpdatedBy()));
         Movement createdMovement = movementService.createAndProcessMovement(movement);
 
         AssetDTO asset2 = createBasicAsset();
-        IncomingMovement incomingMovement2 = createIncomingMovement(asset2,  Instant.now());
+        IncomingMovement incomingMovement2 = createIncomingMovement(asset2, Instant.now());
         Movement movement2 = IncomingMovementMapper.mapNewMovementEntity(incomingMovement2, incomingMovement2.getUpdatedBy());
         movement2.setMovementConnect(IncomingMovementMapper.mapNewMovementConnect(incomingMovement2, incomingMovement2.getUpdatedBy()));
         Movement createdMovement2 = movementService.createAndProcessMovement(movement2);
@@ -352,22 +390,22 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
         assertNotNull(movementDtoList);
         assertTrue(movementDtoList.size() == 2);
     }
-    
+
     private RangeCriteria createRangeCriteriaDate(int daysFromNow) {
         RangeCriteria rangeCriteria1 = new RangeCriteria();
         rangeCriteria1.setKey(RangeKeyType.DATE);
         rangeCriteria1.setTo(Long.toString(Instant.now().toEpochMilli()));
-        rangeCriteria1.setFrom(Long.toString(Instant.now().minus(daysFromNow,ChronoUnit.DAYS).toEpochMilli()));
+        rangeCriteria1.setFrom(Long.toString(Instant.now().minus(daysFromNow, ChronoUnit.DAYS).toEpochMilli()));
         return rangeCriteria1;
     }
-    
+
     private ListPagination listPaginationDefault() {
-    	ListPagination pagination = new ListPagination();
+        ListPagination pagination = new ListPagination();
         pagination.setPage(BigInteger.ONE);
         pagination.setListSize(BigInteger.valueOf(1000));
         return pagination;
     }
-    
+
     private IncomingMovement createIncomingMovement(AssetDTO testAsset, Instant positionTime) {
 
         IncomingMovement incomingMovement = new IncomingMovement();
@@ -399,47 +437,5 @@ public class MovementRestClientTest extends BuildMovementClientDeployment {
         incomingMovement.setMovementSourceType(MovementSourceType.OTHER.value());
 
         return incomingMovement;
-    }
-
-    private static AssetDTO createBasicAsset() {
-        AssetDTO asset = new AssetDTO();
-
-        asset.setActive(true);
-        asset.setId(UUID.randomUUID());
-
-        asset.setName("Ship" + generateARandomStringWithMaxLength(10));
-        asset.setCfr("CFR" + generateARandomStringWithMaxLength(9));
-        asset.setFlagStateCode("SWE");
-        asset.setIrcsIndicator(true);
-        asset.setIrcs("F" + generateARandomStringWithMaxLength(7));
-        asset.setExternalMarking("EXT3");
-        asset.setImo("0" + generateARandomStringWithMaxLength(6));
-        asset.setMmsi(generateARandomStringWithMaxLength(9));
-
-        asset.setSource("INTERNAL");
-
-        asset.setMainFishingGearCode("DERMERSAL");
-        asset.setHasLicence(true);
-        asset.setLicenceType("MOCK-license-DB");
-        asset.setPortOfRegistration("TEST_GOT");
-        asset.setLengthOverAll(15.0);
-        asset.setLengthBetweenPerpendiculars(3.0);
-        asset.setGrossTonnage(200.0);
-
-        asset.setGrossTonnageUnit("OSLO");
-        asset.setSafteyGrossTonnage(80.0);
-        asset.setPowerOfMainEngine(10.0);
-        asset.setPowerOfAuxEngine(10.0);
-
-        return asset;
-    }
-
-    public static String generateARandomStringWithMaxLength(int len) {
-        StringBuilder ret = new StringBuilder();
-        for (int i = 0; i < len; i++) {
-            int randomInt = new Random().nextInt(10);
-            ret.append(randomInt);
-        }
-        return ret.toString();
     }
 }

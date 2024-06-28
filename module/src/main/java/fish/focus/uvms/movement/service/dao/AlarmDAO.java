@@ -1,9 +1,10 @@
 package fish.focus.uvms.movement.service.dao;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import fish.focus.uvms.movement.service.dto.AlarmStatusType;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -40,7 +41,7 @@ public class AlarmDAO {
     }
 
     public AlarmReport getAlarmReportByGuid(UUID guid) {
-            return em.find(AlarmReport.class, guid);
+        return em.find(AlarmReport.class, guid);
     }
 
     public long getNumberOfOpenAlarms() {

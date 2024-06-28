@@ -10,10 +10,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.message;
 
-import java.util.Enumeration;
-import java.util.List;
-import javax.jms.*;
-
 import fish.focus.schema.movement.module.v1.CreateMovementBatchResponse;
 import fish.focus.schema.movement.module.v1.GetMovementListByQueryResponse;
 import fish.focus.schema.movement.module.v1.PingResponse;
@@ -23,12 +19,15 @@ import fish.focus.uvms.commons.message.api.MessageConstants;
 import fish.focus.uvms.movement.model.mapper.JAXBMarshaller;
 import fish.focus.uvms.movement.model.mapper.MovementModuleRequestMapper;
 
+import javax.jms.*;
+import java.util.Enumeration;
+import java.util.List;
+
 public class JMSHelper {
 
+    public static final String RESPONSE_QUEUE = "IntegrationTestsResponseQueue";
     private static final long TIMEOUT = 20000;
     private static final String MOVEMENT_QUEUE = "UVMSMovementEvent";
-    public static final String RESPONSE_QUEUE = "IntegrationTestsResponseQueue";
-
     private final ConnectionFactory connectionFactory;
 
     public JMSHelper(ConnectionFactory connectionFactory) {
@@ -48,14 +47,14 @@ public class JMSHelper {
         Message response = listenForResponse(correlationId);
         return JAXBMarshaller.unmarshallTextMessage((TextMessage) response, CreateMovementResponse.class);
     }*/
-    
+
     public CreateMovementBatchResponse createMovementBatch(List<MovementBaseType> movementBaseType, String username) throws Exception {
         String request = MovementModuleRequestMapper.mapToCreateMovementBatchRequest(movementBaseType, username);
         String correlationId = sendMovementMessage(request, movementBaseType.get(0).getConnectId(), null);
         Message response = listenForResponse(correlationId);
         return JAXBMarshaller.unmarshallTextMessage((TextMessage) response, CreateMovementBatchResponse.class);
     }
-    
+
     public GetMovementListByQueryResponse getMovementListByQuery(MovementQuery movementQuery, String groupId) throws Exception {
         String request = MovementModuleRequestMapper.mapToGetMovementListByQueryRequest(movementQuery);
         String correlationId = sendMovementMessage(request, groupId, null);
@@ -92,7 +91,7 @@ public class JMSHelper {
             Queue responseQueue = session.createQueue(RESPONSE_QUEUE);
 
             return session.createConsumer(responseQueue, "JMSCorrelationID='" + correlationId + "'")
-                          .receive(TIMEOUT);
+                    .receive(TIMEOUT);
         } finally {
             connection.close();
         }
@@ -135,9 +134,9 @@ public class JMSHelper {
             Queue responseQueue = session.createQueue(queue);
 
             QueueBrowser browser = session.createBrowser(responseQueue);
-            
+
             Enumeration enumeration = browser.getEnumeration();
-            while(enumeration.hasMoreElements()) {
+            while (enumeration.hasMoreElements()) {
                 enumeration.nextElement();
                 messages++;
             }
@@ -156,7 +155,7 @@ public class JMSHelper {
             Queue responseQueue = session.createQueue(queue);
             consumer = session.createConsumer(responseQueue);
 
-            while (consumer.receive(10L) != null);
+            while (consumer.receive(10L) != null) ;
         } finally {
             connection.close();
         }

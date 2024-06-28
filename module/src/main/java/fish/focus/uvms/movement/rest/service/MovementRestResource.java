@@ -16,25 +16,23 @@ import fish.focus.schema.movement.source.v1.GetMovementMapByQueryResponse;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementType;
 import fish.focus.uvms.commons.date.DateUtils;
-import fish.focus.uvms.rest.security.RequiresFeature;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
 import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.model.dto.MovementDto;
 import fish.focus.uvms.movement.rest.RestUtilMapper;
 import fish.focus.uvms.movement.rest.dto.RealTimeMapInitialData;
-import fish.focus.uvms.movement.rest.dto.TrackForAssetsQuery;
 import fish.focus.uvms.movement.service.bean.MovementService;
 import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.mapper.MovementEntityToModelMapper;
 import fish.focus.uvms.movement.service.mapper.MovementMapper;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+import fish.focus.uvms.rest.security.RequiresFeature;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.json.bind.Jsonb;
@@ -44,11 +42,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -67,13 +63,13 @@ public class MovementRestResource {
     @Inject
     private MovementDao movementDao;
 
-    @Context 
+    @Context
     private HttpServletRequest request;
-    
+
     private Jsonb jsonb;    //to be able to replace one part of the string beeing sent out since yasson does not allow one to send raw ;(
 
     @PostConstruct
-    public void init(){
+    public void init() {
         LOG.info("Initializing MovementRestResource");
         jsonb = new JsonBConfiguratorMovement().getContext(null);
     }
@@ -92,7 +88,8 @@ public class MovementRestResource {
     }
 
     @POST
-    @Path("/list/minimal")          //Used by a position part in old frontend, use until we have moved that functionality to new frontend
+    @Path("/list/minimal")
+    //Used by a position part in old frontend, use until we have moved that functionality to new frontend
     @RequiresFeature(UnionVMSFeature.viewMovements)
     public Response getMinimalListByQuery(MovementQuery query) {
         LOG.debug("Get list invoked in rest layer");
@@ -209,7 +206,7 @@ public class MovementRestResource {
             List<MovementSourceType> sourceTypes = RestUtilMapper.convertToMovementSourceTypes(sources);
             Instant startInstant = (startDate.isEmpty() ? Instant.now().minus(8, ChronoUnit.HOURS) : DateUtils.stringToDate(startDate));
             Instant endInstant = (endDate.isEmpty() ? Instant.now() : DateUtils.stringToDate(endDate));
-            List<Movement> movements = movementDao.getMovementsForAssetAfterDate (connectId, startInstant, endInstant, sourceTypes);
+            List<Movement> movements = movementDao.getMovementsForAssetAfterDate(connectId, startInstant, endInstant, sourceTypes);
             List<MovementDto> movementDtos = MovementMapper.mapToMovementDtoList(movements);
             return Response.ok(movementDtos).header("MDC", MDC.get("requestId")).build();
         } catch (Exception e) {
@@ -227,7 +224,7 @@ public class MovementRestResource {
             List<MovementDto> movements = movementService.getLatestMovementsLast8Hours(sourceTypes);
 
             List<String> assetIdList = new ArrayList<>(movements.size());
-            for (MovementDto movement: movements) {
+            for (MovementDto movement : movements) {
                 assetIdList.add(movement.getAsset());
             }
 
@@ -242,5 +239,5 @@ public class MovementRestResource {
             throw e;
         }
     }
-    
+
 }

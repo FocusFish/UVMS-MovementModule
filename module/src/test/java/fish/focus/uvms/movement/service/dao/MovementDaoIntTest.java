@@ -4,7 +4,6 @@ import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.commons.date.DateUtils;
 import fish.focus.uvms.movement.service.TransactionalTests;
-import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.dto.CursorPagination;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.entity.MovementConnect;
@@ -34,6 +33,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
 
 /**
@@ -53,14 +53,11 @@ public class MovementDaoIntTest extends TransactionalTests {
         AUTHORITY["EPSG","4326"]]
      */
 
-    private Random rnd = new Random();
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @EJB
     private MovementDao movementDao;
-
 
     /******************************************************************************************************************
      *   TEST FUNCTIONS
@@ -69,7 +66,6 @@ public class MovementDaoIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void create() {
-
         MovementConnect movementConnect = createMovementConnectHelper();
         MovementConnect createdMovementConnect = movementDao.createMovementConnect(movementConnect);
         assertNotNull(createdMovementConnect);
@@ -93,7 +89,6 @@ public class MovementDaoIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void getFirstMovement() {
-
         MovementConnect movementConnect = createMovementConnectHelper();
         MovementConnect createdMovementConnect = movementDao.createMovementConnect(movementConnect);
         assertNotNull(createdMovementConnect);
@@ -124,8 +119,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementListPaginatedListSize()  {
-
+    public void getMovementListPaginatedListSize() {
         List<SearchValue> searchKeyValues = new ArrayList<>();
         Integer page = 1;
         Integer listSize = 10;
@@ -138,8 +132,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementListPaginated_NegativeSpeed()  {
-
+    public void getMovementListPaginated_NegativeSpeed() {
         List<SearchValue> searchKeyValues = new ArrayList<>();
         Integer page = 1;
         Integer listSize = 10;
@@ -153,7 +146,6 @@ public class MovementDaoIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementById() {
-
         MovementConnect movementConnect = createMovementConnectHelper();
         MovementConnect createdMovementConnect = movementDao.createMovementConnect(movementConnect);
         assertNotNull(createdMovementConnect);
@@ -188,7 +180,6 @@ public class MovementDaoIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementConnectByConnectId() {
-
         MovementConnect movementConnect = createMovementConnectHelper();
         MovementConnect createdMovementConnect = movementDao.createMovementConnect(movementConnect);
         assertNotNull(createdMovementConnect);
@@ -211,8 +202,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NonPaginated_NullCheckResultSetAtUnlogicQuery()  {
-
+    public void getMovementList_NonPaginated_NullCheckResultSetAtUnlogicQuery() {
         // TODO getMovementList looks unhealthy according to the number of queries it runs  (slow)
 
         List<SearchValue> searchValues = new ArrayList<>();
@@ -224,8 +214,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NonPaginated_NoSearchValues()  {
-
+    public void getMovementList_NonPaginated_NoSearchValues() {
         List<SearchValue> searchValues = new ArrayList<>();
         String sql = "select m from Movement m ";
 
@@ -235,8 +224,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NonPaginated_WithSearchValues()  {
-
+    public void getMovementList_NonPaginated_WithSearchValues() {
         // this is not covered in the code BUT it forces that code path to execute
 
         List<SearchValue> searchValues = Collections.singletonList(new SearchValue(SearchField.MOVEMENT_SPEED, "HEPP"));
@@ -248,8 +236,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NonPaginated_ShouldCrash()  {
-
+    public void getMovementList_NonPaginated_ShouldCrash() {
         List<SearchValue> searchValues = Collections.singletonList(new SearchValue(SearchField.AREA, "HEPP"));
         String sql = "select m from Movement m ";
 
@@ -261,8 +248,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     // @Test
     // Unstable ServerCode see TODO
-    public void getMovementList_NumberOfReports_1_NoSearchValue()  {
-
+    public void getMovementList_NumberOfReports_1_NoSearchValue() {
         // TODO getMovementList looks unhealthy according to the number of queries it runs  (slow)
         // TODO getLatestMovementsByConnectId in DAO throws exception and crashes the entire result-set if a lookup is empty
 
@@ -275,8 +261,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NumberOfReports_5_noSearchValue()  {
-
+    public void getMovementList_NumberOfReports_5_noSearchValue() {
         // TODO getMovementList looks unhealthy according to the number of queries it runs  (slow)
 
         List<SearchValue> searchValues = new ArrayList<>();
@@ -288,8 +273,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NumberOfReports_0_WithSearchValue()  {
-
+    public void getMovementList_NumberOfReports_0_WithSearchValue() {
         // TODO this test is maybe to optimistic since the query parameters are given in the test OR they are manufactured in the Service-layer
         // TODO getMovementList looks unhealthy according to the number of queries it runs  (slow)
 
@@ -303,8 +287,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NumberOfReports_1_WithSearchValue()  {
-
+    public void getMovementList_NumberOfReports_1_WithSearchValue() {
         // TODO this test is maybe to optimistic since the query parameters are given in the test OR they are manufactured in the Service-layer
         // TODO getMovementList looks unhealthy according to the number of queries it runs  (slow)
 
@@ -318,8 +301,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NumberOfReports_1_withSearchValue_NoResult()  {
-
+    public void getMovementList_NumberOfReports_1_withSearchValue_NoResult() {
         // TODO this test is maybe to optimistic since the query parameters are given in the test OR they are manufactured in the Service-layer
         // TODO getMovementList  looks unhealthy according to the number of queries it runs  (slow)
 
@@ -333,8 +315,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementList_NumberOfReports_5_withSearchValue()  {
-
+    public void getMovementList_NumberOfReports_5_withSearchValue() {
         // TODO this test is maybe to optimistic since the query parameters are given in the test OR they are manufactured in the Service-layer
         // TODO getMovementList  looks unhealthy according to the number of queries it runs  (slow)
 
@@ -348,8 +329,7 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementListPaginated()  {
-
+    public void getMovementListPaginated() {
         long currentTimeMillis = System.currentTimeMillis();
 
         Instant d1980 = OffsetDateTime.of(1980, 3, 3, 0, 0, 0, 0, ZoneOffset.UTC).toInstant();
@@ -362,7 +342,7 @@ public class MovementDaoIntTest extends TransactionalTests {
         Integer listSize = 10;
 
         List<Movement> allMovements = getAllFromMovementHelper();
-        if(allMovements.size() < listSize)
+        if (allMovements.size() < listSize)
             listSize = allMovements.size();
 
         String sql = "SELECT m FROM Movement m WHERE m.timestamp >= :fromDate AND m.timestamp <= :toDate";
@@ -372,49 +352,48 @@ public class MovementDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementListSearchCount() throws java.text.ParseException {
+    public void getMovementListSearchCount() {
         List<SearchValue> searchValues = new ArrayList<>();
         String sql = SearchFieldMapper.createCountSearchSql(searchValues, true);
-        Long searchResult = movementDao.getMovementListSearchCount(sql,searchValues);
+        Long searchResult = movementDao.getMovementListSearchCount(sql, searchValues);
         assertNotNull(searchResult);
         assertTrue(searchResult >= 0);
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMovementListSearchCount_SearchValueNull_ExceptionThrown() throws java.text.ParseException{
-
+    public void getMovementListSearchCount_SearchValueNull_ExceptionThrown() {
         thrown.expect(Exception.class);
 
         String sql = SearchFieldMapper.createCountSearchSql(null, true);
-        movementDao.getMovementListSearchCount(sql,null);
+        movementDao.getMovementListSearchCount(sql, null);
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
-    public void getCursorBasedListTest() throws Exception{
+    public void getCursorBasedListTest() {
         MovementConnect movementConnect = createMovementConnectHelper();
         movementDao.createMovementConnect(movementConnect);
         Movement movement = createMovementHelper();
         movement.setMovementConnect(movementConnect);
         movementDao.createMovement(movement);
-        
+
         CursorPagination cursorPagination = new CursorPagination();
         cursorPagination.setFrom(movement.getTimestamp().minus(1, ChronoUnit.HOURS));
         cursorPagination.setTo(movement.getTimestamp().plus(1, ChronoUnit.HOURS));
         cursorPagination.setConnectIds(Arrays.asList(movementConnect.getId()));
         cursorPagination.setSources(Arrays.asList(MovementSourceType.AIS, MovementSourceType.NAF));
         cursorPagination.setLimit(10);
-        
+
         List<Movement> movements = movementDao.getCursorBasedList(cursorPagination);
-        
+
         assertThat(movements.size(), CoreMatchers.is(1));
         assertThat(movements.get(0).getId(), CoreMatchers.is(movement.getId()));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
-    public void getCursorBasedListPaginationTest() throws Exception{
+    public void getCursorBasedListPaginationTest() {
         MovementConnect movementConnect = createMovementConnectHelper();
         movementDao.createMovementConnect(movementConnect);
         Movement movement = createMovementHelper();
@@ -425,7 +404,7 @@ public class MovementDaoIntTest extends TransactionalTests {
         movement2.setTimestamp(Instant.now());
         movement2.setMovementConnect(movementConnect);
         movementDao.createMovement(movement2);
-        
+
         Instant from = movement.getTimestamp().minus(1, ChronoUnit.HOURS);
         Instant to = movement2.getTimestamp().plus(1, ChronoUnit.HOURS);
 
@@ -435,24 +414,24 @@ public class MovementDaoIntTest extends TransactionalTests {
         cursorPagination.setConnectIds(Arrays.asList(movementConnect.getId()));
         cursorPagination.setSources(Arrays.asList(movement.getSource()));
         cursorPagination.setLimit(2);
-        
+
         List<Movement> movements = movementDao.getCursorBasedList(cursorPagination);
-        
+
         assertThat(movements.size(), CoreMatchers.is(2));
         assertThat(movements.get(0).getId(), CoreMatchers.is(movement.getId()));
-        
+
         cursorPagination.setTimestampCursor(movements.get(1).getTimestamp());
         cursorPagination.setIdCursor(movements.get(1).getId());
-        
+
         List<Movement> movements2 = movementDao.getCursorBasedList(cursorPagination);
-        
+
         assertThat(movements2.size(), CoreMatchers.is(1));
         assertThat(movements2.get(0).getId(), CoreMatchers.is(movement2.getId()));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
-    public void getCursorBasedListPaginationSameTimestampTest() throws Exception{
+    public void getCursorBasedListPaginationSameTimestampTest() {
         Instant timestamp = Instant.now();
 
         MovementConnect movementConnect = createMovementConnectHelper();
@@ -467,12 +446,12 @@ public class MovementDaoIntTest extends TransactionalTests {
         movement2.setTimestamp(timestamp);
         movement2.setMovementConnect(movementConnect2);
         movementDao.createMovement(movement2);
-        
+
         List<String> stringUUIDList = Arrays.asList(movement.getId().toString(), movement2.getId().toString());
         Collections.sort(stringUUIDList);
-        List<UUID> sortedIds = stringUUIDList.stream().map(str ->  UUID.fromString(str)).collect(Collectors 
-                .toCollection(ArrayList::new)); 
-        
+        List<UUID> sortedIds = stringUUIDList.stream().map(str -> UUID.fromString(str)).collect(Collectors
+                .toCollection(ArrayList::new));
+
         Instant from = movement.getTimestamp().minus(1, ChronoUnit.HOURS);
         Instant to = movement.getTimestamp().plus(1, ChronoUnit.HOURS);
 
@@ -482,9 +461,9 @@ public class MovementDaoIntTest extends TransactionalTests {
         cursorPagination.setConnectIds(Arrays.asList(movementConnect.getId(), movementConnect2.getId()));
         cursorPagination.setSources(Arrays.asList(movement.getSource()));
         cursorPagination.setLimit(2);
-        
+
         List<Movement> movements = movementDao.getCursorBasedList(cursorPagination);
-        
+
         assertThat(movements.size(), CoreMatchers.is(2));
         assertThat(movements.get(0).getId(), CoreMatchers.is(sortedIds.get(0)));
 
@@ -495,16 +474,16 @@ public class MovementDaoIntTest extends TransactionalTests {
 
         assertThat(movements2.size(), CoreMatchers.is(1));
         assertThat(movements2.get(0).getId(), CoreMatchers.is(sortedIds.get(1)));
-        
-        assertTrue(movements2.get(0).equals(movements.get(1)));
-        
+
+        assertEquals(movements2.get(0), movements.get(1));
     }
 
     /******************************************************************************************************************
      *   HELPER FUNCTIONS
      ******************************************************************************************************************/
 
-    /** This one always creates on the same coordinates
+    /**
+     * This one always creates on the same coordinates
      *
      * @return
      */
@@ -522,8 +501,7 @@ public class MovementDaoIntTest extends TransactionalTests {
      * @param latitude
      * @return newly created {@code Movement} object.
      */
-    private Movement createMovementHelper( double longitude, double latitude  ) {
-
+    private Movement createMovementHelper(double longitude, double latitude) {
         Movement movement = new Movement();
 
         GeometryFactory geometryFactory = new GeometryFactory();
@@ -553,7 +531,6 @@ public class MovementDaoIntTest extends TransactionalTests {
     }
 
     private List<Movement> getAllFromMovementHelper() {
-
         String sql = "SELECT m FROM Movement m ";
 
         try {
@@ -564,18 +541,7 @@ public class MovementDaoIntTest extends TransactionalTests {
         return new ArrayList<>();
     }
 
-    private Boolean findLatestMovements(UUID createdMovementId, List<Movement> all) {
-        for (Movement latestMovement : all) {
-            UUID movementFromLatestMovementId = latestMovement.getId();
-            if (movementFromLatestMovementId.equals(createdMovementId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void expectedMessage(String message) {
         thrown.expect(new ThrowableMessageMatcher(new StringContains(message)));
     }
-
 }

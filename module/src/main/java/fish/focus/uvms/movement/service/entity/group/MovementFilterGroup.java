@@ -25,14 +25,14 @@ import java.util.UUID;
 @Entity
 @Table(name = "movementfiltergroup")
 @NamedQuery(name = MovementFilterGroup.GROUP_VESSEL_FIND_ALL, query = "SELECT f FROM MovementFilterGroup f")
-@NamedQuery(name = MovementFilterGroup.GROUP_VESSEL_BY_USER, query="SELECT f FROM MovementFilterGroup f WHERE f.user = :user")
+@NamedQuery(name = MovementFilterGroup.GROUP_VESSEL_BY_USER, query = "SELECT f FROM MovementFilterGroup f WHERE f.user = :user")
 @DynamicUpdate
 @DynamicInsert
 public class MovementFilterGroup implements Serializable {
-    
+
     public static final String GROUP_VESSEL_FIND_ALL = "Filtergroup.findAll";
     public static final String GROUP_VESSEL_BY_USER = "Filtergroup.findByUser";
-    
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -63,7 +63,7 @@ public class MovementFilterGroup implements Serializable {
     @Column(name = "movefiltgrp_user_id")
     private String user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy="filterGroup")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "filterGroup")
     @Column(name = "movefilt_movefiltgrp_id")
     private List<MovementFilter> filters;
 
@@ -131,14 +131,14 @@ public class MovementFilterGroup implements Serializable {
         this.user = user;
     }
 
-    public void setFilters(List<MovementFilter> filters) {
-        this.filters = filters;
-    }
-
     public List<MovementFilter> getFilters() {
         if (this.filters == null) {
             this.filters = new ArrayList<>();
         }
         return this.filters;
+    }
+
+    public void setFilters(List<MovementFilter> filters) {
+        this.filters = filters;
     }
 }

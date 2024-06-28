@@ -14,6 +14,7 @@ package fish.focus.uvms.movement.service.mapper.search;
 import fish.focus.schema.movement.v1.SegmentCategoryType;
 
 /**
+ *
  **/
 public enum SearchFieldSpecial implements SearchFieldType {
 
@@ -39,7 +40,6 @@ public enum SearchFieldSpecial implements SearchFieldType {
     }
 
     /**
-     *
      * @return The fieldname in the Entity. Must be exact
      */
     @Override
@@ -48,7 +48,6 @@ public enum SearchFieldSpecial implements SearchFieldType {
     }
 
     /**
-     *
      * @return
      */
     @Override
@@ -57,7 +56,6 @@ public enum SearchFieldSpecial implements SearchFieldType {
     }
 
     /**
-     *
      * @return
      */
     @Override

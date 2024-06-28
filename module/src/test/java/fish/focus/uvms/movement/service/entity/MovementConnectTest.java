@@ -1,7 +1,7 @@
 package fish.focus.uvms.movement.service.entity;
 
 import org.junit.Test;
-import fish.focus.uvms.movement.service.entity.MovementConnect;
+
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;

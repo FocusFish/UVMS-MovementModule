@@ -1,4 +1,3 @@
-
 package fish.focus.uvms.movement.service.dto;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -10,9 +9,9 @@ import java.io.Serializable;
 
 /**
  * <p>Java class for AlarmItemType complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AlarmItemType"&gt;
  *   &lt;complexContent&gt;
@@ -26,18 +25,15 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AlarmItemType", propOrder = {
-    "guid",
-    "ruleGuid",
-    "ruleName"
+        "guid",
+        "ruleGuid",
+        "ruleName"
 })
 public class AlarmItemType
-    implements Serializable
-{
+        implements Serializable {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(required = true)
@@ -49,11 +45,9 @@ public class AlarmItemType
 
     /**
      * Gets the value of the guid property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getGuid() {
         return guid;
@@ -61,11 +55,9 @@ public class AlarmItemType
 
     /**
      * Sets the value of the guid property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setGuid(String value) {
         this.guid = value;
@@ -73,11 +65,9 @@ public class AlarmItemType
 
     /**
      * Gets the value of the ruleGuid property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRuleGuid() {
         return ruleGuid;
@@ -85,11 +75,9 @@ public class AlarmItemType
 
     /**
      * Sets the value of the ruleGuid property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRuleGuid(String value) {
         this.ruleGuid = value;
@@ -97,11 +85,9 @@ public class AlarmItemType
 
     /**
      * Gets the value of the ruleName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getRuleName() {
         return ruleName;
@@ -109,11 +95,9 @@ public class AlarmItemType
 
     /**
      * Sets the value of the ruleName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setRuleName(String value) {
         this.ruleName = value;

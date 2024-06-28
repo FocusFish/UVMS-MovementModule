@@ -10,27 +10,28 @@
  */
 package fish.focus.uvms.movement.service.dto;
 
-import java.time.Instant;
-import java.util.UUID;
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 import fish.focus.schema.movement.v1.MovementPoint;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.movement.model.constants.SatId;
 import fish.focus.uvms.movement.model.dto.MovementDto;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Point;
+
+import java.time.Instant;
+import java.util.UUID;
 
 public class MovementProjection extends MovementDto {
 
     public MovementProjection(UUID id, Geometry location, Float speed, Double calculatedSpeed, Float heading,
-            UUID asset, String status, MovementSourceType source, MovementTypeType movementType, Instant timestamp,
-            Instant lesReportTime, SatId sourceSatelliteId, Instant updated, String updatedBy,
-            Short aisPositionAccuracy) {
+                              UUID asset, String status, MovementSourceType source, MovementTypeType movementType, Instant timestamp,
+                              Instant lesReportTime, SatId sourceSatelliteId, Instant updated, String updatedBy,
+                              Short aisPositionAccuracy) {
         super();
         setId(id);
         MovementPoint point = new MovementPoint();
-        point.setLongitude(((Point)location).getX());
-        point.setLatitude(((Point)location).getY());
+        point.setLongitude(((Point) location).getX());
+        point.setLatitude(((Point) location).getY());
         setLocation(point);
         setSpeed(speed);
         setCalculatedSpeed(calculatedSpeed);

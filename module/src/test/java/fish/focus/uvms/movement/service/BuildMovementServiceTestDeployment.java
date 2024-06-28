@@ -1,22 +1,19 @@
 package fish.focus.uvms.movement.service;
 
-import java.io.File;
+import fish.focus.uvms.movement.service.message.SpatialModuleMock;
+import fish.focus.uvms.movement.service.message.UnionVMSMock;
+import fish.focus.uvms.movement.service.message.rest.mock.AssetMTRestMock;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import fish.focus.uvms.movement.service.message.SpatialModuleMock;
-import fish.focus.uvms.movement.service.message.UnionVMSMock;
-import fish.focus.uvms.movement.service.message.rest.mock.AssetMTRestMock;
+
+import java.io.File;
 
 @ArquillianSuiteDeployment
 public abstract class BuildMovementServiceTestDeployment {
-
-    final static Logger LOG = LoggerFactory.getLogger(BuildMovementServiceTestDeployment.class);
 
     @Deployment(name = "movementservice", order = 2)
     public static Archive<?> createDeployment() {
@@ -40,12 +37,11 @@ public abstract class BuildMovementServiceTestDeployment {
         testWar.delete("/WEB-INF/web.xml");
         testWar.addAsWebInfResource("mock-web.xml", "web.xml");
 
-		return testWar;
-	}
-    
+        return testWar;
+    }
+
     @Deployment(name = "uvms", order = 1)
     public static Archive<?> createSpatialMock() {
-
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "unionvms.war");
 
         File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")

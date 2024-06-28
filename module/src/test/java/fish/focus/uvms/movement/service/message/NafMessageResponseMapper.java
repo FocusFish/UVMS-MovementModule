@@ -28,8 +28,7 @@ import java.time.Instant;
 import java.util.Date;
 
 /**
- *  code copied  and made standalone - from NAF Plugin
- *
+ * code copied  and made standalone - from NAF Plugin
  **/
 public class NafMessageResponseMapper {
 
@@ -59,16 +58,16 @@ public class NafMessageResponseMapper {
     public static final String LATITUDE = "LA";
     public static final String LONGITUDE = "LO";
 
-    
+
     final static Logger LOG = LoggerFactory.getLogger(NafMessageResponseMapper.class);
-    
+    private final static String DATE_TIME_FORMAT = "yyyyMMdd HHmm z";
     static String dateString;
     static String timeString;
-    
+
     public static SetReportMovementType mapToMovementType(String nafMessage, String pluginName) throws Exception {
         dateString = "";
         timeString = "";
-        
+
         SetReportMovementType movementType = new SetReportMovementType();
         if (nafMessage != null) {
             try {
@@ -256,14 +255,11 @@ public class NafMessageResponseMapper {
         decimalDegrees = bd.doubleValue();
         return Double.valueOf(decimalDegrees);
     }
-    
+
     static double charToDouble(char val) {
         String str = "" + val;
         return Double.valueOf(str);
     }
-
-
-    private final static String DATE_TIME_FORMAT = "yyyyMMdd HHmm z";
     /*private static Date parseToUTC(String format, String dateString) {
         DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
         DateTime dateTime = formatter.withZoneUTC().parseDateTime(dateString);

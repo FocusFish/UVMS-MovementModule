@@ -112,7 +112,6 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Creates a JPQL count query based on the search fields. This is used for
      * when paginating lists
      *
@@ -136,7 +135,6 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Creates the complete search SQL with joins and sets the values based on
      * the criterias
      *
@@ -303,17 +301,9 @@ public class SearchFieldMapper {
     }
 
     /**
-     * The supported JOIN types see method getJoin for more info
-     */
-    public enum JoinType {
-        INNER,
-        LEFT
-    }
-
-    /**
      * Created the Join statement based on the join type. The resulting String
      * can be:
-     *
+     * <p>
      * JOIN LEFT JOIN JOIN FETCH ( based on fetch )
      *
      * @param fetch create a JOIN FETCH or plain JOIN
@@ -357,12 +347,11 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Creates at String that sets values based on what class the SearchValue
      * has. A String class returns [ = 'value' ] A Integer returns [ = value ]
      * Date is specificaly handled and can return [ >= 'datavalue' ] or [ <=
      * 'datavalue' ]
-     *
+     * <p>
      * Also the special occation MIN_SPEED and MAX_SPEED is handled in the same
      * way as dates
      *
@@ -401,12 +390,11 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Creates at String that sets values based on what class the SearchValue
      * has. A String class returns [ = 'value' ] A Integer returns [ = value ]
      * Date is specificaly handled and can return [ >= 'datavalue' ] or [ <=
      * 'datavalue' ]
-     *
+     * <p>
      * Also the special occation MIN_SPEED and MAX_SPEED is handled in the same
      * way as dates
      *
@@ -458,7 +446,7 @@ public class SearchFieldMapper {
      * @param value
      * @return
      */
-    public static Integer getOrdinalValueFromEnum(SearchValue value){
+    public static Integer getOrdinalValueFromEnum(SearchValue value) {
         if (value.getField().getClazz().isAssignableFrom(MovementTypeType.class)) {
             return MovementTypeType.fromValue(value.getValue()).ordinal();
         } else if (value.getField().getClazz().isAssignableFrom(MovementActivityTypeType.class)) {
@@ -468,13 +456,12 @@ public class SearchFieldMapper {
         } else if (value.getField().getClazz().isAssignableFrom(SegmentCategoryType.class)) {
             return SegmentCategoryType.fromValue(value.getValue()).ordinal();
         }
-         throw new IllegalArgumentException("Enum type not defined for mapping");
+        throw new IllegalArgumentException("Enum type not defined for mapping");
     }
 
     /**
-     *
      * Builds a table alias for the query based on the search field
-     *
+     * <p>
      * EG [ theTableAlias.theColumnName ]
      *
      * @param field
@@ -485,11 +472,9 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Returns the representation of the value
-     *
+     * <p>
      * if Integer [ value ] else [ 'value' ]
-     *
      *
      * @param entry
      * @return
@@ -509,11 +494,9 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Builds an IN JPQL representation for lists of values
-     *
+     * <p>
      * The resulting String = [ mc.in IN ( 'ABC123', 'ABC321' ) ]
-     *
      *
      * @param searchValues
      * @param field
@@ -539,7 +522,6 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Takes all the search values and categorizes them in lists to a key
      * according to the SearchField
      *
@@ -559,7 +541,6 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Converts List<ListCriteria> to List<SearchValue> so that a JPQL query can
      * be built based on the criteria
      *
@@ -585,7 +566,6 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Converts List<RangeCriteria> to List<SearchValue> so that a JPQL query
      * can be built based on the criteria
      *
@@ -637,7 +617,6 @@ public class SearchFieldMapper {
     }
 
     /**
-     *
      * Maps the Search Key to a SearchField. All SearchKeys that are not a part
      * of Movement are excluded
      *
@@ -669,5 +648,13 @@ public class SearchFieldMapper {
             default:
                 throw new IllegalArgumentException("No field found: " + key.name());
         }
+    }
+
+    /**
+     * The supported JOIN types see method getJoin for more info
+     */
+    public enum JoinType {
+        INNER,
+        LEFT
     }
 }

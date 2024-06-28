@@ -1,15 +1,15 @@
 package fish.focus.uvms.movement.service.bean;
 
-import javax.ejb.EJBTransactionRolledbackException;
-import javax.inject.Inject;
+import fish.focus.schema.movement.search.v1.MovementQuery;
+import fish.focus.uvms.movement.service.MovementTestHelper;
+import fish.focus.uvms.movement.service.TransactionalTests;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import fish.focus.schema.movement.search.v1.MovementQuery;
-import fish.focus.uvms.movement.service.MovementTestHelper;
-import fish.focus.uvms.movement.service.TransactionalTests;
-import fish.focus.uvms.movement.service.bean.MovementService;
+
+import javax.ejb.EJBTransactionRolledbackException;
+import javax.inject.Inject;
 
 /**
  * Created by roblar on 2017-03-08.
@@ -20,11 +20,9 @@ public class GetMapByQueryIntTest extends TransactionalTests {
     @Inject
     MovementService movementServiceBean;
 
-
     @Test(expected = EJBTransactionRolledbackException.class)
     @OperateOnDeployment("movementservice")
     public void getMovementMapByQuery_settingPaginationOnAMovementMapQueryIsNotAllowed() {
-
         MovementQuery movementQuery = MovementTestHelper.createMovementQuery(true, false, false);
         movementServiceBean.getMapByQuery(movementQuery);
     }
@@ -32,7 +30,6 @@ public class GetMapByQueryIntTest extends TransactionalTests {
     @Test(expected = EJBTransactionRolledbackException.class)
     @OperateOnDeployment("movementservice")
     public void getMovementMapByQuery_settingPaginationOnAMovementMapQueryThrowsMovementServiceException() {
-
         MovementQuery movementQuery = MovementTestHelper.createMovementQuery(true, false, false);
         movementServiceBean.getMapByQuery(movementQuery);
     }
@@ -42,7 +39,6 @@ public class GetMapByQueryIntTest extends TransactionalTests {
     @Test(expected = EJBTransactionRolledbackException.class)
     @OperateOnDeployment("movementservice")
     public void getMovementMapByQuery_mustUseEnumValueFromMovementTypeTypeClassWhenSettingSearchKeyTypeValueTo_MOVEMENT_TYPE() {
-
         MovementQuery movementQuery = MovementTestHelper.createMovementQuery(false, true, false);
         movementServiceBean.getMapByQuery(movementQuery);
     }

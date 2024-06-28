@@ -11,11 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.bean;
 
-import fish.focus.schema.movement.v1.MovementPoint;
 import fish.focus.uvms.movement.service.dto.ManualMovementDto;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.mapper.MovementMapper;
-import fish.focus.uvms.movement.service.message.ExchangeBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +39,7 @@ public class ManualMovementService {
     }
 
     private void checkUsernameProvided(String username) {
-        if(username == null || username.isEmpty()){
+        if (username == null || username.isEmpty()) {
             throw new IllegalArgumentException("Could not get username from request context");
         }
     }

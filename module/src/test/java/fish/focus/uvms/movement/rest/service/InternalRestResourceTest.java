@@ -6,12 +6,12 @@ import fish.focus.schema.movement.search.v1.MovementQuery;
 import fish.focus.schema.movement.search.v1.SearchKey;
 import fish.focus.schema.movement.v1.MovementType;
 import fish.focus.uvms.commons.date.DateUtils;
-import fish.focus.uvms.movement.rest.BuildMovementRestDeployment;
-import fish.focus.uvms.movement.rest.MovementTestHelper;
 import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.model.GetMovementMapByQueryResponse;
 import fish.focus.uvms.movement.model.dto.MovementDto;
 import fish.focus.uvms.movement.model.dto.MovementsForConnectIdsBetweenDatesRequest;
+import fish.focus.uvms.movement.rest.BuildMovementRestDeployment;
+import fish.focus.uvms.movement.rest.MovementTestHelper;
 import fish.focus.uvms.movement.service.bean.MovementService;
 import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.entity.Movement;
@@ -49,7 +49,7 @@ public class InternalRestResourceTest extends BuildMovementRestDeployment {
     private Jsonb jsonb;
 
     @Before
-    public void init(){
+    public void init() {
         jsonb = new JsonBConfiguratorMovement().getContext(null);
     }
 
@@ -286,14 +286,15 @@ public class InternalRestResourceTest extends BuildMovementRestDeployment {
                 .header(HttpHeaders.AUTHORIZATION, getTokenInternalRest())
                 .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), Response.class);
 
-        List<MovementDto> movementExtendedList = response.readEntity(new GenericType<List<MovementDto>>() {});
+        List<MovementDto> movementExtendedList = response.readEntity(new GenericType<List<MovementDto>>() {
+        });
 
         assertEquals(1, movementExtendedList.size());
     }
 
     private MovementQuery createMovementQuery(Movement createdMovement) {
         MovementQuery query = new MovementQuery();
-        if(createdMovement != null) {
+        if (createdMovement != null) {
             ListCriteria criteria = new ListCriteria();
             criteria.setKey(SearchKey.MOVEMENT_ID);
             criteria.setValue(createdMovement.getId().toString());

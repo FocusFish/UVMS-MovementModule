@@ -1,20 +1,21 @@
-<definitions name="MovementDataSource"
-             targetNamespace="urn:source.movement.schema.focus.fish:v1"
-             xmlns:source="urn:source.movement.schema.focus.fish:v1"
+<definitions xmlns:source="urn:source.movement.schema.focus.fish:v1"
              xmlns:movement="urn:movement.schema.focus.fish:v1"
              xmlns:search="urn:search.movement.schema.focus.fish:v1"
              xmlns:common="urn:common.movement.schema.focus.fish:v1"
              xmlns:xsd="http://www.w3.org/2001/XMLSchema"
              xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             name="MovementDataSource"
+             targetNamespace="urn:source.movement.schema.focus.fish:v1"
              xmlns="http://schemas.xmlsoap.org/wsdl/">
 
     <types>
-        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:source.movement.schema.focus.fish:v1">
-            
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                    targetNamespace="urn:source.movement.schema.focus.fish:v1">
+
             <xsd:import namespace="urn:common.movement.schema.focus.fish:v1" schemaLocation="MovementCommon.xsd"/>
             <xsd:import namespace="urn:search.movement.schema.focus.fish:v1" schemaLocation="MovementSearch.xsd"/>
             <xsd:import namespace="urn:movement.schema.focus.fish:v1" schemaLocation="Movement.xsd"/>
-            
+
             <!-- Mobile Terminal Base Request -->
             <xsd:simpleType name="MovementDataSourceMethod">
                 <xsd:restriction base="xsd:string">
@@ -49,7 +50,7 @@
                     <xsd:element name="username" type="xsd:string"/>
                 </xsd:sequence>
             </xsd:complexType>
-            
+
             <!-- LatestReportBy CoonnectId Query -->
             <xsd:element name="getMovementByGUIDRequest">
                 <xsd:complexType>
@@ -62,15 +63,15 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="getMovementByGUIDResponse">
                 <xsd:complexType>
-                    <xsd:sequence>                        
+                    <xsd:sequence>
                         <xsd:element name="movement" type="movement:MovementType" minOccurs="0" maxOccurs="1"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- LatestReportBy CoonnectId Query -->
             <xsd:element name="getLatestMovementsByConnectIdRequest">
                 <xsd:complexType>
@@ -83,15 +84,15 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="getLatestMovementsByConnectIdResponse">
                 <xsd:complexType>
-                    <xsd:sequence>                        
+                    <xsd:sequence>
                         <xsd:element name="movement" type="movement:MovementType" minOccurs="0" maxOccurs="unbounded"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- QueryList request -->
             <xsd:element name="getMovementListByQueryRequest">
                 <xsd:complexType>
@@ -104,7 +105,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="getMovementListByQueryResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -114,8 +115,8 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
-             
+
+
             <!-- Get Movement Map By Query -->
             <xsd:element name="getMovementMapByQueryRequest">
                 <xsd:complexType>
@@ -128,15 +129,16 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="getMovementMapByQueryResponse">
                 <xsd:complexType>
-                    <xsd:sequence>          
-                        <xsd:element name="movementMap" type="search:MovementMapResponseType" minOccurs="1" maxOccurs="unbounded"/>
+                    <xsd:sequence>
+                        <xsd:element name="movementMap" type="search:MovementMapResponseType" minOccurs="1"
+                                     maxOccurs="unbounded"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- Create movement request -->
             <xsd:element name="createMovementRequest">
                 <xsd:complexType>
@@ -149,7 +151,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="createMovementResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -157,20 +159,21 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- Create movement batch request -->
             <xsd:element name="createMovementBatchRequest">
                 <xsd:complexType>
                     <xsd:complexContent>
                         <xsd:extension base="source:MovementBaseRequest">
                             <xsd:sequence>
-                                <xsd:element name="movement" type="movement:MovementType" minOccurs="1" maxOccurs="unbounded"/>
+                                <xsd:element name="movement" type="movement:MovementType" minOccurs="1"
+                                             maxOccurs="unbounded"/>
                             </xsd:sequence>
                         </xsd:extension>
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="createMovementBatchResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -178,7 +181,7 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- Create temporary movement request -->
             <xsd:element name="createTempMovementRequest">
                 <xsd:complexType>
@@ -191,7 +194,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="createTempMovementResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -199,7 +202,7 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- Update temporary movement request -->
             <xsd:element name="updateTempMovementRequest">
                 <xsd:complexType>
@@ -212,7 +215,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="updateTempMovementResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -233,7 +236,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="setStatusMovementResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -254,7 +257,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="sendTempMovementResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -275,17 +278,18 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="getTempMovementListResponse">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="movement" type="movement:TempMovementType" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:element name="movement" type="movement:TempMovementType" minOccurs="0"
+                                     maxOccurs="unbounded"/>
                         <xsd:element name="totalNumberOfPages" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
                         <xsd:element name="currentPage" type="xsd:integer" minOccurs="1" maxOccurs="1"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- Create movement search group -->
             <xsd:element name="createMovementSearchGroupRequest">
                 <xsd:complexType>
@@ -310,7 +314,8 @@
             <xsd:element name="listMovementSearchGroupResponse">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="searchGroups" type="search:MovementSearchGroup" minOccurs="0" maxOccurs="unbounded"/>
+                        <xsd:element name="searchGroups" type="search:MovementSearchGroup" minOccurs="0"
+                                     maxOccurs="unbounded"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
@@ -379,15 +384,16 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="getMovementTripByIdResponse">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="movement" type="movement:MovementSegment" minOccurs="1" maxOccurs="unbounded"/>
+                        <xsd:element name="movement" type="movement:MovementSegment" minOccurs="1"
+                                     maxOccurs="unbounded"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <!-- Get segment by Id -->
             <xsd:element name="getSegmentByIdRequest">
                 <xsd:complexType>
@@ -400,7 +406,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-            
+
             <xsd:element name="getSegmentByIdResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -408,7 +414,7 @@
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
- 
+
             <!-- Ping request -->
             <xsd:element name="pingRequest">
                 <xsd:complexType>
@@ -417,7 +423,7 @@
                     </xsd:complexContent>
                 </xsd:complexType>
             </xsd:element>
-			
+
             <xsd:element name="pingResponse">
                 <xsd:complexType>
                     <xsd:sequence>
@@ -449,74 +455,74 @@
 
         </xsd:schema>
     </types>
-    
+
     <message name="MovementException">
         <part name="body" element="common:exceptionType"/>
     </message>
-    
+
     <message name="GetMovementByGUIDRequest">
         <part name="body" element="source:getMovementByGUIDRequest"/>
     </message>
     <message name="GetMovementByGUIDResponse">
         <part name="body" element="source:getMovementByGUIDResponse"/>
     </message>
-    
+
     <message name="GetLatestMovementsByConnectIdListRequest">
         <part name="body" element="source:getLatestMovementsByConnectIdRequest"/>
     </message>
     <message name="GetLatestMovementsByConnectIdListResponse">
         <part name="body" element="source:getLatestMovementsByConnectIdResponse"/>
     </message>
-    
+
     <message name="GetMovementMapRequest">
         <part name="body" element="source:getMovementMapByQueryRequest"/>
     </message>
     <message name="GetMovementMapResponse">
         <part name="body" element="source:getMovementMapByQueryResponse"/>
     </message>
-    
+
     <message name="GetMovementListRequest">
         <part name="body" element="source:getMovementListByQueryRequest"/>
     </message>
     <message name="GetMovementListResponse">
         <part name="body" element="source:getMovementListByQueryResponse"/>
     </message>
-    
+
     <message name="CreateMovementRequest">
         <part name="body" element="source:createMovementRequest"/>
     </message>
     <message name="CreateMovementResponse">
         <part name="body" element="source:createMovementResponse"/>
     </message>
-    
+
     <message name="CreateMovementBatchRequest">
         <part name="body" element="source:createMovementBatchRequest"/>
     </message>
     <message name="CreateMovementBatchResponse">
         <part name="body" element="source:createMovementBatchResponse"/>
     </message>
-    
+
     <message name="CreateTempMovementRequest">
         <part name="body" element="source:createTempMovementRequest"/>
     </message>
     <message name="CreateTempMovementResponse">
         <part name="body" element="source:createTempMovementResponse"/>
     </message>
-    
+
     <message name="GetTempMovementListRequest">
         <part name="body" element="source:getTempMovementListRequest"/>
     </message>
     <message name="GetTempMovementListResponse">
         <part name="body" element="source:getTempMovementListResponse"/>
     </message>
-    
+
     <message name="GetMovementTripByIdRequest">
         <part name="body" element="source:getMovementTripByIdRequest"/>
     </message>
     <message name="GetMovementTripByIdResponse">
         <part name="body" element="source:getMovementTripByIdResponse"/>
     </message>
-    
+
     <message name="GetSegmentByIdRequest">
         <part name="body" element="source:getSegmentByIdRequest"/>
     </message>
@@ -566,7 +572,7 @@
     <message name="SetStatusMovementResponse">
         <part name="body" element="source:setStatusMovementResponse"/>
     </message>
-    
+
     <message name="SendTempMovementRequest">
         <part name="body" element="source:sendTempMovementRequest"/>
     </message>
@@ -574,7 +580,7 @@
     <message name="SendTempMovementResponse">
         <part name="body" element="source:sendTempMovementResponse"/>
     </message>
-    
+
     <message name="PingRequest">
         <part name="body" element="source:pingRequest"/>
     </message>
@@ -589,61 +595,61 @@
         <part name="body" element="source:getTempMovementResponse"/>
     </message>
     <portType name="MovementDataSourcePortType">
-        
+
         <operation name="GetMovementByGUID">
             <input message="source:GetMovementByGUIDRequest"/>
             <output message="source:GetMovementByGUIDResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="GetLatestMovementListByConnectIds">
             <input message="source:GetLatestMovementsByConnectIdListRequest"/>
             <output message="source:GetLatestMovementsByConnectIdListResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-       
+
         <operation name="GetMovementList">
             <input message="source:GetMovementListRequest"/>
             <output message="source:GetMovementListResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="GetMovementMap">
             <input message="source:GetMovementMapRequest"/>
             <output message="source:GetMovementMapResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="CreateMovement">
             <input message="source:CreateMovementRequest"/>
             <output message="source:CreateMovementResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="CreateMovementBatch">
             <input message="source:CreateMovementBatchRequest"/>
             <output message="source:CreateMovementBatchResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="CreateTempMovement">
             <input message="source:CreateTempMovementRequest"/>
             <output message="source:CreateTempMovementResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="GetTempMovementList">
             <input message="source:GetTempMovementListRequest"/>
             <output message="source:GetTempMovementListResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="GetTripById">
             <input message="source:GetMovementTripByIdRequest"/>
             <output message="source:GetMovementTripByIdResponse"/>
             <fault name="MovementException" message="source:MovementException"/>
         </operation>
-        
+
         <operation name="GetSegmentById">
             <input message="source:GetSegmentByIdRequest"/>
             <output message="source:GetSegmentByIdResponse"/>
@@ -705,7 +711,7 @@
 
     <binding name="MovementDataSourceSoapBinding" type="source:MovementDataSourcePortType">
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        
+
         <operation name="GetMovementByGUID">
             <input>
                 <soap:body use="literal"/>
@@ -717,7 +723,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="GetLatestMovementListByConnectIds">
             <input>
                 <soap:body use="literal"/>
@@ -729,7 +735,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="GetMovementList">
             <input>
                 <soap:body use="literal"/>
@@ -741,7 +747,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="GetMovementMap">
             <input>
                 <soap:body use="literal"/>
@@ -753,7 +759,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="CreateMovement">
             <input>
                 <soap:body use="literal"/>
@@ -765,7 +771,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="CreateMovementBatch">
             <input>
                 <soap:body use="literal"/>
@@ -777,7 +783,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="CreateTempMovement">
             <input>
                 <soap:body use="literal"/>
@@ -789,7 +795,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="GetTempMovementList">
             <input>
                 <soap:body use="literal"/>
@@ -801,7 +807,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="GetTripById">
             <input>
                 <soap:body use="literal"/>
@@ -813,7 +819,7 @@
                 <soap:fault name="MovementException" use="literal"/>
             </fault>
         </operation>
-        
+
         <operation name="GetSegmentById">
             <input>
                 <soap:body use="literal"/>
@@ -917,7 +923,7 @@
             <output>
                 <soap:body use="literal"/>
             </output>
-        </operation> 
+        </operation>
 
         <operation name="GetTempMovement">
             <input>

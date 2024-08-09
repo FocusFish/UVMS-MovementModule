@@ -1,9 +1,8 @@
 package fish.focus.uvms.movement.service.entity;
 
 import org.junit.Test;
-import fish.focus.uvms.movement.service.entity.Movement;
+
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 import static org.junit.Assert.assertEquals;
 

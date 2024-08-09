@@ -1,4 +1,3 @@
-
 package fish.focus.uvms.movement.service.dto;
 
 import fish.focus.schema.movement.search.v1.ListPagination;
@@ -14,9 +13,9 @@ import java.util.List;
 
 /**
  * <p>Java class for AlarmQuery complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AlarmQuery"&gt;
  *   &lt;complexContent&gt;
@@ -30,18 +29,15 @@ import java.util.List;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AlarmQuery", propOrder = {
-    "pagination",
-    "alarmSearchCriteria",
-    "dynamic"
+        "pagination",
+        "alarmSearchCriteria",
+        "dynamic"
 })
 public class AlarmQuery
-    implements Serializable
-{
+        implements Serializable {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(required = true)
@@ -52,11 +48,9 @@ public class AlarmQuery
 
     /**
      * Gets the value of the pagination property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ListPagination }
-     *     
+     *
+     * @return possible object is
+     * {@link ListPagination }
      */
     public ListPagination getPagination() {
         return pagination;
@@ -64,11 +58,9 @@ public class AlarmQuery
 
     /**
      * Sets the value of the pagination property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ListPagination }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link ListPagination }
      */
     public void setPagination(ListPagination value) {
         this.pagination = value;
@@ -76,25 +68,23 @@ public class AlarmQuery
 
     /**
      * Gets the value of the alarmSearchCriteria property.
-     * 
+     *
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
      * This is why there is not a <CODE>set</CODE> method for the alarmSearchCriteria property.
-     * 
+     *
      * <p>
      * For example, to add a new item, do as follows:
      * <pre>
      *    getAlarmSearchCriteria().add(newItem);
      * </pre>
-     * 
-     * 
+     *
+     *
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link AlarmListCriteria }
-     * 
-     * 
      */
     public List<AlarmListCriteria> getAlarmSearchCriteria() {
         if (alarmSearchCriteria == null) {
@@ -105,7 +95,6 @@ public class AlarmQuery
 
     /**
      * Gets the value of the dynamic property.
-     * 
      */
     public boolean isDynamic() {
         return dynamic;
@@ -113,7 +102,6 @@ public class AlarmQuery
 
     /**
      * Sets the value of the dynamic property.
-     * 
      */
     public void setDynamic(boolean value) {
         this.dynamic = value;

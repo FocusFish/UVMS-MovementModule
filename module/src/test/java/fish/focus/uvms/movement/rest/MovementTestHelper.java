@@ -1,8 +1,5 @@
 package fish.focus.uvms.movement.rest;
 
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
 import fish.focus.schema.movement.asset.v1.VesselType;
 import fish.focus.schema.movement.search.v1.ListPagination;
 import fish.focus.schema.movement.search.v1.MovementQuery;
@@ -10,6 +7,10 @@ import fish.focus.schema.movement.search.v1.MovementSearchGroup;
 import fish.focus.schema.movement.v1.*;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.entity.MovementConnect;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.Random;
@@ -18,10 +19,10 @@ import java.util.UUID;
 public class MovementTestHelper {
 
     public static Movement createMovement() {
-        return MovementTestHelper.createMovement(56d,11d);
+        return MovementTestHelper.createMovement(56d, 11d);
     }
 
-    public static Movement createMovement(Double longitude , Double latitude) {
+    public static Movement createMovement(Double longitude, Double latitude) {
 
         Movement movement = new Movement();
         movement.setMovementType(MovementTypeType.POS);
@@ -48,7 +49,7 @@ public class MovementTestHelper {
 
         return movement;
     }
-    
+
     public static MovementSearchGroup createBasicMovementSearchGroup() {
         MovementSearchGroup movementSearchGroup = new MovementSearchGroup();
         movementSearchGroup.setName("Test Group " + getRandomIntegers(5));
@@ -64,10 +65,10 @@ public class MovementTestHelper {
         listPagination.setPage(BigInteger.ONE);
         listPagination.setListSize(BigInteger.valueOf(1000));
         movementQuery.setPagination(listPagination);
-        
+
         return movementQuery;
     }
-    
+
     public static TempMovementType createTempMovementType() {
         TempMovementType tempMovement = new TempMovementType();
         VesselType asset = new VesselType();
@@ -85,10 +86,10 @@ public class MovementTestHelper {
         tempMovement.setState(TempMovementStateEnum.DRAFT);
         return tempMovement;
     }
-    
+
     public static String getRandomIntegers(int length) {
         return new Random()
-                .ints(0,9)
+                .ints(0, 9)
                 .mapToObj(i -> String.valueOf(i))
                 .limit(length)
                 .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)

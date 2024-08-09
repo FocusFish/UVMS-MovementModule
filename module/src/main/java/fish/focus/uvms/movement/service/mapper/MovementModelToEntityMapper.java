@@ -71,17 +71,17 @@ public class MovementModelToEntityMapper {
         } else {
             entity.setTimestamp(Instant.now());
         }
-        
+
         if (movement.getCalculatedSpeed() != null) {
             entity.setCalculatedSpeed(movement.getCalculatedSpeed());
         } else {
             entity.setCalculatedSpeed(0d);
         }
-        
+
         return entity;
 
     }
-    
+
     public static Movement mapNewMovementEntity(MovementBaseType movement, String username) {
         Movement entity = new Movement();
         if (movement.getReportedSpeed() != null) {

@@ -11,25 +11,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.util;
 
+import fish.focus.uvms.movement.service.entity.Movement;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import fish.focus.uvms.movement.service.entity.Movement;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class GeometryUtil {
-    
-    private GeometryUtil() {}
 
+    static final int SRID = 4326;
     private static final Logger LOG = LoggerFactory.getLogger(GeometryUtil.class);
 
     private static final GeometryFactory FACTORY = new GeometryFactory();
-    static final int SRID = 4326;
+    private GeometryUtil() {
+    }
 
     /**
      * Returns a LineString for insertion in database

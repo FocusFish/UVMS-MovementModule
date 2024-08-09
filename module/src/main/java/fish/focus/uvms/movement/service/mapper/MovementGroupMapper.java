@@ -16,13 +16,15 @@ import fish.focus.schema.movement.search.v1.MovementSearchGroup;
 import fish.focus.uvms.movement.service.entity.group.MovementFilter;
 import fish.focus.uvms.movement.service.entity.group.MovementFilterGroup;
 import fish.focus.uvms.movement.service.util.CalculationUtil;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovementGroupMapper {
 
-    private MovementGroupMapper() {}
+    private MovementGroupMapper() {
+    }
 
     public static MovementFilterGroup toGroupEntity(MovementFilterGroup filterGroup, MovementSearchGroup searchGroup, String username) {
         validateMovementSearchGroup(searchGroup);

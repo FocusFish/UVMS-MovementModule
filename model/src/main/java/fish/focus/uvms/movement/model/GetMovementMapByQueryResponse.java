@@ -28,8 +28,6 @@ import java.util.List;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -37,8 +35,7 @@ import java.util.List;
 })
 @XmlRootElement(name = "getMovementMapByQueryResponse")
 public class GetMovementMapByQueryResponse
-        implements Serializable
-{
+        implements Serializable {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(required = true)
@@ -63,8 +60,6 @@ public class GetMovementMapByQueryResponse
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link MovementMapResponseType }
-     *
-     *
      */
     public List<MovementMapResponseType> getMovementMap() {
         if (movementMap == null) {

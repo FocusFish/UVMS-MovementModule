@@ -12,12 +12,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.movement.rest.service;
 
 import fish.focus.schema.movement.search.v1.MovementSearchGroup;
-import fish.focus.uvms.rest.security.RequiresFeature;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
 import fish.focus.uvms.movement.service.bean.MovementSearchGroupService;
 import fish.focus.uvms.movement.service.entity.group.MovementFilterGroup;
 import fish.focus.uvms.movement.service.mapper.MovementGroupMapper;
 import fish.focus.uvms.movement.service.util.CalculationUtil;
+import fish.focus.uvms.rest.security.RequiresFeature;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

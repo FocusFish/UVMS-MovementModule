@@ -22,7 +22,7 @@ import javax.jms.Queue;
 @Stateless
 public class MovementProducer extends AbstractProducer {
 
-    @Resource(mappedName =  "java:/" + MessageConstants.QUEUE_MOVEMENT)
+    @Resource(mappedName = "java:/" + MessageConstants.QUEUE_MOVEMENT)
     private Queue destination;
 
     @Override

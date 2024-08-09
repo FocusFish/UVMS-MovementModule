@@ -62,7 +62,7 @@ public class MovementId implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         MovementId other = (MovementId) obj;
-        return Objects.equals(id, other.id) && 
+        return Objects.equals(id, other.id) &&
                 Objects.equals(timestamp, other.timestamp);
     }
 }

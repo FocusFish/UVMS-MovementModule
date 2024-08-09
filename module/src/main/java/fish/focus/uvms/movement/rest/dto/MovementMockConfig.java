@@ -22,16 +22,6 @@ import java.util.Map;
 
 public class MovementMockConfig {
 
-    enum MovementConfig {
-
-        STATUS,
-        TIME_SPAN,
-        MESSAGE_TYPE,
-        SPEED_SPAN,
-		ACTIVITY_TYPE,
-		CATEGORY_TYPE
-    }
-
     public static Map<String, List<String>> getValues() {
         Map<String, List<String>> configValues = new HashMap<>();
         for (MovementConfig config : MovementConfig.values()) {
@@ -50,10 +40,10 @@ public class MovementMockConfig {
                 return getMessageType();
             case SPEED_SPAN:
                 return getSpeedSpan();
-			case ACTIVITY_TYPE:
+            case ACTIVITY_TYPE:
                 return getActivityType();
-			case CATEGORY_TYPE:
-				return getCategoryType();
+            case CATEGORY_TYPE:
+                return getCategoryType();
         }
         return new ArrayList<>();
     }
@@ -75,22 +65,22 @@ public class MovementMockConfig {
         }
         return values;
     }
-	
-	private static List<String> getActivityType() {
-		List<String> values = new ArrayList<>();
-		for (MovementActivityTypeType type : MovementActivityTypeType.values()) {
-			values.add(type.value());
-		}
-		return values;
-	}
-	
-	private static List<String> getCategoryType() {
-		List<String> values = new ArrayList<>();
-		for (SegmentCategoryType type : SegmentCategoryType.values()) {
-			values.add(type.value());
-		}
-		return values;
-	}
+
+    private static List<String> getActivityType() {
+        List<String> values = new ArrayList<>();
+        for (MovementActivityTypeType type : MovementActivityTypeType.values()) {
+            values.add(type.value());
+        }
+        return values;
+    }
+
+    private static List<String> getCategoryType() {
+        List<String> values = new ArrayList<>();
+        for (SegmentCategoryType type : SegmentCategoryType.values()) {
+            values.add(type.value());
+        }
+        return values;
+    }
 
     private static List<String> getStatus() {
         List<String> values = new ArrayList<>();
@@ -117,6 +107,16 @@ public class MovementMockConfig {
         values.add("48");
         values.add("96");
         return values;
+    }
+
+    enum MovementConfig {
+
+        STATUS,
+        TIME_SPAN,
+        MESSAGE_TYPE,
+        SPEED_SPAN,
+        ACTIVITY_TYPE,
+        CATEGORY_TYPE
     }
 
 }

@@ -2,8 +2,8 @@ package fish.focus.uvms.movement.service.message;
 
 
 import fish.focus.uvms.commons.message.api.MessageConstants;
-import fish.focus.uvms.movement.service.BuildMovementServiceTestDeployment;
 import fish.focus.uvms.movement.model.dto.MovementDto;
+import fish.focus.uvms.movement.service.BuildMovementServiceTestDeployment;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -25,20 +25,19 @@ import static org.junit.Assert.*;
 @RunWith(Arquillian.class)
 public class EventStreamSenderTest extends BuildMovementServiceTestDeployment {
 
-    @Resource(mappedName = "java:/ConnectionFactory")
-    private ConnectionFactory connectionFactory;
-
     JMSHelper jmsHelper;
     MessageConsumer subscriber;
     Topic eventBus;
     Session session;
-
     Jsonb jsonb;
+    @Resource(mappedName = "java:/ConnectionFactory")
+    private ConnectionFactory connectionFactory;
 
     @PostConstruct
     public void init() {
 
     }
+
     @Before
     public void cleanJMS() {
         jmsHelper = new JMSHelper(connectionFactory);

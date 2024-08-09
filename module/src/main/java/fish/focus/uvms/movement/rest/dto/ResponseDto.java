@@ -17,8 +17,8 @@ import java.util.Objects;
 
 public class ResponseDto<T> {
 
-    private T data;
     private final RestResponseCode code;
+    private T data;
     private String requestId = MDC.get("requestId");
 
     public ResponseDto(T data, RestResponseCode code) {
@@ -39,7 +39,7 @@ public class ResponseDto<T> {
     }
 
     public String getRequestId() {
-        return requestId ;
+        return requestId;
     }
 
     @Override

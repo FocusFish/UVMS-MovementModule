@@ -3,8 +3,8 @@ package fish.focus.uvms.movement.rest.service;
 import fish.focus.schema.movement.asset.v1.VesselType;
 import fish.focus.schema.movement.v1.MovementPoint;
 import fish.focus.schema.movement.v1.MovementSourceType;
-import fish.focus.uvms.movement.rest.BuildMovementRestDeployment;
 import fish.focus.uvms.movement.model.dto.MovementDto;
+import fish.focus.uvms.movement.rest.BuildMovementRestDeployment;
 import fish.focus.uvms.movement.rest.filter.AppError;
 import fish.focus.uvms.movement.service.dto.ManualMovementDto;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -111,5 +111,5 @@ public class ManualMovementRestResourceTest extends BuildMovementRestDeployment 
 
         return movement;
     }
-    
+
 }

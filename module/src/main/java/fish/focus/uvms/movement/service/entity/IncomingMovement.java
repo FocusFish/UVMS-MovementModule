@@ -2,6 +2,7 @@ package fish.focus.uvms.movement.service.entity;
 
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
+
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Table(name = "incomingmovement")
 public class IncomingMovement {
 
-	@Id
+    @Id
     @GeneratedValue
     @Column(columnDefinition = "uuid", name = "id")
     private UUID id;
@@ -25,7 +26,7 @@ public class IncomingMovement {
     private Instant positionTime;
 
     private Instant lesReportTime;
-    
+
     private String status;
     private Double reportedSpeed;
     private Double reportedCourse;
@@ -73,11 +74,13 @@ public class IncomingMovement {
     @NotNull
     private String updatedBy;
 
-    @Column(name = "ais_position_accuracy")     //Value can be 0 (>10m) and 1 (<10m). See https://gpsd.gitlab.io/gpsd/AIVDM.html for more info
+    @Column(name = "ais_position_accuracy")
+    //Value can be 0 (>10m) and 1 (<10m). See https://gpsd.gitlab.io/gpsd/AIVDM.html for more info
     private Short aisPositionAccuracy;
 
     @JsonbTransient
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)    //DB is set to allow null values here since, for some reason, hibernate passes a null that is later changed into the correct value.
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    //DB is set to allow null values here since, for some reason, hibernate passes a null that is later changed into the correct value.
     private AlarmReport alarmReport;
 
 
@@ -120,14 +123,14 @@ public class IncomingMovement {
     public void setPositionTime(Instant positionTime) {
         this.positionTime = positionTime;
     }
-    
-    public Instant getLesReportTime() {
-  		return lesReportTime;
-  	}
 
-  	public void setLesReportTime(Instant lesReportTime) {
-  		this.lesReportTime = lesReportTime;
-  	}
+    public Instant getLesReportTime() {
+        return lesReportTime;
+    }
+
+    public void setLesReportTime(Instant lesReportTime) {
+        this.lesReportTime = lesReportTime;
+    }
 
     public String getStatus() {
         return status;

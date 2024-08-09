@@ -11,14 +11,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.rest.service;
 
-import fish.focus.uvms.rest.security.RequiresFeature;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
 import fish.focus.uvms.movement.service.dto.AlarmListResponseDto;
 import fish.focus.uvms.movement.service.dto.AlarmQuery;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
 import fish.focus.uvms.movement.service.validation.MovementSanityValidatorBean;
 import fish.focus.uvms.movement.service.validation.SanityRule;
+import fish.focus.uvms.rest.security.RequiresFeature;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
 
 @Path("/alarms")
 @Stateless
-@Consumes(value = { MediaType.APPLICATION_JSON })
-@Produces(value = { MediaType.APPLICATION_JSON })
+@Consumes(value = {MediaType.APPLICATION_JSON})
+@Produces(value = {MediaType.APPLICATION_JSON})
 public class AlarmRestResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(AlarmRestResource.class);
@@ -57,7 +57,7 @@ public class AlarmRestResource {
             LOG.info("Get alarm list invoked in rest layer");
             AlarmListResponseDto alarmList = validationService.getAlarmList(query);
             return Response.ok(alarmList).header("MDC", MDC.get("requestId")).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Unable to get alarm list due to: {}", e);
             throw e;
         }
@@ -70,7 +70,7 @@ public class AlarmRestResource {
             LOG.info("Update alarm status invoked in rest layer");
             AlarmReport updated = validationService.updateAlarmStatus(alarmReport);
             return Response.ok(updated).header("MDC", MDC.get("requestId")).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Unable to update alarm status due to: {}", e);
             throw e;
         }
@@ -84,7 +84,7 @@ public class AlarmRestResource {
             LOG.info("Update incomingMovement in holding table");
             IncomingMovement updated = validationService.updateIncomingMovement(movement);
             return Response.ok(updated).header("MDC", MDC.get("requestId")).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Unable to update incoming movement due to: {}", e);
             throw e;
         }
@@ -97,7 +97,7 @@ public class AlarmRestResource {
         try {
             AlarmReport byGuid = validationService.getAlarmReportByGuid(guid);
             return Response.ok(byGuid).header("MDC", MDC.get("requestId")).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Unable to get alarm report due to: {}", e);
             throw e;
         }
@@ -111,7 +111,7 @@ public class AlarmRestResource {
             LOG.info("Reprocess alarm invoked in rest layer");
             validationService.reprocessAlarm(alarmGuidList, request.getRemoteUser());
             return Response.ok().header("MDC", MDC.get("requestId")).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Unable to reprocess alarm due to {}", e);
             throw e;
         }
@@ -124,7 +124,7 @@ public class AlarmRestResource {
         try {
             long count = validationService.getNumberOfOpenAlarmReports();
             return Response.ok(count).header("MDC", MDC.get("requestId")).build();
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Unable to get the number of open alarms due to: {}", e);
             throw e;
         }

@@ -4,6 +4,7 @@ import fish.focus.schema.movement.v1.MovementPoint;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.movement.model.constants.SatId;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class MovementDto {
 
     private String updatedBy;
 
-     //Value can be 0 (>10m) and 1 (<10m). See https://gpsd.gitlab.io/gpsd/AIVDM.html for more info
+    //Value can be 0 (>10m) and 1 (<10m). See https://gpsd.gitlab.io/gpsd/AIVDM.html for more info
     private Short aisPositionAccuracy;
 
 

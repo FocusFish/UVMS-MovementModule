@@ -1,4 +1,3 @@
-
 package fish.focus.uvms.movement.service.dto;
 
 import javax.xml.bind.annotation.XmlEnum;
@@ -7,7 +6,7 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for AlarmSearchKey.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
@@ -24,7 +23,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
- * 
  */
 @XmlType(name = "AlarmSearchKey")
 @XmlEnum
@@ -39,12 +37,12 @@ public enum AlarmSearchKey {
     RULE_GUID,
     RULE_NAME;
 
-    public String value() {
-        return name();
-    }
-
     public static AlarmSearchKey fromValue(String v) {
         return valueOf(v);
+    }
+
+    public String value() {
+        return name();
     }
 
 }

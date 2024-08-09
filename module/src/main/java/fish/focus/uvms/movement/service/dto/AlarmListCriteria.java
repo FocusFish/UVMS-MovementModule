@@ -1,4 +1,3 @@
-
 package fish.focus.uvms.movement.service.dto;
 
 import javax.xml.bind.annotation.*;
@@ -7,9 +6,9 @@ import java.io.Serializable;
 
 /**
  * <p>Java class for AlarmListCriteria complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="AlarmListCriteria"&gt;
  *   &lt;complexContent&gt;
@@ -22,17 +21,14 @@ import java.io.Serializable;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AlarmListCriteria", propOrder = {
-    "key",
-    "value"
+        "key",
+        "value"
 })
 public class AlarmListCriteria
-    implements Serializable
-{
+        implements Serializable {
 
     private final static long serialVersionUID = 1L;
     @XmlElement(required = true)
@@ -43,11 +39,9 @@ public class AlarmListCriteria
 
     /**
      * Gets the value of the key property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link AlarmSearchKey }
-     *     
+     *
+     * @return possible object is
+     * {@link AlarmSearchKey }
      */
     public AlarmSearchKey getKey() {
         return key;
@@ -55,11 +49,9 @@ public class AlarmListCriteria
 
     /**
      * Sets the value of the key property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link AlarmSearchKey }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link AlarmSearchKey }
      */
     public void setKey(AlarmSearchKey value) {
         this.key = value;
@@ -67,11 +59,9 @@ public class AlarmListCriteria
 
     /**
      * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getValue() {
         return value;
@@ -79,11 +69,9 @@ public class AlarmListCriteria
 
     /**
      * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setValue(String value) {
         this.value = value;

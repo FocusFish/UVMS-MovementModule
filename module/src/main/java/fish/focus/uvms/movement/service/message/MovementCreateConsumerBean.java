@@ -29,7 +29,7 @@ public class MovementCreateConsumerBean implements MessageListener {
     private static final Logger LOG = LoggerFactory.getLogger(MovementCreateConsumerBean.class);
 
     private Jsonb jsonb;
-    
+
     @Inject
     private MovementCreateBean movementCreate;
 
@@ -52,16 +52,17 @@ public class MovementCreateConsumerBean implements MessageListener {
 
         try {
             String propertyMethod = textMessage.getStringProperty(MessageConstants.JMS_FUNCTION_PROPERTY);
-            if(propertyMethod != null) {
+            if (propertyMethod != null) {
                 switch (propertyMethod) {
-                    case "CREATE" :
+                    case "CREATE":
                         IncomingMovement incomingMovement = jsonb.fromJson(textMessage.getText(), IncomingMovement.class);
                         movementCreate.processIncomingMovement(incomingMovement);
                         break;
 
-                    case "CREATE_BATCH" :
-                        List<IncomingMovement> movementList = jsonb.fromJson(textMessage.getText(), new ArrayList<IncomingMovement>(){}.getClass().getGenericSuperclass());
-                        for (IncomingMovement im: movementList) {
+                    case "CREATE_BATCH":
+                        List<IncomingMovement> movementList = jsonb.fromJson(textMessage.getText(), new ArrayList<IncomingMovement>() {
+                        }.getClass().getGenericSuperclass());
+                        for (IncomingMovement im : movementList) {
                             movementCreate.processIncomingMovement(im);
                         }
                         break;

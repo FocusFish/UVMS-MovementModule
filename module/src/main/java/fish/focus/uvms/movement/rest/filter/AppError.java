@@ -3,7 +3,7 @@ package fish.focus.uvms.movement.rest.filter;
 public class AppError {
 
     public Integer code;
-    public String  description;
+    public String description;
 
     public AppError() {
         this.code = Integer.MIN_VALUE;

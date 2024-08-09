@@ -4,19 +4,18 @@ import fish.focus.schema.exchange.module.v1.ProcessedMovementResponse;
 import fish.focus.schema.exchange.movement.v1.MovementRefTypeType;
 import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.schema.movement.v1.MovementTypeType;
-import fish.focus.uvms.commons.date.JsonBConfigurator;
 import fish.focus.uvms.commons.message.api.MessageConstants;
 import fish.focus.uvms.movement.service.BuildMovementServiceTestDeployment;
-import fish.focus.uvms.movement.service.message.JMSHelper;
-import fish.focus.uvms.movement.service.message.MovementTestHelper;
-import fish.focus.uvms.movementrules.model.mapper.JAXBMarshaller;
 import fish.focus.uvms.movement.service.dao.AlarmDAO;
 import fish.focus.uvms.movement.service.dto.AlarmStatusType;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmItem;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
+import fish.focus.uvms.movement.service.message.JMSHelper;
+import fish.focus.uvms.movement.service.message.MovementTestHelper;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
 import fish.focus.uvms.movement.service.validation.SanityRule;
+import fish.focus.uvms.movementrules.model.mapper.JAXBMarshaller;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Before;
@@ -36,18 +35,21 @@ import java.util.UUID;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 @RunWith(Arquillian.class)
 public class SanityRulesTest extends BuildMovementServiceTestDeployment {
+
+    JMSHelper jmsHelper;
+
+    @Inject
+    AlarmDAO dao;
 
     @Resource(mappedName = "java:/ConnectionFactory")
     private ConnectionFactory connectionFactory;
 
     private Jsonb jsonb;
-
-    JMSHelper jmsHelper;
 
     @Before
     public void cleanJMS() throws Exception {
@@ -58,12 +60,9 @@ public class SanityRulesTest extends BuildMovementServiceTestDeployment {
         jsonb = new JsonBConfiguratorMovement().getContext(null);
     }
 
-    @Inject
-    AlarmDAO dao;
-
     @Test
     @OperateOnDeployment("movementservice")
-    public void basicAlarmPersistTest(){
+    public void basicAlarmPersistTest() {
         AlarmReport alarmReport;
         alarmReport = new AlarmReport();
         alarmReport.setAssetGuid(UUID.randomUUID().toString());
@@ -401,7 +400,7 @@ public class SanityRulesTest extends BuildMovementServiceTestDeployment {
         assertThat(alarmItem.getRuleName(), is(SanityRule.TRANSPONDER_INACTIVE.getRuleName()));
     }
 
-    private ProcessedMovementResponse sendIncomingMovementAndReturnAlarmResponse(IncomingMovement incomingMovement) throws Exception{
+    private ProcessedMovementResponse sendIncomingMovementAndReturnAlarmResponse(IncomingMovement incomingMovement) throws Exception {
         String json = jsonb.toJson(incomingMovement);
         jmsHelper.sendMovementMessage(json, incomingMovement.getAssetGuid(), "CREATE");   //grouping on null.....
 

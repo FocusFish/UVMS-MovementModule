@@ -38,7 +38,7 @@ public class ExchangeBean extends AbstractProducer {
         processedMovementResponse.setMovementRefType(movementRefType);
         send(processedMovementResponse);
     }
-    
+
     public void send(ProcessedMovementResponse processedMovementResponse) throws JMSException {
         String xml = JAXBMarshaller.marshallJaxBObjectToString(processedMovementResponse);
         sendMessageToSpecificQueueWithFunction(xml, getDestination(), null, processedMovementResponse.getMethod().toString(), null);
@@ -47,7 +47,7 @@ public class ExchangeBean extends AbstractProducer {
     public String sendModuleMessage(String text, String function) throws JMSException {
         return sendMessageToSpecificQueueWithFunction(text, getDestination(), replyToQueue, function, null);
     }
-    
+
     @Override
     public Destination getDestination() {
         return destination;

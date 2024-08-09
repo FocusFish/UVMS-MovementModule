@@ -43,7 +43,7 @@ public class MovementConsumerBean extends AbstractConsumer implements ConfigMess
         } catch (JMSException e) {
             LOG.error("[ Error when getting message ] {}", e.getMessage());
             throw new ConfigMessageException("Error when retrieving message: ");
-        } 
+        }
     }
 
     @Override

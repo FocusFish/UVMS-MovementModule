@@ -11,10 +11,10 @@
  */
 package fish.focus.uvms.movement.rest;
 
-import fish.focus.uvms.rest.security.UnionVMSFeatureFilter;
 import fish.focus.uvms.movement.rest.filter.MovementRestExceptionMapper;
 import fish.focus.uvms.movement.rest.service.*;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+import fish.focus.uvms.rest.security.UnionVMSFeatureFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

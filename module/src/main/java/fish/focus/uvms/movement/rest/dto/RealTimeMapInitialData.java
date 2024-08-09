@@ -1,7 +1,8 @@
 package fish.focus.uvms.movement.rest.dto;
 
-import java.util.List;
 import fish.focus.uvms.movement.model.dto.MovementDto;
+
+import java.util.List;
 
 public class RealTimeMapInitialData {
 

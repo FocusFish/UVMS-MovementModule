@@ -16,6 +16,7 @@ import fish.focus.schema.movement.v1.SegmentCategoryType;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.mapper.MovementMapper;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Stateless
-public class SpatialRestClient{
+public class SpatialRestClient {
 
     private WebTarget webTarget;
 
@@ -40,7 +41,7 @@ public class SpatialRestClient{
     private String spatialEndpoint;
 
     private Jsonb jsonb;
-    
+
     @PostConstruct
     public void initClient() {
         String url = spatialEndpoint + "/spatialnonsecure/json/";
@@ -55,7 +56,7 @@ public class SpatialRestClient{
         webTarget = client.target(url);
     }
 
-    public SegmentCategoryType getSegmentCategoryType(Movement movement1, Movement movement2){
+    public SegmentCategoryType getSegmentCategoryType(Movement movement1, Movement movement2) {
 
         fish.focus.schema.movement.v1.MovementType movementType1 = MovementMapper.mapMovementToMovementTypeForSpatial(movement1);
         MovementType movementType2 = MovementMapper.mapMovementToMovementTypeForSpatial(movement2);
@@ -66,15 +67,15 @@ public class SpatialRestClient{
 
         String s = jsonb.toJson(request);
 
-        Response response =  webTarget
+        Response response = webTarget
                 .path("getSegmentCategoryType")
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(s), Response.class);
 
-        SegmentCategoryType returnValue = response.readEntity(new GenericType<SegmentCategoryType>() {});
+        SegmentCategoryType returnValue = response.readEntity(new GenericType<SegmentCategoryType>() {
+        });
         response.close();
 
         return returnValue;
     }
-
 }

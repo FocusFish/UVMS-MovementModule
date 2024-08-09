@@ -31,7 +31,7 @@ public class MovementSanityValidatorBean {
 
     @Inject
     private MovementCreateBean movementCreate;
-    
+
     public UUID evaluateSanity(IncomingMovement movement) {
         UUID reportId = null;
         for (SanityRule sanityRule : SanityRule.values()) {
@@ -48,7 +48,7 @@ public class MovementSanityValidatorBean {
         LOG.info("Create alarm invoked in validation service, rule: {}", ruleName);
 
         AlarmReport alarmReport = alarmDAO.getOpenAlarmReportByMovementGuid(movement.getId());
-        if(alarmReport == null) {
+        if (alarmReport == null) {
             alarmReport = new AlarmReport();
             alarmReport.setAssetGuid(movement.getAssetGuid());
             alarmReport.setCreatedDate(Instant.now());
@@ -72,7 +72,7 @@ public class MovementSanityValidatorBean {
         alarmDAO.save(item);
 
         alarmReport.getAlarmItemList().add(item);
-            
+
         return alarmReport.getId();
     }
 
@@ -128,12 +128,12 @@ public class MovementSanityValidatorBean {
         return entity;
     }
 
-    public IncomingMovement updateIncomingMovement(IncomingMovement movement){
-        if(movement == null || movement.getId() == null){
+    public IncomingMovement updateIncomingMovement(IncomingMovement movement) {
+        if (movement == null || movement.getId() == null) {
             throw new IllegalArgumentException("IncomingMovement or its ID is null");
         }
 
-        if(movement.getAlarmReport() == null) {
+        if (movement.getAlarmReport() == null) {
             movement.setAlarmReport(alarmDAO.getOpenAlarmReportByMovementGuid(movement.getId()));
         }
         movement.getAlarmReport().setIncomingMovement(movement); //since these two infinetly recurse we make sure that they recurse into each other

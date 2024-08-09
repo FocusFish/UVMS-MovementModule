@@ -63,11 +63,11 @@ public class MovementMapResponseHelper {
             String sql = SearchFieldMapper.createSelectSearchSql(searchKeys, true);
             List<Movement> movementEntityList = new ArrayList<>();
 
-            if ( numberOfLatestReports > 0) {
+            if (numberOfLatestReports > 0) {
                 List<SearchValue> connectedIdsFromSearchKeyValues = getConnectedIdsFromSearchKeyValues(searchKeyValuesList);
-                if(!connectedIdsFromSearchKeyValues.isEmpty() && connectedIdsFromSearchKeyValues.size()>1) {
+                if (!connectedIdsFromSearchKeyValues.isEmpty() && connectedIdsFromSearchKeyValues.size() > 1) {
                     getMovementsByConnectedIds(numberOfLatestReports, searchKeys, movementEntityList, connectedIdsFromSearchKeyValues);
-                }else{
+                } else {
                     movementEntityList = movementDao.getMovementList(sql, searchKeys, numberOfLatestReports);
                 }
             } else {
@@ -108,7 +108,7 @@ public class MovementMapResponseHelper {
 
             }
             return MovementResponseMapper.createMovementMapResponse(mapResponse);
-        } catch (Exception  ex) {
+        } catch (Exception ex) {
             throw new RuntimeException("Error when getting movement map by query", ex);
         }
     }
@@ -157,14 +157,14 @@ public class MovementMapResponseHelper {
         }
     }
 
-    private List<SearchValue> removeConnectedIdsFromSearchKeyValues(List<SearchValue> searchKeyValues){
+    private List<SearchValue> removeConnectedIdsFromSearchKeyValues(List<SearchValue> searchKeyValues) {
         return searchKeyValues
                 .stream()
                 .filter(searchValue -> !(SearchField.CONNECT_ID.getFieldName().equals(searchValue.getField().getFieldName())))
                 .collect(Collectors.toList());
     }
 
-    private List<SearchValue> getConnectedIdsFromSearchKeyValues(List<SearchValue> searchKeyValues){
+    private List<SearchValue> getConnectedIdsFromSearchKeyValues(List<SearchValue> searchKeyValues) {
         return searchKeyValues.stream()
                 .filter(searchValue -> SearchField.CONNECT_ID.getFieldName().equals(searchValue.getField().getFieldName()))
                 .collect(Collectors.toList());
@@ -173,14 +173,15 @@ public class MovementMapResponseHelper {
     /**
      * This method removes track mismatches. These can occur during movement creation but are easier to remove on
      * read than write.
-     *
+     * <p>
      * In the rare event of segments that are attached to two different tracks, the track that is not
-     connected to the any relevant Movement should be removed from the input list.
-     * @param tracks list of tracks to purge
+     * connected to the any relevant Movement should be removed from the input list.
+     *
+     * @param tracks    list of tracks to purge
      * @param movements list of movements to look for correct tracks in
      */
     public void removeTrackMismatches(List<MovementTrack> tracks, List<Movement> movements) {
-        if(tracks == null || movements == null) {
+        if (tracks == null || movements == null) {
             throw new IllegalArgumentException("MovementTrack list or Movement list is null");
         }
         Set<String> trackIds = movements.stream()

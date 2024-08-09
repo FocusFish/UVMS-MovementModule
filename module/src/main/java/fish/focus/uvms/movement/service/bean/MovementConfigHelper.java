@@ -13,6 +13,7 @@ package fish.focus.uvms.movement.service.bean;
 
 import fish.focus.uvms.config.constants.ConfigHelper;
 import fish.focus.uvms.movement.service.constant.ParameterKey;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,10 +24,10 @@ import java.util.stream.Collectors;
 @Stateless
 public class MovementConfigHelper implements ConfigHelper {
 
+    private final static String MOVEMENT_PU = "movement";
+
     @PersistenceContext
     protected EntityManager em;
-
-    private final static String MOVEMENT_PU = "movement";
 
     @Override
     public List<String> getAllParameterKeys() {
@@ -40,8 +41,8 @@ public class MovementConfigHelper implements ConfigHelper {
         return MOVEMENT_PU;
     }
 
-	@Override
-	public EntityManager getEntityManager() {
-		return em;
-	}
+    @Override
+    public EntityManager getEntityManager() {
+        return em;
+    }
 }

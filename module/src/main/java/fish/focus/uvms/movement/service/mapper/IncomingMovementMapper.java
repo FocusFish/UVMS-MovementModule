@@ -3,11 +3,11 @@ package fish.focus.uvms.movement.service.mapper;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.asset.client.model.AssetMTEnrichmentResponse;
-import fish.focus.uvms.movementrules.model.dto.MovementDetails;
 import fish.focus.uvms.movement.model.constants.SatId;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.entity.MovementConnect;
+import fish.focus.uvms.movementrules.model.dto.MovementDetails;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -24,7 +24,7 @@ public class IncomingMovementMapper {
         if (ic.getReportedSpeed() != null) {
             entity.setSpeed(ic.getReportedSpeed().floatValue());
         }
-        entity.setHeading( ic.getReportedCourse() == null ? -1f : ic.getReportedCourse().floatValue());
+        entity.setHeading(ic.getReportedCourse() == null ? -1f : ic.getReportedCourse().floatValue());
         entity.setStatus(ic.getStatus());
         entity.setLesReportTime(ic.getLesReportTime());
         entity.setSourceSatelliteId(ic.getSourceSatelliteId() != null ? SatId.fromInt(ic.getSourceSatelliteId().intValue()) : null);
@@ -73,8 +73,8 @@ public class IncomingMovementMapper {
         md.setMovementType(movement.getMovementType().value());
         Movement previousMovement = movement.getPreviousMovement();
         md.setCalculatedSpeed(movement.getCalculatedSpeed() != null ? movement.getCalculatedSpeed() : null);
-        md.setReportedCourse(movement.getHeading() != null ? (double)movement.getHeading() : null);
-        md.setReportedSpeed(movement.getSpeed() != null ? (double)movement.getSpeed() : null);
+        md.setReportedCourse(movement.getHeading() != null ? (double) movement.getHeading() : null);
+        md.setReportedSpeed(movement.getSpeed() != null ? (double) movement.getSpeed() : null);
         md.setPositionTime(movement.getTimestamp());
         md.setStatusCode(movement.getStatus());
         md.setWkt("");

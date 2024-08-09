@@ -1,11 +1,6 @@
 package fish.focus.uvms.movement.service;
 
-import fish.focus.schema.movement.search.v1.ListCriteria;
-import fish.focus.schema.movement.search.v1.ListPagination;
-import fish.focus.schema.movement.search.v1.MovementQuery;
-import fish.focus.schema.movement.search.v1.RangeCriteria;
-import fish.focus.schema.movement.search.v1.RangeKeyType;
-import fish.focus.schema.movement.search.v1.SearchKey;
+import fish.focus.schema.movement.search.v1.*;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -20,17 +15,17 @@ public class MovementTestHelper {
         MovementQuery movementQuery = new MovementQuery();
         movementQuery.setExcludeFirstAndLastSegment(true);
 
-        if(useListPagination) {
+        if (useListPagination) {
             ListPagination listPagination = createListPagination();
             movementQuery.setPagination(listPagination);
         }
 
-        if(useListCriteria) {
+        if (useListCriteria) {
             List<ListCriteria> listOfListCriteria = createListOfListCriteria();
             movementQuery.getMovementSearchCriteria().addAll(listOfListCriteria);
         }
 
-        if(useRangeCriteria) {
+        if (useRangeCriteria) {
             List<RangeCriteria> listOfRangeCriteria = createListOfRangeCriteria();
             movementQuery.getMovementRangeSearchCriteria().addAll(listOfRangeCriteria);
         }

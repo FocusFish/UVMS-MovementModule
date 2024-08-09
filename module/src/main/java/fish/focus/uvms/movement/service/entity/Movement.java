@@ -48,11 +48,11 @@ import java.util.UUID;
 @NamedQuery(name = Movement.FIND_MOVEMENT_BY_ID_LIST, query = "SELECT m FROM Movement m WHERE m.id in :moveIds")
 
 @NamedNativeQuery(name = Movement.UPDATE_TO_NEW_MOVEMENTCONNECT, query = "WITH subRequest as (" +
-                                                                            "SELECT id FROM movement.movement WHERE movementconnect_id = :oldMC LIMIT :limit FOR UPDATE) " +
-                                                                                "UPDATE movement.movement as m " +
-                                                                                "SET movementconnect_id = :newMC " +
-                                                                                "FROM subRequest " +
-                                                                                "WHERE m.id = subRequest.id")
+        "SELECT id FROM movement.movement WHERE movementconnect_id = :oldMC LIMIT :limit FOR UPDATE) " +
+        "UPDATE movement.movement as m " +
+        "SET movementconnect_id = :newMC " +
+        "FROM subRequest " +
+        "WHERE m.id = subRequest.id")
 @Entity
 @Table(name = "movement")
 @DynamicUpdate
@@ -76,9 +76,9 @@ public class Movement implements Serializable, Comparable<Movement> {
     public static final String FIND_ALL_FOR_CONNECT_IDS_BETWEEN_DATES = "Movement.findAllForConnectIdsBetweenDates";
 
     public static final String UPDATE_TO_NEW_MOVEMENTCONNECT = "Movement.updateToNewMovementConnect";
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(columnDefinition = "uuid", name = "id")
@@ -93,7 +93,7 @@ public class Movement implements Serializable, Comparable<Movement> {
 
     @Column(name = "heading")
     private Float heading;
-    
+
     @Size(max = 60)
     @Column(name = "status")
     private String status;
@@ -126,7 +126,7 @@ public class Movement implements Serializable, Comparable<Movement> {
     @Id
     @Column(name = "timestamp")
     private Instant timestamp;
-    
+
     @Column(name = "lesreporttime")
     private Instant lesReportTime;
 
@@ -143,7 +143,8 @@ public class Movement implements Serializable, Comparable<Movement> {
     @Column(name = "update_user")
     private String updatedBy;
 
-    @Column(name = "ais_position_accuracy")     //Value can be 0 (>10m) and 1 (<10m). See https://gpsd.gitlab.io/gpsd/AIVDM.html for more info
+    @Column(name = "ais_position_accuracy")
+    //Value can be 0 (>10m) and 1 (<10m). See https://gpsd.gitlab.io/gpsd/AIVDM.html for more info
     private Short aisPositionAccuracy;
 
     @Column(name = "calculatedspeed")
@@ -254,12 +255,12 @@ public class Movement implements Serializable, Comparable<Movement> {
     }
 
     public Instant getLesReportTime() {
-		return lesReportTime;
-	}
+        return lesReportTime;
+    }
 
-	public void setLesReportTime(Instant lesReportTime) {
-		this.lesReportTime = lesReportTime;
-	}
+    public void setLesReportTime(Instant lesReportTime) {
+        this.lesReportTime = lesReportTime;
+    }
 
     public SatId getSourceSatelliteId() {
         return sourceSatelliteId;

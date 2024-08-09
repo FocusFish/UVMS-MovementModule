@@ -8,10 +8,6 @@ public enum SatId {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
-    }
-
     public static SatId fromInt(Integer code) {
         for (SatId type : SatId.values()) {
             if (type.value == code) {
@@ -19,5 +15,9 @@ public enum SatId {
             }
         }
         return null;
+    }
+
+    public int getValue() {
+        return value;
     }
 }

@@ -3,9 +3,9 @@ package fish.focus.uvms.movement.rest.service;
 import fish.focus.schema.movement.search.v1.*;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementType;
+import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.rest.BuildMovementRestDeployment;
 import fish.focus.uvms.movement.rest.MovementTestHelper;
-import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.service.bean.MovementService;
 import fish.focus.uvms.movement.service.entity.Movement;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -23,7 +23,9 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
@@ -54,7 +56,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getSeveralMovesByConnectId () {
+    public void getSeveralMovesByConnectId() {
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
@@ -81,7 +83,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveBySourceAndConnectId () {
+    public void getMoveBySourceAndConnectId() {
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
@@ -114,11 +116,11 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveByAreaAndConnectId () {
-        Movement movementBaseType1 = MovementTestHelper.createMovement(11d,56d);
+    public void getMoveByAreaAndConnectId() {
+        Movement movementBaseType1 = MovementTestHelper.createMovement(11d, 56d);
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
-        Movement movementBaseType2 = MovementTestHelper.createMovement(12d,57d);
+        Movement movementBaseType2 = MovementTestHelper.createMovement(12d, 57d);
         movementBaseType2.setMovementConnect(movementBaseType1.getMovementConnect());
         movementBaseType2.setTimestamp(Instant.now().minus(10, ChronoUnit.SECONDS));
         movementBaseType2.setSource(MovementSourceType.MANUAL);
@@ -147,7 +149,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveBySourceAndStatus () {
+    public void getMoveBySourceAndStatus() {
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
@@ -179,7 +181,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveBySourceAndType () {
+    public void getMoveBySourceAndType() {
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
@@ -211,7 +213,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveByConnectIdAndDateRange () {
+    public void getMoveByConnectIdAndDateRange() {
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
@@ -228,8 +230,8 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
         RangeCriteria rangeCriteria = new RangeCriteria();
         rangeCriteria.setKey(RangeKeyType.DATE);
-        rangeCriteria.setFrom("" + createdMovement1.getTimestamp().minus(5,ChronoUnit.SECONDS).toEpochMilli());
-        rangeCriteria.setTo("" + createdMovement1.getTimestamp().plus(5,ChronoUnit.SECONDS).toEpochMilli());
+        rangeCriteria.setFrom("" + createdMovement1.getTimestamp().minus(5, ChronoUnit.SECONDS).toEpochMilli());
+        rangeCriteria.setTo("" + createdMovement1.getTimestamp().plus(5, ChronoUnit.SECONDS).toEpochMilli());
         query.getMovementRangeSearchCriteria().add(rangeCriteria);
 
         GetMovementListByQueryResponse queryResponse = getListByQuery(query);
@@ -244,7 +246,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveByConnectIdAndSpeedRange () {
+    public void getMoveByConnectIdAndSpeedRange() {
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
@@ -262,7 +264,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
         RangeCriteria rangeCriteria = new RangeCriteria();
         rangeCriteria.setKey(RangeKeyType.MOVEMENT_SPEED);
-        rangeCriteria.setFrom("" + (createdMovement1.getSpeed() - 1d) );
+        rangeCriteria.setFrom("" + (createdMovement1.getSpeed() - 1d));
         rangeCriteria.setTo("" + (createdMovement1.getSpeed() + 1d));
         query.getMovementRangeSearchCriteria().add(rangeCriteria);
 
@@ -278,11 +280,11 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveByConnectIdAndTrackDurationRange () {
-        Movement movementBaseType1 = MovementTestHelper.createMovement(56d,11d);
+    public void getMoveByConnectIdAndTrackDurationRange() {
+        Movement movementBaseType1 = MovementTestHelper.createMovement(56d, 11d);
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
-        Movement movementBaseType2 = MovementTestHelper.createMovement(56.1d,11.1d);
+        Movement movementBaseType2 = MovementTestHelper.createMovement(56.1d, 11.1d);
         movementBaseType2.setMovementConnect(movementBaseType1.getMovementConnect());
         movementBaseType2.setTimestamp(Instant.now().minus(10, ChronoUnit.SECONDS));
         movementBaseType2.setSpeed(5f);
@@ -296,7 +298,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
         RangeCriteria rangeCriteria = new RangeCriteria();
         rangeCriteria.setKey(RangeKeyType.TRACK_DURATION);
-        rangeCriteria.setFrom("" + 5 );
+        rangeCriteria.setFrom("" + 5);
         rangeCriteria.setTo("" + 15);
         query.getMovementRangeSearchCriteria().add(rangeCriteria);
 
@@ -312,11 +314,11 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void getMoveByConnectIdAndTrackLengthRange () {
-        Movement movementBaseType1 = MovementTestHelper.createMovement(56d,11d);
+    public void getMoveByConnectIdAndTrackLengthRange() {
+        Movement movementBaseType1 = MovementTestHelper.createMovement(56d, 11d);
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
 
-        Movement movementBaseType2 = MovementTestHelper.createMovement(56.1d,11.1d);
+        Movement movementBaseType2 = MovementTestHelper.createMovement(56.1d, 11.1d);
         movementBaseType2.setMovementConnect(movementBaseType1.getMovementConnect());
         movementBaseType2.setTimestamp(Instant.now().minus(10, ChronoUnit.SECONDS));
         movementBaseType2.setSpeed(5f);
@@ -330,7 +332,7 @@ public class MovementRestResourceQueryTest extends BuildMovementRestDeployment {
 
         RangeCriteria rangeCriteria = new RangeCriteria();
         rangeCriteria.setKey(RangeKeyType.TRACK_LENGTH);
-        rangeCriteria.setFrom("" + 5 );
+        rangeCriteria.setFrom("" + 5);
         rangeCriteria.setTo("" + 15);
         query.getMovementRangeSearchCriteria().add(rangeCriteria);
 

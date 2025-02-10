@@ -12,13 +12,9 @@ import fish.focus.uvms.movement.service.TransactionalTests;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.mapper.search.SearchField;
 import fish.focus.uvms.movement.service.mapper.search.SearchValue;
-import org.hamcrest.core.StringContains;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.internal.matchers.ThrowableMessageMatcher;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
@@ -30,6 +26,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
 
 /**
@@ -39,10 +37,7 @@ import static org.junit.Assert.*;
 @RunWith(Arquillian.class)
 public class MovementDomainModelBeanIntTest extends TransactionalTests {
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-    private Random rnd = new Random();
+    private final Random rnd = new Random();
 
     @EJB
     private MovementMapResponseHelper mapResponseHelper;
@@ -92,79 +87,75 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void getLatestMovements_NULL() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        movementService.getLatestMovements(null);
+        assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getLatestMovements(null));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void getLatestMovements_neg5() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        movementService.getLatestMovements(-5);
+        assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getLatestMovements(-5));
     }
-
 
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementListByQuery_NULL() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("Movement list query is null");
+        String expectedMessage = "Movement list query is null";
 
-        movementService.getList(null);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getList(null));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementMapByQuery_NULL() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("Movement list query is null");
+        String expectedMessage = "Movement list query is null";
 
-        movementService.getMapByQuery(null);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getMapByQuery(null));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void keepSegment_NULL() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("MovementSegment or SearchValue list is null");
+        String expectedMessage = "MovementSegment or SearchValue list is null";
 
-        mapResponseHelper.keepSegment(null, null);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> mapResponseHelper.keepSegment(null, null));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void removeTrackMismatches_NULL() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("MovementTrack list or Movement list is null");
+        String expectedMessage = "MovementTrack list or Movement list is null";
 
-        mapResponseHelper.removeTrackMismatches(null, null);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> mapResponseHelper.removeTrackMismatches(null, null));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetMovementListByQuery_WillFailWithNullParameter() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("Movement list query is null");
+        String expectedMessage = "Movement list query is null";
 
-        movementService.getList(null);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getList(null));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetMovementListByQuery_WillFailNoPaginationSet() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("Pagination in movementlist query is null");
+        String expectedMessage = "Pagination in movementlist query is null";
 
         MovementQuery input = new MovementQuery();
         input.setExcludeFirstAndLastSegment(true);
-        movementService.getList(input);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getList(input));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetMovementListByQuery_WillFailNoSearchCriteria() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("No search criterias in MovementList query");
+        String expectedMessage = "No search criterias in MovementList query";
 
         MovementQuery input = new MovementQuery();
         input.setExcludeFirstAndLastSegment(true);
@@ -174,7 +165,8 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
         listPagination.setPage(new BigInteger("1")); //this can not be 0 or lower....
         input.setPagination(listPagination);
 
-        movementService.getList(input);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getList(input));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
@@ -235,8 +227,6 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetMovementListByQuery_WillFailEmptyRangeSearchCriteria() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-
         MovementQuery input = new MovementQuery();
         input.setExcludeFirstAndLastSegment(true);
 
@@ -257,24 +247,23 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
 
         input.getMovementRangeSearchCriteria().add(new RangeCriteria());
 
-        movementService.getList(input);
+        assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getList(input));
     }
 
 
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetMovementMapByQuery_WillFailWIthNullAsQuery() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("Movement list query is null");
+        String expectedMessage = "Movement list query is null";
 
-        movementService.getMapByQuery(null);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getMapByQuery(null));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetMovementMapByQuery_WillFailWIthPaginationNotSupported() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("Pagination not supported in get movement map by query");
+        String expectedMessage = "Pagination not supported in get movement map by query";
 
         MovementQuery input = new MovementQuery();
         input.setExcludeFirstAndLastSegment(true);
@@ -284,7 +273,8 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
         listPagination.setPage(new BigInteger("1")); //this can not be 0 or lower....
         input.setPagination(listPagination);
 
-        movementService.getMapByQuery(input);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getMapByQuery(input));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     @Test
@@ -337,8 +327,6 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetMinimalMovementMapByQuery_WillFailNoSearchCriteriaSet() {
-        thrown.expect(EJBTransactionRolledbackException.class);
-
         MovementQuery input = new MovementQuery();
         input.setExcludeFirstAndLastSegment(true);
 
@@ -348,7 +336,7 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
         input.setPagination(listPagination);
         input.getMovementRangeSearchCriteria().add(new RangeCriteria());
 
-        movementService.getMapByQuery(input);
+        assertThrows(EJBTransactionRolledbackException.class, () -> movementService.getMapByQuery(input));
     }
 
     @Test
@@ -439,9 +427,5 @@ public class MovementDomainModelBeanIntTest extends TransactionalTests {
         MovementHelpers movementHelpers = new MovementHelpers(movementService);
         List<Movement> varbergGrena = movementHelpers.createVarbergGrenaMovements(1, 10, connectID);
         return varbergGrena;
-    }
-
-    private void expectedMessage(String message) {
-        thrown.expect(new ThrowableMessageMatcher(new StringContains(message)));
     }
 }

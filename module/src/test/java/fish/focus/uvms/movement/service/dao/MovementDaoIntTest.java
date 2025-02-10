@@ -11,14 +11,10 @@ import fish.focus.uvms.movement.service.mapper.search.SearchField;
 import fish.focus.uvms.movement.service.mapper.search.SearchFieldMapper;
 import fish.focus.uvms.movement.service.mapper.search.SearchValue;
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.core.StringContains;
 import org.hibernate.HibernateException;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.internal.matchers.ThrowableMessageMatcher;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -34,6 +30,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.junit.Assert.*;
 
 /**
@@ -52,9 +49,6 @@ public class MovementDaoIntTest extends TransactionalTests {
         PRIMEM["Greenwich",0, AUTHORITY["EPSG","8901"]], UNIT["degree",0.01745329251994328,AUTHORITY["EPSG","9122"]],
         AUTHORITY["EPSG","4326"]]
      */
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @EJB
     private MovementDao movementDao;
@@ -240,10 +234,10 @@ public class MovementDaoIntTest extends TransactionalTests {
         List<SearchValue> searchValues = Collections.singletonList(new SearchValue(SearchField.AREA, "HEPP"));
         String sql = "select m from Movement m ";
 
-        thrown.expect(EJBTransactionRolledbackException.class);
-        expectedMessage("Error when getting list");
+        String expectedMessage="Error when getting list";
 
-        movementDao.getMovementList(sql, searchValues);
+        Exception exception = assertThrows(EJBTransactionRolledbackException.class, () -> movementDao.getMovementList(sql, searchValues));
+        assertThat(exception.getMessage(), containsString(expectedMessage));
     }
 
     // @Test
@@ -363,10 +357,9 @@ public class MovementDaoIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementListSearchCount_SearchValueNull_ExceptionThrown() {
-        thrown.expect(Exception.class);
-
         String sql = SearchFieldMapper.createCountSearchSql(null, true);
-        movementDao.getMovementListSearchCount(sql, null);
+
+        assertThrows(EJBTransactionRolledbackException.class, () -> movementDao.getMovementListSearchCount(sql, null));
     }
 
     @Test
@@ -539,9 +532,5 @@ public class MovementDaoIntTest extends TransactionalTests {
             fail(e.toString());
         }
         return new ArrayList<>();
-    }
-
-    private void expectedMessage(String message) {
-        thrown.expect(new ThrowableMessageMatcher(new StringContains(message)));
     }
 }

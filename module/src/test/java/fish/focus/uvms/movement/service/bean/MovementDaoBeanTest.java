@@ -7,9 +7,7 @@ import fish.focus.uvms.movement.service.dao.MovementDao;
 import fish.focus.uvms.movement.service.entity.Movement;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
@@ -24,9 +22,6 @@ import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
 public class MovementDaoBeanTest extends TransactionalTests {
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @EJB
     private MovementService movementService;
@@ -129,9 +124,6 @@ public class MovementDaoBeanTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void testGetLatestMovementsByConnectID_willFail() throws Exception {
-
-        thrown.expect(EJBTransactionRolledbackException.class);
-
         UUID connectID = UUID.randomUUID();
         MovementHelpers movementHelpers = new MovementHelpers(movementService);
         Movement move1 = movementHelpers.createMovement(20D, 20D, connectID, "TEST", Instant.now());
@@ -146,9 +138,8 @@ public class MovementDaoBeanTest extends TransactionalTests {
         assertEquals(1, output.size());
         assertEquals(move3.getId(), output.get(0).getId());
 
-        movementDao.getLatestMovementsByConnectId(connectID, -3);
+        assertThrows(EJBTransactionRolledbackException.class, () -> movementDao.getLatestMovementsByConnectId(connectID, -3));
     }
-
 
     @Test
     @OperateOnDeployment("movementservice")

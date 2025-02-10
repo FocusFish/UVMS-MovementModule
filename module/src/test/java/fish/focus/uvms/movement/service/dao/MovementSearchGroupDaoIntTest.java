@@ -4,9 +4,7 @@ import fish.focus.uvms.movement.service.TransactionalTests;
 import fish.focus.uvms.movement.service.entity.group.MovementFilterGroup;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
@@ -24,9 +22,6 @@ public class MovementSearchGroupDaoIntTest extends TransactionalTests {
 
     private static final String TEST_USER_NAME = "MovementSearchGroupDaoIntTestUser";
 
-    @Rule
-    public ExpectedException expectedException = ExpectedException.none();
-
     @EJB
     private MovementSearchGroupDao dao;
 
@@ -42,25 +37,25 @@ public class MovementSearchGroupDaoIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void createMovementFilterGroupNoUpdateTime() {
-        expectedException.expect(ConstraintViolationException.class);
-
         MovementFilterGroup movementFilterGroup = newFilterGroup();
         movementFilterGroup.setUpdated(null);
+
         dao.createMovementFilterGroup(movementFilterGroup);
+
         assertNotNull(movementFilterGroup.getId());
-        em.flush();
+        assertThrows(ConstraintViolationException.class, () -> em.flush());
     }
 
     @Test
     @OperateOnDeployment("movementservice")
     public void createMovementFilterGroupNoUpdateBy() {
-        expectedException.expect(ConstraintViolationException.class);
-
         MovementFilterGroup movementFilterGroup = newFilterGroup();
         movementFilterGroup.setUpdatedBy(null);
+
         dao.createMovementFilterGroup(movementFilterGroup);
+
         assertNotNull(movementFilterGroup.getId());
-        em.flush();
+        assertThrows(ConstraintViolationException.class, () -> em.flush());
     }
 
     @Test
@@ -143,10 +138,9 @@ public class MovementSearchGroupDaoIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("movementservice")
     public void updateMovementFilterGroupFailedNoId() {
-        expectedException.expect(EJBTransactionRolledbackException.class);
         MovementFilterGroup movementFilterGroup = newFilterGroup();
-        dao.updateMovementFilterGroup(movementFilterGroup);
-        em.flush();
+
+        assertThrows(EJBTransactionRolledbackException.class, () -> dao.updateMovementFilterGroup(movementFilterGroup));
     }
 
     private MovementFilterGroup newFilterGroup() {

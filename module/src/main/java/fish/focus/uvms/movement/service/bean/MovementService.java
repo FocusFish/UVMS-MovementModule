@@ -265,6 +265,8 @@ public class MovementService {
             newMovementConnect = movementDao.createMovementConnect(newMovementConnect);
         }
 
+        LOG.info("Remapping old positions for {} to {}", oldMovementConnect.getId(), newMovementConnect);
+
         return movementDao.updateToNewMovementConnect(oldMovementConnect.getId(), newMovementConnect.getId(), 10000);
     }
 

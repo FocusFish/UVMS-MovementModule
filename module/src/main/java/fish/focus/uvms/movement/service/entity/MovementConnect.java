@@ -146,4 +146,14 @@ public class MovementConnect implements Serializable, Comparable<MovementConnect
             return ObjectUtils.compare(this.getId(), o.getId());
         }
     }
+
+    @Override
+    public String toString() {
+        return "MovementConnect{" +
+                "id=" + id +
+                ", updated=" + updated +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", latestLocation=" + latestLocation +
+                '}';
+    }
 }

@@ -2,8 +2,9 @@ package fish.focus.uvms.movement.service.message;
 
 import fish.focus.uvms.commons.message.api.MessageConstants;
 import fish.focus.uvms.commons.message.impl.AbstractProducer;
-import fish.focus.uvms.movementrules.model.dto.MovementDetails;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+import fish.focus.uvms.movementrules.model.dto.MovementDetails;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;

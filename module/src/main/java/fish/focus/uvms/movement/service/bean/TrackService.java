@@ -17,6 +17,7 @@ import fish.focus.uvms.movement.service.dto.SegmentCalculations;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.entity.Track;
 import fish.focus.uvms.movement.service.util.CalculationUtil;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.time.Instant;
@@ -26,7 +27,7 @@ public class TrackService {
 
     @Inject
     private SpatialRestClient spatialClient;
-    
+
     public void upsertTrack(Movement previous, Movement current) {
         SegmentCalculations positionCalculations = CalculationUtil.getPositionCalculations(previous, current);
         Track existingTrack = previous.getTrack();
@@ -57,7 +58,7 @@ public class TrackService {
             }
         }
     }
-    
+
     private Track createNewTrack(SegmentCalculations positionCalculations) {
         Track track = new Track();
         track.setDistance(positionCalculations.getDistanceBetweenPoints());
@@ -66,8 +67,8 @@ public class TrackService {
         track.setUpdatedBy("UVMS");
         return track;
     }
-    
-    private void updateTrack(Track track, SegmentCalculations positionCalculations, SegmentCategoryType segCat)  {
+
+    private void updateTrack(Track track, SegmentCalculations positionCalculations, SegmentCategoryType segCat) {
         //add segments values to those of the track
         double calculatedDistance = track.getDistance() + positionCalculations.getDistanceBetweenPoints();
         track.setDistance(calculatedDistance);

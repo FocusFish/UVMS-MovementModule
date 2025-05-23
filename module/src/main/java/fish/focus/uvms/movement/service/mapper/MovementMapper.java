@@ -34,10 +34,11 @@ public class MovementMapper {
 
     private static final Logger LOG = LoggerFactory.getLogger(MovementMapper.class);
 
-    private MovementMapper() {}
+    private MovementMapper() {
+    }
 
 
-    public static MovementType mapMovementToMovementTypeForSpatial(Movement movement){
+    public static MovementType mapMovementToMovementTypeForSpatial(Movement movement) {
         MovementType movementType = new MovementType();
         movementType.setPositionTime(Date.from(movement.getTimestamp()));
         fish.focus.schema.movement.v1.MovementPoint movementPoint = new fish.focus.schema.movement.v1.MovementPoint();
@@ -47,7 +48,7 @@ public class MovementMapper {
 
         return movementType;
     }
-    
+
     public static List<MovementDto> mapToMovementDtoList(List<Movement> movmements) {
         List<MovementDto> mappedMovements = new ArrayList<>();
         for (Movement mappedMovement : movmements) {
@@ -57,7 +58,7 @@ public class MovementMapper {
     }
 
     public static MovementDto mapToMovementDto(Movement movement) {
-        if(movement == null){
+        if (movement == null) {
             return null;
         }
         MovementDto dto = new MovementDto();

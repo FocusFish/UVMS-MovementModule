@@ -21,8 +21,8 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 
-import java.util.Date;
 import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 public class MockData {
@@ -30,7 +30,7 @@ public class MockData {
     public static Movement createMovement(double longitude, double latitude, UUID connectId) {
         return createMovement(longitude, latitude, connectId, 0d, "Test");
     }
-    
+
     public static Movement createMovement(double longitude, double latitude, UUID connectId, double reportedCourse, String username) {
 
         LatLong latLong = new LatLong(latitude, longitude, Instant.now());
@@ -53,8 +53,8 @@ public class MockData {
         Point point = factory.createPoint(coordinate);
         point.setSRID(4326);
         movement.setLocation(point);
-        movement.setHeading((float)latlong.bearing);
-        movement.setSpeed((float)latlong.speed);
+        movement.setHeading((float) latlong.bearing);
+        movement.setSpeed((float) latlong.speed);
         movement.setSource(MovementSourceType.NAF);
         movement.setStatus("TEST");
         movement.setUpdated(Instant.now());
@@ -64,7 +64,7 @@ public class MockData {
 
         return movement;
     }
-    
+
     public static MovementType createMovementType(double longitude, double latitude, double altitude, SegmentCategoryType segmentCategoryType, String connectId, double reportedCourse) {
 
         LatLong latLong = new LatLong(latitude, longitude, Instant.now());

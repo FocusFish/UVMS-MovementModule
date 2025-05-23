@@ -2,7 +2,6 @@ package fish.focus.uvms.movement.service.dao;
 
 import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.uvms.movement.service.TransactionalTests;
-import fish.focus.uvms.movement.service.dao.AlarmDAO;
 import fish.focus.uvms.movement.service.dto.AlarmStatusType;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
 import fish.focus.uvms.movement.service.entity.alarm.AlarmItem;

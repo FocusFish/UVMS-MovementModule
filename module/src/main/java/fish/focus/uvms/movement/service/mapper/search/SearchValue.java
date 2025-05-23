@@ -12,6 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.movement.service.mapper.search;
 
 /**
+ *
  **/
 public class SearchValue {
 

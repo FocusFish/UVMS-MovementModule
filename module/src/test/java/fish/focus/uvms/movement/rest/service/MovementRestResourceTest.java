@@ -3,15 +3,12 @@ package fish.focus.uvms.movement.rest.service;
 import fish.focus.schema.movement.search.v1.ListCriteria;
 import fish.focus.schema.movement.search.v1.MovementQuery;
 import fish.focus.schema.movement.search.v1.SearchKey;
-import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementType;
 import fish.focus.uvms.commons.date.DateUtils;
-import fish.focus.uvms.movement.rest.BuildMovementRestDeployment;
-import fish.focus.uvms.movement.rest.MovementTestHelper;
 import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.model.dto.MovementDto;
-import fish.focus.uvms.movement.rest.RestUtilMapper;
-import fish.focus.uvms.movement.rest.dto.RealTimeMapInitialData;
+import fish.focus.uvms.movement.rest.BuildMovementRestDeployment;
+import fish.focus.uvms.movement.rest.MovementTestHelper;
 import fish.focus.uvms.movement.service.bean.MovementService;
 import fish.focus.uvms.movement.service.entity.Movement;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -25,19 +22,19 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class MovementRestResourceTest extends BuildMovementRestDeployment {
-    
+
     @Inject
     private MovementService movementService;
 
@@ -67,66 +64,66 @@ public class MovementRestResourceTest extends BuildMovementRestDeployment {
     public void getLatestMovementsByConnectIds() {
         Movement movementBaseType = MovementTestHelper.createMovement();
         Movement createdMovement = movementService.createAndProcessMovement(movementBaseType);
-        
+
         List<MovementDto> latestMovements = getLatestMovementsByConnectIds(
                 Collections.singletonList(createdMovement.getMovementConnect().getId().toString()));
         assertThat(latestMovements.size(), is(1));
         assertThat(latestMovements.get(0).getId(), is(createdMovement.getId()));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void getLatestMovementsByConnectIdsTwoPositions() {
         UUID connectId = UUID.randomUUID();
-        
+
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         movementBaseType1.getMovementConnect().setId(connectId);
         movementBaseType1.setTimestamp(Instant.now().minusSeconds(60));
         movementService.createAndProcessMovement(movementBaseType1);
-        
+
         Movement movementBaseType2 = MovementTestHelper.createMovement();
         movementBaseType1.getMovementConnect().setId(connectId);
         Movement createdMovement2 = movementService.createAndProcessMovement(movementBaseType2);
-        
+
         List<MovementDto> latestMovements = getLatestMovementsByConnectIds(
                 Collections.singletonList(createdMovement2.getMovementConnect().getId().toString()));
         assertThat(latestMovements.size(), is(1));
         assertThat(latestMovements.get(0).getId(), is(createdMovement2.getId()));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void getLatestMovementsByConnectIdsTwoPositionsUnordered() {
         UUID connectId = UUID.randomUUID();
-        
+
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         movementBaseType1.getMovementConnect().setId(connectId);
         Movement createdMovement1 = movementService.createAndProcessMovement(movementBaseType1);
-        
+
         Movement movementBaseType2 = MovementTestHelper.createMovement();
         movementBaseType1.getMovementConnect().setId(connectId);
         movementBaseType2.setTimestamp(Instant.now().minusSeconds(60));
         movementService.createAndProcessMovement(movementBaseType2);
-        
+
         List<MovementDto> latestMovements = getLatestMovementsByConnectIds(
                 Collections.singletonList(createdMovement1.getMovementConnect().getId().toString()));
         assertThat(latestMovements.size(), is(1));
         assertThat(latestMovements.get(0).getId(), is(createdMovement1.getId()));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void getLatestMovements() {
         Movement movementBaseType1 = MovementTestHelper.createMovement();
         movementService.createAndProcessMovement(movementBaseType1);
-        
+
         Movement movementBaseType2 = MovementTestHelper.createMovement();
         movementService.createAndProcessMovement(movementBaseType2);
-        
+
         List<MovementDto> latestMovements = getLatestMovements(1);
         assertThat(latestMovements.size(), is(1));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementById() {
@@ -161,10 +158,11 @@ public class MovementRestResourceTest extends BuildMovementRestDeployment {
                 .path("latest")
                 .path("asset")
                 .path(connectId.toString())
-                .queryParam("maxNbr", 2) 
+                .queryParam("maxNbr", 2)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getToken())
-                .post(Entity.json(""), new GenericType<List<MovementDto>>() {});
+                .post(Entity.json(""), new GenericType<List<MovementDto>>() {
+                });
 
         assertFalse(latestMovements.isEmpty());
         assertTrue(latestMovements.stream().
@@ -174,11 +172,11 @@ public class MovementRestResourceTest extends BuildMovementRestDeployment {
         assertTrue(latestMovements.stream()
                 .anyMatch(m -> m.getId().equals(createdMovement3.getId())));
     }
-    
+
     /*
      * Moved from microMovementRestResourceTest
      */
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void getTrackBetweenTimesForAssetTest() {
@@ -195,8 +193,8 @@ public class MovementRestResourceTest extends BuildMovementRestDeployment {
         movementBaseType3.getMovementConnect().setId(connectId);
         Movement createdMovement3 = movementService.createAndProcessMovement(movementBaseType3);
 
-        Instant startTime  = createdMovement2.getTimestamp().minusSeconds(1);
-        Instant endTime  = createdMovement2.getTimestamp().plusSeconds(1);
+        Instant startTime = createdMovement2.getTimestamp().minusSeconds(1);
+        Instant endTime = createdMovement2.getTimestamp().plusSeconds(1);
 
 
         List<MovementDto> latestMovements = getWebTarget()
@@ -208,7 +206,8 @@ public class MovementRestResourceTest extends BuildMovementRestDeployment {
                 .queryParam("endDate", DateUtils.dateToHumanReadableString(endTime))
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getToken())
-                .post(Entity.json(""), new GenericType<List<MovementDto>>() {});
+                .post(Entity.json(""), new GenericType<List<MovementDto>>() {
+                });
 
         assertFalse(latestMovements.isEmpty());
         assertTrue(latestMovements.stream().
@@ -218,7 +217,7 @@ public class MovementRestResourceTest extends BuildMovementRestDeployment {
         assertTrue(latestMovements.stream()
                 .noneMatch(m -> m.getId().equals(createdMovement3.getId())));
     }
-    
+
 
     /*
      * Helper functions for REST calls
@@ -233,26 +232,28 @@ public class MovementRestResourceTest extends BuildMovementRestDeployment {
                 .header(HttpHeaders.AUTHORIZATION, getToken())
                 .post(Entity.json(query), GetMovementListByQueryResponse.class);
     }
-    
+
 
     private List<MovementDto> getLatestMovementsByConnectIds(List<String> connectIds) {
-         return getWebTarget()
+        return getWebTarget()
                 .path("movement")
                 .path("latest")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getToken())
-                .post(Entity.json(connectIds), new GenericType<List<MovementDto>>(){});
+                .post(Entity.json(connectIds), new GenericType<List<MovementDto>>() {
+                });
     }
-    
+
     private List<MovementDto> getLatestMovements(int numberOfMovements) {
         return getWebTarget()
                 .path("movement")
                 .path("latest/" + numberOfMovements)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getToken())
-                .get(new GenericType<List<MovementDto>>(){});
+                .get(new GenericType<List<MovementDto>>() {
+                });
     }
-    
+
     private MovementType getMovementById(String id) {
         return getWebTarget()
                 .path("movement")

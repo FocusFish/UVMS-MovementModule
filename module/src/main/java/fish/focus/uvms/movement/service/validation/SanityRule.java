@@ -13,6 +13,7 @@ package fish.focus.uvms.movement.service.validation;
 
 import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.movement.service.entity.IncomingMovement;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -57,9 +58,9 @@ public enum SanityRule {
     TIME_IN_FUTURE("Time in future") {
         @Override
         public boolean evaluate(IncomingMovement movement) {
-            return movement.getPositionTime() != null && 
+            return movement.getPositionTime() != null &&
                     (!movement.getMovementSourceType().equals("AIS") && movement.getPositionTime().isAfter(Instant.now()) ||
-                    movement.getMovementSourceType().equals("AIS") && movement.getPositionTime().isAfter(Instant.now().plus(2, ChronoUnit.MINUTES)));
+                            movement.getMovementSourceType().equals("AIS") && movement.getPositionTime().isAfter(Instant.now().plus(2, ChronoUnit.MINUTES)));
         }
     },
     PLUGIN_TYPE_MISSING("Plugin Type missing") {
@@ -71,46 +72,46 @@ public enum SanityRule {
     TRANSPONDER_NOT_FOUND("Transponder not found") {
         @Override
         public boolean evaluate(IncomingMovement movement) {
-            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER")) 
+            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER"))
                     && (movement.getMobileTerminalConnectId() == null || movement.getMobileTerminalConnectId().isEmpty());
         }
     },
     MEM_NO_MISSING("Mem No. missing") {
         @Override
         public boolean evaluate(IncomingMovement movement) {
-            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER")) 
-                    && movement.getMovementSourceType().equals("INMARSAT_C") 
+            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER"))
+                    && movement.getMovementSourceType().equals("INMARSAT_C")
                     && (movement.getMobileTerminalMemberNumber() == null || movement.getMobileTerminalMemberNumber().isEmpty());
         }
     },
     DNID_MISSING("DNID missing") {
         @Override
         public boolean evaluate(IncomingMovement movement) {
-            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER")) 
-                    && movement.getMovementSourceType().equals("INMARSAT_C") 
+            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER"))
+                    && movement.getMovementSourceType().equals("INMARSAT_C")
                     && (movement.getMobileTerminalDNID() == null || movement.getMobileTerminalDNID().isEmpty());
         }
     },
     SERIAL_NO_MISSING("Serial No. missing") {
         @Override
         public boolean evaluate(IncomingMovement movement) {
-            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER")) 
-                    && movement.getMovementSourceType().equals("IRIDIUM") 
+            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER"))
+                    && movement.getMovementSourceType().equals("IRIDIUM")
                     && (movement.getMobileTerminalSerialNumber() == null || movement.getMobileTerminalSerialNumber().isEmpty());
         }
     },
     COMCHANNEL_TYPE_MISSING("ComChannel Type missing") {
         @Override
         public boolean evaluate(IncomingMovement movement) {
-            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER")) 
+            return (movement.getPluginType() == null || movement.getPluginType().equals("SATELLITE_RECEIVER"))
                     && (movement.getComChannelType() == null || movement.getComChannelType().isEmpty());
         }
     },
     CFR_AND_IRCS_MISSING("CFR and IRCS missing") {
         @Override
         public boolean evaluate(IncomingMovement movement) {
-            return ((movement.getAssetCFR() == null || movement.getAssetCFR().isEmpty()) 
-                    && (movement.getAssetIRCS() == null || movement.getAssetIRCS().isEmpty())) 
+            return ((movement.getAssetCFR() == null || movement.getAssetCFR().isEmpty())
+                    && (movement.getAssetIRCS() == null || movement.getAssetIRCS().isEmpty()))
                     && ("FLUX".equals(movement.getPluginType()) || "MANUAL".equals(movement.getComChannelType()));
         }
     },
@@ -145,17 +146,15 @@ public enum SanityRule {
         }
     };
 
-    
     private String ruleName;
-    
+
     private SanityRule(String ruleName) {
         this.ruleName = ruleName;
     }
-    
+
     public String getRuleName() {
         return ruleName;
     }
 
     public abstract boolean evaluate(IncomingMovement movement);
-    
 }

@@ -19,12 +19,12 @@ import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment {
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void createMovementSearchGroup() {
@@ -35,14 +35,14 @@ public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment
         criteria.setValue(UUID.randomUUID().toString());
         movementSearchGroup.getSearchFields().add(criteria);
         MovementSearchGroup createdMovementSearchGroup = createMovementSearchGroup(movementSearchGroup);
-        
+
         assertThat(createdMovementSearchGroup, is(notNullValue()));
         assertThat(createdMovementSearchGroup.getId(), is(notNullValue()));
         assertThat(createdMovementSearchGroup.getName(), is(movementSearchGroup.getName()));
         assertThat(createdMovementSearchGroup.getSearchFields().size(), is(1));
         assertThat(createdMovementSearchGroup.getUser(), is(notNullValue()));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementSearchGroupById() {
@@ -53,11 +53,11 @@ public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment
         criteria.setValue(UUID.randomUUID().toString());
         movementSearchGroup.getSearchFields().add(criteria);
         MovementSearchGroup createdMovementSearchGroup = createMovementSearchGroup(movementSearchGroup);
-        
+
         MovementSearchGroup fetchedMovementSearchGroup = getMovementSearchGroup(createdMovementSearchGroup.getId().toString());
         assertThat(fetchedMovementSearchGroup.getId(), is(createdMovementSearchGroup.getId()));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void updateMovementSearchGroup() {
@@ -68,16 +68,16 @@ public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment
         criteria.setValue(UUID.randomUUID().toString());
         movementSearchGroup.getSearchFields().add(criteria);
         MovementSearchGroup createdMovementSearchGroup = createMovementSearchGroup(movementSearchGroup);
-        
+
         String newName = "Updated" + MovementTestHelper.getRandomIntegers(5);
         createdMovementSearchGroup.setName(newName);
         updateMovementSearchGroup(createdMovementSearchGroup);
-        
+
         MovementSearchGroup fetchedGroup = getMovementSearchGroup(createdMovementSearchGroup.getId().toString());
         assertThat(fetchedGroup.getId(), is(createdMovementSearchGroup.getId()));
         assertThat(fetchedGroup.getName(), is(newName));
     }
-    
+
     @Test
     @OperateOnDeployment("movementservice")
     public void getMovementSearchGroupByUser() {
@@ -88,11 +88,11 @@ public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment
         criteria.setValue(UUID.randomUUID().toString());
         movementSearchGroup.getSearchFields().add(criteria);
         MovementSearchGroup createdMovementSearchGroup = createMovementSearchGroup(movementSearchGroup);
-        
+
         List<MovementSearchGroup> searchGroups = getMovementSearchGroupByUser("TEST");
         assertTrue(searchGroups.contains(createdMovementSearchGroup));
     }
-    
+
     /*
      * Helper functions for REST calls
      */
@@ -104,7 +104,7 @@ public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment
                 .header(HttpHeaders.AUTHORIZATION, getToken())
                 .post(Entity.json(searchGroup), MovementSearchGroup.class);
     }
-    
+
     private MovementSearchGroup getMovementSearchGroup(String id) {
         return getWebTarget()
                 .path("search")
@@ -114,7 +114,7 @@ public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment
                 .header(HttpHeaders.AUTHORIZATION, getToken())
                 .get(MovementSearchGroup.class);
     }
-    
+
     private MovementSearchGroup updateMovementSearchGroup(MovementSearchGroup searchGroup) {
         return getWebTarget()
                 .path("search")
@@ -131,6 +131,7 @@ public class MovementSearchGroupResourceTest extends BuildMovementRestDeployment
                 .queryParam("user", user)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getToken())
-                .get(new GenericType<List<MovementSearchGroup>>(){});
+                .get(new GenericType<List<MovementSearchGroup>>() {
+                });
     }
 }

@@ -5,8 +5,6 @@ import fish.focus.schema.movement.source.v1.GetMovementMapByQueryResponse;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.schema.movement.v1.MovementType;
 import fish.focus.uvms.commons.date.DateUtils;
-import fish.focus.uvms.rest.security.RequiresFeature;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
 import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.model.dto.MovementDto;
 import fish.focus.uvms.movement.model.dto.MovementsForConnectIdsBetweenDatesRequest;
@@ -17,6 +15,8 @@ import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.mapper.MovementEntityToModelMapper;
 import fish.focus.uvms.movement.service.mapper.MovementMapper;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+import fish.focus.uvms.rest.security.RequiresFeature;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class InternalRestResource {
     private Jsonb jsonb;    //since for some reason jackson is used to serialize stuff if we use the framework
 
     @PostConstruct
-    public void init(){
+    public void init() {
         jsonb = new JsonBConfiguratorMovement().getContext(null);
     }
 
@@ -128,7 +128,7 @@ public class InternalRestResource {
         try {
             Instant afterInstant = DateUtils.stringToDate(after);
             Instant yesterday = afterInstant.minusSeconds(60L * 60L * 24L); // 1 day in seconds
-            long count = movementDao.countNrOfMovementsForAssetBetween(UUID.fromString(id),yesterday, afterInstant);
+            long count = movementDao.countNrOfMovementsForAssetBetween(UUID.fromString(id), yesterday, afterInstant);
             return Response.ok().entity(count).type(MediaType.APPLICATION_JSON)
                     .header("MDC", MDC.get("requestId")).build();
         } catch (Exception e) {
@@ -196,7 +196,7 @@ public class InternalRestResource {
         }
     }
 
-    private List<MovementSourceType> convertToMovementSourceTypes (List<String> sources) {
+    private List<MovementSourceType> convertToMovementSourceTypes(List<String> sources) {
         List<MovementSourceType> sourceTypes = new ArrayList<>();
         if (sources == null || sources.isEmpty()) {
             sourceTypes = Arrays.asList(MovementSourceType.values());
@@ -207,7 +207,7 @@ public class InternalRestResource {
         }
         return sourceTypes;
     }
-    
+
     @POST
     @Path("/getMovementList")
     @RequiresFeature(UnionVMSFeature.manageInternalRest)
@@ -221,7 +221,7 @@ public class InternalRestResource {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ExceptionUtils.getRootCause(e)).build();
         }
     }
-    
+
     @POST
     @Path("/list/cursor")
     @RequiresFeature(UnionVMSFeature.manageInternalRest)

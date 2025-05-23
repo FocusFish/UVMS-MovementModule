@@ -50,7 +50,7 @@ public class MovementFilter implements Serializable {
     private Instant updated;
 
     @ManyToOne
-    @JoinColumn(name="movefilt_movefiltgrp_id")
+    @JoinColumn(name = "movefilt_movefiltgrp_id")
     private MovementFilterGroup filterGroup;
 
     @Column(name = "movefilt_movefilttyp_id")

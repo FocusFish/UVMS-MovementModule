@@ -29,6 +29,11 @@ public class IncomingMovementBean {
 
     private boolean trackInMovementDisabled = false;
 
+    private static void setLatest(Movement currentMovement) {
+        currentMovement.getMovementConnect().setLatestMovement(currentMovement);
+        currentMovement.getMovementConnect().setLatestLocation(currentMovement.getLocation());
+    }
+
     @PostConstruct
     public void init() {
         trackInMovementDisabled = "true".equalsIgnoreCase(System.getProperty("track.in.movement.disabled"));
@@ -51,7 +56,7 @@ public class IncomingMovementBean {
                 if (currentMovement.getTimestamp().isAfter(latestMovement.getTimestamp())) {
                     // Normal case (latest position)
                     currentMovement.setPreviousMovement(latestMovement);
-                        setLatest(currentMovement);
+                    setLatest(currentMovement);
                     if (!trackInMovementDisabled) {
                         trackService.upsertTrack(latestMovement, currentMovement);
                     }
@@ -69,16 +74,12 @@ public class IncomingMovementBean {
                         }
                     }
                 }
-            } catch (EntityNotFoundException e){
+            } catch (EntityNotFoundException e) {
                 LOG.error("Couldn't get latestMovement for movementConnect, source: {}, uuid: {}, timestamp: {}", currentMovement.getSource(), connectId, timeStamp);
                 setLatest(currentMovement);
             }
         }
         updateLatestVMS(currentMovement);
-    }
-    private static void setLatest(Movement currentMovement) {
-        currentMovement.getMovementConnect().setLatestMovement(currentMovement);
-        currentMovement.getMovementConnect().setLatestLocation(currentMovement.getLocation());
     }
 
     private void updateLatestVMS(Movement currentMovement) {
@@ -90,9 +91,9 @@ public class IncomingMovementBean {
             currentMovement.getMovementConnect().setLatestVMS(currentMovement);
         }
     }
-    
+
     public boolean checkAndSetDuplicate(IncomingMovement movement) {
-        if(movement.getPositionTime() == null || movement.getAssetGuid() == null){     //if these two are null the check cant complete and one of the other sanity rules will get it
+        if (movement.getPositionTime() == null || movement.getAssetGuid() == null) {     //if these two are null the check cant complete and one of the other sanity rules will get it
             return false;
         }
         UUID connectId = UUID.fromString(movement.getAssetGuid());

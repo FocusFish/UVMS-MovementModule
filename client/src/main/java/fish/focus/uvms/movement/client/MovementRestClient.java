@@ -1,13 +1,12 @@
 package fish.focus.uvms.movement.client;
 
 import fish.focus.schema.movement.search.v1.MovementQuery;
-import fish.focus.schema.movement.v1.MovementType;
 import fish.focus.uvms.commons.date.JsonBConfigurator;
-import fish.focus.uvms.rest.security.InternalRestTokenHandler;
 import fish.focus.uvms.movement.client.model.CursorPagination;
 import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.model.dto.MovementDto;
 import fish.focus.uvms.movement.model.dto.MovementsForConnectIdsBetweenDatesRequest;
+import fish.focus.uvms.rest.security.InternalRestTokenHandler;
 import org.slf4j.MDC;
 
 import javax.annotation.PostConstruct;
@@ -33,9 +32,9 @@ import java.util.concurrent.TimeUnit;
 public class MovementRestClient {
 
     private WebTarget webTarget;
-    
-    private Jsonb jsonb;  
-    
+
+    private Jsonb jsonb;
+
     @Resource(name = "java:global/movement_endpoint")
     private String movementEndpoint;
 
@@ -53,17 +52,17 @@ public class MovementRestClient {
 
         client.register(JsonBConfigurator.class);
         webTarget = client.target(url);
-        
+
         jsonb = new JsonBConfigurator().getContext(null);
     }
 
     public String ping() {
         Response response = webTarget
-            .path("internal/ping")
-            .request(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.AUTHORIZATION, internalRestTokenHandler.createAndFetchToken("user"))
-            .get(Response.class);
-        
+                .path("internal/ping")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, internalRestTokenHandler.createAndFetchToken("user"))
+                .get(Response.class);
+
         checkForErrorResponse(response);
         return response.readEntity(String.class);
     }
@@ -78,7 +77,8 @@ public class MovementRestClient {
                 .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
 
         checkForErrorResponse(response);
-        return response.readEntity(new GenericType<List<MovementDto>>() {});
+        return response.readEntity(new GenericType<List<MovementDto>>() {
+        });
     }
 
     public String getMovementsForConnectIdsBetweenDates(List<String> connectIds, Instant fromDate, Instant toDate, List<String> sources) {
@@ -106,19 +106,19 @@ public class MovementRestClient {
         checkForErrorResponse(response);
         return response.readEntity(MovementDto.class);
     }
-    
-    public GetMovementListByQueryResponse getMovementList(MovementQuery movementQuery){ 
-    	Response response = webTarget
+
+    public GetMovementListByQueryResponse getMovementList(MovementQuery movementQuery) {
+        Response response = webTarget
                 .path("internal/list")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, internalRestTokenHandler.createAndFetchToken("user"))
                 .post(Entity.entity(movementQuery, MediaType.APPLICATION_JSON_TYPE), Response.class);
         checkForErrorResponse(response);
-    	// json parsning from String to GetMovementListByQueryResponse to avoid time parsing issues
-    	GetMovementListByQueryResponse getMovementListByQueryResponse = jsonb.fromJson(response.readEntity(String.class), GetMovementListByQueryResponse.class);
+        // json parsning from String to GetMovementListByQueryResponse to avoid time parsing issues
+        GetMovementListByQueryResponse getMovementListByQueryResponse = jsonb.fromJson(response.readEntity(String.class), GetMovementListByQueryResponse.class);
         return getMovementListByQueryResponse;
     }
-    
+
     public List<MovementDto> getMovementDtoByIdList(List<UUID> ids) {
         Response response = webTarget
                 .path("internal/getMovementList")
@@ -127,10 +127,11 @@ public class MovementRestClient {
                 .post(Entity.entity(ids, MediaType.APPLICATION_JSON_TYPE));
 
         checkForErrorResponse(response);
-        return response.readEntity(new GenericType<List<MovementDto>>() {});
+        return response.readEntity(new GenericType<List<MovementDto>>() {
+        });
     }
-    
-    public List<MovementDto> getCursorBasedList(CursorPagination cursorPagination){
+
+    public List<MovementDto> getCursorBasedList(CursorPagination cursorPagination) {
         Response response = webTarget
                 .path("internal/list/cursor")
                 .request(MediaType.APPLICATION_JSON)
@@ -138,11 +139,12 @@ public class MovementRestClient {
                 .header("requestId", MDC.get("requestId"))
                 .post(Entity.json(cursorPagination), Response.class);
         checkForErrorResponse(response);
-        return jsonb.fromJson(response.readEntity(String.class), new ArrayList<MovementDto>(){}.getClass().getGenericSuperclass());
+        return jsonb.fromJson(response.readEntity(String.class), new ArrayList<MovementDto>() {
+        }.getClass().getGenericSuperclass());
     }
 
-    private void checkForErrorResponse(Response response){
-        if(response.getStatus() != 200){
+    private void checkForErrorResponse(Response response) {
+        if (response.getStatus() != 200) {
             throw new RuntimeException("Statuscode from movement was: " + response.getStatus() + " with payload " + response.readEntity(String.class));
         }
     }

@@ -1,12 +1,12 @@
 package fish.focus.uvms.movement.rest.service;
 
-import fish.focus.uvms.rest.security.RequiresFeature;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
 import fish.focus.uvms.movement.model.dto.MovementDto;
 import fish.focus.uvms.movement.service.entity.Movement;
 import fish.focus.uvms.movement.service.event.CreatedMovement;
 import fish.focus.uvms.movement.service.mapper.MovementMapper;
 import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+import fish.focus.uvms.rest.security.RequiresFeature;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +48,8 @@ public class SSEResource {
         this.sseBroadcaster = sse.newBroadcaster();
     }
 
-    public void createdMovement(@Observes(during = TransactionPhase.AFTER_SUCCESS) @CreatedMovement Movement move){
-        LOG.debug("Movement {} came to SseResource" , move);
+    public void createdMovement(@Observes(during = TransactionPhase.AFTER_SUCCESS) @CreatedMovement Movement move) {
+        LOG.debug("Movement {} came to SseResource", move);
         try {
             if (move != null) {
                 MovementDto dto = MovementMapper.mapToMovementDto(move);
@@ -65,7 +65,7 @@ public class SSEResource {
                         .build();
                 sseBroadcaster.broadcast(sseEvent);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LOG.error("Error while broadcasting SSE: ", e);
             throw new RuntimeException(e);
         }

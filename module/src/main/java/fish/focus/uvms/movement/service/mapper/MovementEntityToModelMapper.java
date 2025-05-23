@@ -24,16 +24,17 @@ import org.locationtech.jts.geom.Point;
 import java.util.*;
 
 public class MovementEntityToModelMapper {
-    
-    private MovementEntityToModelMapper() {}
+
+    private MovementEntityToModelMapper() {
+    }
 
     public static MovementBaseType mapToMovementBaseType(Movement movement) {
         MovementBaseType model = new MovementBaseType();
-        model.setReportedSpeed((double)movement.getSpeed());
-        model.setReportedCourse((double)movement.getHeading());
+        model.setReportedSpeed((double) movement.getSpeed());
+        model.setReportedCourse((double) movement.getHeading());
         model.setGuid(movement.getId().toString());
         model.setPositionTime(Date.from(movement.getTimestamp()));
-        model.setLesReportTime( Date.from(movement.getLesReportTime() ));
+        model.setLesReportTime(Date.from(movement.getLesReportTime()));
         model.setStatus(movement.getStatus());
         model.setSource(movement.getSource());
         model.setMovementType(movement.getMovementType());
@@ -56,15 +57,15 @@ public class MovementEntityToModelMapper {
         //Previous movement ID is mapped in MovementBatchModelBean
         MovementType model = new MovementType();
         if (movement.getSpeed() != null) {
-            model.setReportedSpeed((double)movement.getSpeed());
+            model.setReportedSpeed((double) movement.getSpeed());
         }
         model.setGuid(movement.getId().toString());
         if (movement.getHeading() != null) {
-            model.setReportedCourse((double)movement.getHeading());
+            model.setReportedCourse((double) movement.getHeading());
         }
         model.setPositionTime(Date.from(movement.getTimestamp()));
-        if ( movement.getLesReportTime() != null) {
-        	model.setLesReportTime( Date.from(movement.getLesReportTime() ));
+        if (movement.getLesReportTime() != null) {
+            model.setLesReportTime(Date.from(movement.getLesReportTime()));
         }
         model.setStatus(movement.getStatus());
         model.setSource(movement.getSource());
@@ -108,7 +109,7 @@ public class MovementEntityToModelMapper {
         }
         return null;
     }
-    
+
     public static List<MovementSegment> mapToMovementSegment(List<Movement> movements, boolean excludeFirstAndLast) {
         List<MovementSegment> mappedSegments = new ArrayList<>();
         Collections.sort(movements, (m1, m2) -> m1.getTimestamp().compareTo(m2.getTimestamp()));
@@ -139,7 +140,7 @@ public class MovementEntityToModelMapper {
 
     public static MovementTrack mapToMovementTrack(Track track, List<Geometry> points) {
         MovementTrack movementTrack = new MovementTrack();
-        if(track == null){
+        if (track == null) {
             return movementTrack;
         }
         movementTrack.setDistance(track.getDistance());

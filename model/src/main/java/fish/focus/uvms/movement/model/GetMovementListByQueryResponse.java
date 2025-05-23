@@ -31,8 +31,6 @@ import java.util.List;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- *
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -42,8 +40,7 @@ import java.util.List;
 })
 @XmlRootElement(name = "getMovementListByQueryResponse")
 public class GetMovementListByQueryResponse
-        implements Serializable
-{
+        implements Serializable {
 
     //Moved out of the wsdl files since they, by standard, does not generate setters for list et al and jsonB really needs setters to work
 
@@ -73,8 +70,6 @@ public class GetMovementListByQueryResponse
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link MovementType }
-     *
-     *
      */
     public List<MovementType> getMovement() {
         if (movement == null) {
@@ -90,10 +85,8 @@ public class GetMovementListByQueryResponse
     /**
      * Gets the value of the totalNumberOfPages property.
      *
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *
+     * @return possible object is
+     * {@link BigInteger }
      */
     public BigInteger getTotalNumberOfPages() {
         return totalNumberOfPages;
@@ -102,10 +95,8 @@ public class GetMovementListByQueryResponse
     /**
      * Sets the value of the totalNumberOfPages property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *
+     * @param value allowed object is
+     *              {@link BigInteger }
      */
     public void setTotalNumberOfPages(BigInteger value) {
         this.totalNumberOfPages = value;
@@ -114,10 +105,8 @@ public class GetMovementListByQueryResponse
     /**
      * Gets the value of the currentPage property.
      *
-     * @return
-     *     possible object is
-     *     {@link BigInteger }
-     *
+     * @return possible object is
+     * {@link BigInteger }
      */
     public BigInteger getCurrentPage() {
         return currentPage;
@@ -126,10 +115,8 @@ public class GetMovementListByQueryResponse
     /**
      * Sets the value of the currentPage property.
      *
-     * @param value
-     *     allowed object is
-     *     {@link BigInteger }
-     *
+     * @param value allowed object is
+     *              {@link BigInteger }
      */
     public void setCurrentPage(BigInteger value) {
         this.currentPage = value;

@@ -11,20 +11,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.util;
 
-import org.locationtech.jts.geom.Point;
 import fish.focus.uvms.movement.service.dto.SegmentCalculations;
 import fish.focus.uvms.movement.service.entity.Movement;
+import org.locationtech.jts.geom.Point;
+
 import java.math.BigInteger;
 import java.time.Duration;
 import java.util.UUID;
 
 public class CalculationUtil {
-    
-    private CalculationUtil() {}
 
+    public static final BigInteger B = BigInteger.ONE.shiftLeft(64); // 2^64
+    public static final BigInteger L = BigInteger.valueOf(Long.MAX_VALUE);
     private static final double NAUTICAL_MILE_ONE_METER = 0.000539956803;
     private static final int EARTH_RADIUS_METER = 6371000;
     private static final double FACTOR_METER_PER_SECOND_TO_KNOTS = 1.9438444924574;
+
+    private CalculationUtil() {
+    }
 
     /**
      * Calculated the distance between 2 points and returns the distance in meters
@@ -34,11 +38,10 @@ public class CalculationUtil {
     }
 
     /**
-     *
      * Calculates the course between 2 Points
      */
     public static Double calculateCourse(double prevLat, double prevLon, double currentLat, double currentLon) {
-        if(prevLat == 0.0 && prevLon == 0.0 && currentLat == 0.0 && currentLon == 0.0)
+        if (prevLat == 0.0 && prevLon == 0.0 && currentLat == 0.0 && currentLon == 0.0)
             return null;
         return bearing(prevLat, prevLon, currentLat, currentLon);
     }
@@ -65,21 +68,21 @@ public class CalculationUtil {
         double courseOverGround = 0;
         double distanceBetweenPointsInNauticalMiles = 0;
 
-        if ((pointThisPosition.getX() != pointPreviousPosition.getX()) ||  (pointThisPosition.getY() != pointPreviousPosition.getY())) {
+        if ((pointThisPosition.getX() != pointPreviousPosition.getX()) || (pointThisPosition.getY() != pointPreviousPosition.getY())) {
 
             distanceInMeters = calculateDistance(pointPreviousPosition.getY(), pointPreviousPosition.getX(), pointThisPosition.getY(), pointThisPosition.getX());
-            durationInMilliSeconds = (double)Duration.between(previousPosition.getTimestamp(), currentPosition.getTimestamp()).abs().toMillis();
+            durationInMilliSeconds = (double) Duration.between(previousPosition.getTimestamp(), currentPosition.getTimestamp()).abs().toMillis();
 
             courseOverGround = calculateCourse(pointPreviousPosition.getY(), pointPreviousPosition.getX(), pointThisPosition.getY(), pointThisPosition.getX());
             distanceBetweenPointsInNauticalMiles = CalculationUtil.getNauticalMilesFromMeter(distanceInMeters);
-            if(distanceInMeters > 0) {
-                speedOverGround = (distanceInMeters / (durationInMilliSeconds/1000)) * FACTOR_METER_PER_SECOND_TO_KNOTS; 
+            if (distanceInMeters > 0) {
+                speedOverGround = (distanceInMeters / (durationInMilliSeconds / 1000)) * FACTOR_METER_PER_SECOND_TO_KNOTS;
             }
         }
 
         calculations.setAvgSpeed(speedOverGround);
         calculations.setDistanceBetweenPoints(distanceBetweenPointsInNauticalMiles);
-        calculations.setDurationBetweenPoints(durationInMilliSeconds/1000);
+        calculations.setDurationBetweenPoints(durationInMilliSeconds / 1000);
         calculations.setCourse(courseOverGround);
 
         return calculations;
@@ -92,8 +95,8 @@ public class CalculationUtil {
     /**
      * Computes the bearing in degrees between two points on Earth.
      *
-     * @param prevLat Latitude of the first point
-     * @param prevLon Longitude of the first point
+     * @param prevLat    Latitude of the first point
+     * @param prevLon    Longitude of the first point
      * @param currentLat Latitude of the second point
      * @param currentLon Longitude of the second point
      * @return Bearing between the two points in degrees. A value of 0 means due
@@ -130,10 +133,7 @@ public class CalculationUtil {
                 * EARTH_RADIUS_METER;
     }
 
-    public static final BigInteger B = BigInteger.ONE.shiftLeft(64); // 2^64
-    public static final BigInteger L = BigInteger.valueOf(Long.MAX_VALUE);
-    public static BigInteger convertToBigInteger(UUID id)
-    {
+    public static BigInteger convertToBigInteger(UUID id) {
         BigInteger lo = BigInteger.valueOf(id.getLeastSignificantBits());
         BigInteger hi = BigInteger.valueOf(id.getMostSignificantBits());
 
@@ -148,8 +148,7 @@ public class CalculationUtil {
         return lo.add(hi.multiply(B));
     }
 
-    public static UUID convertFromBigInteger(BigInteger x)
-    {
+    public static UUID convertFromBigInteger(BigInteger x) {
         BigInteger[] parts = x.divideAndRemainder(B);
         BigInteger hi = parts[0];
         BigInteger lo = parts[1];

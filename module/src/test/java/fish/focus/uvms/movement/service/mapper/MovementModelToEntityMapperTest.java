@@ -13,9 +13,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.UUID;
+
 import static fish.focus.uvms.movement.service.mapper.MovementModelToEntityMapper.mapNewMovementEntity;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 /**
  * Created by roblar on 2017-03-31.
@@ -30,7 +33,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
         //Given
         String uuid = UUID.randomUUID().toString();
 
-        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid,0);
+        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid, 0);
         movementType.setReportedSpeed(null);
 
         //When
@@ -38,7 +41,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
 
         //Then
         assertNull(movement.getSpeed());
-        
+
     }
 
     @Test
@@ -48,7 +51,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
         //Given
         String uuid = UUID.randomUUID().toString();
 
-        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid,0);
+        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid, 0);
         movementType.setReportedCourse(null);
 
         //When
@@ -65,7 +68,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
         //Given
         String uuid = UUID.randomUUID().toString();
 
-        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid,0);
+        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid, 0);
         movementType.setPosition(null);
 
         //When
@@ -82,7 +85,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
         //Given
         String uuid = UUID.randomUUID().toString();
 
-        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid,0);
+        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid, 0);
         movementType.setSource(null);
 
         //When
@@ -90,7 +93,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
 
         //Then
         assertThat(movement.getSource(), is(MovementSourceType.INMARSAT_C));
-        
+
     }
 
     @Test
@@ -100,7 +103,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
         //Given
         String uuid = UUID.randomUUID().toString();
 
-        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid,0);
+        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid, 0);
         movementType.setMovementType(null);
 
         //When
@@ -117,7 +120,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
         //Given
         String uuid = UUID.randomUUID().toString();
 
-        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid,0);
+        MovementType movementType = MockData.createMovementType(1d, 1d, 0, SegmentCategoryType.EXIT_PORT, uuid, 0);
         movementType.setPositionTime(null);
 
         //When
@@ -125,7 +128,7 @@ public class MovementModelToEntityMapperTest extends TransactionalTests {
 
         //Then
         assertNotNull(movement.getTimestamp());
-        
+
     }
 
 

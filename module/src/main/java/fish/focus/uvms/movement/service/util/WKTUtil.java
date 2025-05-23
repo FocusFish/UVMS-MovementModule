@@ -11,6 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.util;
 
+import fish.focus.uvms.movement.service.entity.Movement;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.CoordinateSequence;
 import org.locationtech.jts.geom.Geometry;
@@ -18,25 +19,26 @@ import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 import org.locationtech.jts.io.WKTWriter;
-import fish.focus.uvms.movement.service.entity.Movement;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class WKTUtil {
-    
-    private WKTUtil() {}
+
+    private WKTUtil() {
+    }
 
     public static String getWktLineString(List<Geometry> geometries) {
         List<Coordinate> coords = new ArrayList<>();
         for (Geometry geom : geometries) {
-        	for(Coordinate verti : geom.getCoordinates()) {
-        		coords.add(verti);
-        	}
+            for (Coordinate verti : geom.getCoordinates()) {
+                coords.add(verti);
+            }
         }
         CoordinateSequence seq = new CoordinateArraySequence(coords.toArray(new Coordinate[0]));
         return WKTWriter.toLineString(seq);
     }
-    
+
     public static String getWktLineStringFromMovements(Movement previous, Movement current) {
         return WKTWriter.toLineString(GeometryUtil.getLineStringFromMovements(previous, current).getCoordinateSequence());
     }
@@ -56,7 +58,7 @@ public class WKTUtil {
             Geometry geom = reader.read(wkt);
             geom.setSRID(GeometryUtil.SRID);
             return geom;
-        }catch (ParseException e){
+        } catch (ParseException e) {
             throw new IllegalArgumentException("Inputstring " + wkt + " causes a parse exception.", e);
         }
     }

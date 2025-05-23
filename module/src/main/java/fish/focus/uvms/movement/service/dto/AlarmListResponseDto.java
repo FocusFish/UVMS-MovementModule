@@ -12,9 +12,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.movement.service.dto;
 
 
+import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
+
 import java.io.Serializable;
 import java.util.List;
-import fish.focus.uvms.movement.service.entity.alarm.AlarmReport;
 
 public class AlarmListResponseDto implements Serializable {
 

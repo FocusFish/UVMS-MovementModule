@@ -11,7 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.entity;
 
-import fish.focus.uvms.movement.service.dao.MovementDao;
 import org.apache.commons.lang3.ObjectUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
@@ -29,27 +28,26 @@ import java.util.UUID;
 
 @NamedQuery(name = MovementConnect.MOVEMENT_CONNECT_GET_ALL, query = "SELECT m FROM MovementConnect m")
 @NamedQuery(name = MovementConnect.FIND_NEAREST_AFTER, query = "SELECT new fish.focus.uvms.movementrules.model.dto.VicinityInfoDTO(mc.id, mc.latestMovement.id, distance(mc.latestLocation, :point))" +
-            "FROM MovementConnect mc " +
-            "WHERE DWithin(mc.latestLocation, :point, :maxDistance, false) = true " +
-            "AND mc.updated > :time AND mc.id <> :excludedID")
+        "FROM MovementConnect mc " +
+        "WHERE DWithin(mc.latestLocation, :point, :maxDistance, false) = true " +
+        "AND mc.updated > :time AND mc.id <> :excludedID")
 @NamedQuery(name = MovementConnect.FIND_LATEST_MOVEMENT_BY_ID, query = "SELECT mc.latestMovement FROM MovementConnect mc WHERE mc.id = :connectId")
 @NamedQuery(name = MovementConnect.FIND_LATEST_MOVEMENT_BY_IDS, query = "SELECT mc.latestMovement FROM MovementConnect mc WHERE mc.id in :connectId")
 @NamedQuery(name = MovementConnect.FIND_LATEST_MOVEMENT, query = "SELECT mc.latestMovement FROM MovementConnect mc ORDER BY mc.latestMovement.timestamp DESC")
-@NamedQuery(name = MovementConnect.FIND_LATEST_MOVEMENT_SINCE, query = "SELECT new fish.focus.uvms.movement.service.dto.MovementProjection(mc.latestMovement.id, mc.latestMovement.location, mc.latestMovement.speed, mc.latestMovement.calculatedSpeed, mc.latestMovement.heading, mc.latestMovement.movementConnect.id, mc.latestMovement.status, mc.latestMovement.source, mc.latestMovement.movementType, mc.latestMovement.timestamp, mc.latestMovement.lesReportTime, mc.latestMovement.sourceSatelliteId, mc.latestMovement.updated, mc.latestMovement.updatedBy, mc.latestMovement.aisPositionAccuracy) FROM MovementConnect mc WHERE mc.latestMovement.timestamp >= :date AND mc.latestMovement.source in :sources" )
+@NamedQuery(name = MovementConnect.FIND_LATEST_MOVEMENT_SINCE, query = "SELECT new fish.focus.uvms.movement.service.dto.MovementProjection(mc.latestMovement.id, mc.latestMovement.location, mc.latestMovement.speed, mc.latestMovement.calculatedSpeed, mc.latestMovement.heading, mc.latestMovement.movementConnect.id, mc.latestMovement.status, mc.latestMovement.source, mc.latestMovement.movementType, mc.latestMovement.timestamp, mc.latestMovement.lesReportTime, mc.latestMovement.sourceSatelliteId, mc.latestMovement.updated, mc.latestMovement.updatedBy, mc.latestMovement.aisPositionAccuracy) FROM MovementConnect mc WHERE mc.latestMovement.timestamp >= :date AND mc.latestMovement.source in :sources")
 
 @Entity
 @Table(name = "movementconnect")
 @DynamicUpdate
 @DynamicInsert
 public class MovementConnect implements Serializable, Comparable<MovementConnect> {
-    private static final Logger LOG = LoggerFactory.getLogger(MovementConnect.class);
     public static final String MOVEMENT_CONNECT_GET_ALL = "MovementConnect.findAll";
     public static final String FIND_NEAREST_AFTER = "MovementConnect.findVicinityAfter";
     public static final String FIND_LATEST_MOVEMENT_BY_ID = "MovementConnect.findLatestMovementById";
     public static final String FIND_LATEST_MOVEMENT_BY_IDS = "MovementConnect.findLatestMovementByIds";
     public static final String FIND_LATEST_MOVEMENT = "MovementConnect.findLatestMovement";
     public static final String FIND_LATEST_MOVEMENT_SINCE = "MovementConnect.findLatestMovementSince";
-
+    private static final Logger LOG = LoggerFactory.getLogger(MovementConnect.class);
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -80,7 +78,7 @@ public class MovementConnect implements Serializable, Comparable<MovementConnect
     private Point latestLocation;
 
     @PreUpdate
-    public void preUpdate(){
+    public void preUpdate() {
         updated = Instant.now();
     }
 
@@ -91,7 +89,7 @@ public class MovementConnect implements Serializable, Comparable<MovementConnect
     public void setId(UUID id) {
         this.id = id;
     }
-    
+
     public Instant getUpdated() {
         return updated;
     }
@@ -141,11 +139,21 @@ public class MovementConnect implements Serializable, Comparable<MovementConnect
     }
 
     @Override
-	public int compareTo(MovementConnect o) {
+    public int compareTo(MovementConnect o) {
         if (o == null) {
             return ObjectUtils.compare(this, null);
         } else {
             return ObjectUtils.compare(this.getId(), o.getId());
         }
-	}
+    }
+
+    @Override
+    public String toString() {
+        return "MovementConnect{" +
+                "id=" + id +
+                ", updated=" + updated +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", latestLocation=" + latestLocation +
+                '}';
+    }
 }

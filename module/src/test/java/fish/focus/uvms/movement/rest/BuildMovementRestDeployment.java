@@ -11,16 +11,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.rest;
 
-import java.util.Arrays;
+import fish.focus.uvms.movement.service.BuildMovementServiceTestDeployment;
+import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+import fish.focus.uvms.rest.security.InternalRestTokenHandler;
+import fish.focus.uvms.rest.security.UnionVMSFeature;
+import fish.focus.uvms.usm.jwt.JwtTokenHandler;
+
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import fish.focus.uvms.movement.service.BuildMovementServiceTestDeployment;
-import fish.focus.uvms.rest.security.InternalRestTokenHandler;
-import fish.focus.uvms.rest.security.UnionVMSFeature;
-import fish.focus.uvms.usm.jwt.JwtTokenHandler;
-import fish.focus.uvms.movement.service.util.JsonBConfiguratorMovement;
+import java.util.Arrays;
 
 public abstract class BuildMovementRestDeployment extends BuildMovementServiceTestDeployment {
 
@@ -41,8 +42,8 @@ public abstract class BuildMovementRestDeployment extends BuildMovementServiceTe
 
     protected String getToken() {
         if (token == null) {
-            token = tokenHandler.createToken("user", 
-                    Arrays.asList(UnionVMSFeature.manageManualMovements.getFeatureId(), 
+            token = tokenHandler.createToken("user",
+                    Arrays.asList(UnionVMSFeature.manageManualMovements.getFeatureId(),
                             UnionVMSFeature.viewMovements.getFeatureId(),
                             UnionVMSFeature.viewManualMovements.getFeatureId(),
                             UnionVMSFeature.manageAlarmsHoldingTable.getFeatureId(),

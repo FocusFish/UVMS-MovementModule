@@ -1,25 +1,23 @@
 package fish.focus.uvms.movement.service.bean;
 
-import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.is;
-import java.time.Instant;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-import javax.ejb.EJB;
+import fish.focus.uvms.movement.service.MovementHelpers;
+import fish.focus.uvms.movement.service.TransactionalTests;
+import fish.focus.uvms.movement.service.dao.MovementDao;
+import fish.focus.uvms.movement.service.entity.Movement;
 import org.hamcrest.CoreMatchers;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import fish.focus.uvms.movement.service.MovementHelpers;
-import fish.focus.uvms.movement.service.TransactionalTests;
-import fish.focus.uvms.movement.service.bean.IncomingMovementBean;
-import fish.focus.uvms.movement.service.bean.MovementService;
-import fish.focus.uvms.movement.service.dao.MovementDao;
-import fish.focus.uvms.movement.service.entity.Movement;
-import fish.focus.uvms.movement.service.entity.Track;
+
+import javax.ejb.EJB;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Arquillian.class)
 public class MovementSegmentIntTest extends TransactionalTests {
@@ -40,7 +38,7 @@ public class MovementSegmentIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void createVarbergGrenaNormal()  {
+    public void createVarbergGrenaNormal() {
         MovementHelpers movementHelpers = new MovementHelpers(movementService);
         UUID connectId = UUID.randomUUID();
 
@@ -50,19 +48,19 @@ public class MovementSegmentIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("movementservice")
-    public void createFishingTourVarberg()  {
+    public void createFishingTourVarberg() {
         MovementHelpers movementHelpers = new MovementHelpers(movementService);
         UUID connectId = UUID.randomUUID();
 
-        List<Movement> movementList = movementHelpers.createFishingTourVarberg(ORDER_NORMAL ,connectId);
+        List<Movement> movementList = movementHelpers.createFishingTourVarberg(ORDER_NORMAL, connectId);
         assertMovementIds(movementList);
     }
 
     private void assertMovementIds(List<Movement> movementList) {
         Collections.sort(movementList, Comparator.comparing(m -> m.getTimestamp()));
 
-        Movement previous = null; 
-        for (Movement movement: movementList) {
+        Movement previous = null;
+        for (Movement movement : movementList) {
             if (previous == null) {
                 assertThat(movement.getPreviousMovement(), is(CoreMatchers.nullValue()));
             } else {

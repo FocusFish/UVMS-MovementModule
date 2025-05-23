@@ -1,17 +1,14 @@
 package fish.focus.uvms.movement.service;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 import com.peertopark.java.geocalc.Coordinate;
 import com.peertopark.java.geocalc.DegreeCoordinate;
 import com.peertopark.java.geocalc.EarthCalc;
 import com.peertopark.java.geocalc.Point;
 import fish.focus.uvms.movement.service.bean.MovementService;
 import fish.focus.uvms.movement.service.entity.Movement;
+
+import java.time.Instant;
+import java.util.*;
 
 public class MovementHelpers {
 
@@ -23,41 +20,48 @@ public class MovementHelpers {
         this.movementService = movementBatchModelBean;
     }
 
+    public static String getRandomIntegers(int length) {
+        return new Random()
+                .ints(0, 9)
+                .mapToObj(i -> String.valueOf(i))
+                .limit(length)
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                .toString();
+    }
+
     /******************************************************************************************************************
      *  helpers
      *****************************************************************************************************************/
 
     public Movement createMovement(double longitude, double latitude, UUID connectId, String userName,
-                                   Instant positionTime){
+                                   Instant positionTime) {
 
-            Movement movement = MockData.createMovement(longitude, latitude, connectId, 0, userName);
-            movement.setTimestamp(positionTime);
-            movement.setLesReportTime(positionTime);
-            movement = movementService.createMovement(movement);
-            return movement;
+        Movement movement = MockData.createMovement(longitude, latitude, connectId, 0, userName);
+        movement.setTimestamp(positionTime);
+        movement.setLesReportTime(positionTime);
+        movement = movementService.createMovement(movement);
+        return movement;
 
-
-    }
-
-    private Movement createMovement(LatLong latlong,  UUID connectId, String userName, Instant positionTime) {
-
-            Movement movement = MockData.createMovement(latlong,  connectId, userName);
-            movement.setTimestamp(positionTime);
-            return movementService.createAndProcessMovement(movement);
 
     }
 
     // create l coordinates for well known routes. Collections.shuffle(route);
 
+    private Movement createMovement(LatLong latlong, UUID connectId, String userName, Instant positionTime) {
+
+        Movement movement = MockData.createMovement(latlong, connectId, userName);
+        movement.setTimestamp(positionTime);
+        return movementService.createAndProcessMovement(movement);
+
+    }
+
     /**
-     *
-     * @param order  1 = as created  first EXIT_PORT then GAP  all in time_order
-     *               2 = reversed
-     *               3 = randomly ordered
+     * @param order           1 = as created  first EXIT_PORT then GAP  all in time_order
+     *                        2 = reversed
+     *                        3 = randomly ordered
      * @param numberPositions
      * @param connectId
      * @return
-     *
      */
     public List<Movement> createVarbergGrenaMovements(int order, int numberPositions, UUID connectId) {
         List<LatLong> positions = createRuttVarbergGrena(numberPositions);
@@ -88,9 +92,9 @@ public class MovementHelpers {
                 break;
         }
 
-        for(LatLong position : positions){
+        for (LatLong position : positions) {
             loopCount++;
-            Movement movement = createMovement(position, connectId,userName + "_" + String.valueOf(loopCount), timeStamp);
+            Movement movement = createMovement(position, connectId, userName + "_" + String.valueOf(loopCount), timeStamp);
 
             timeStamp = timeStamp.plusMillis(timeDelta);
             createdRoute.add(movement);
@@ -98,15 +102,15 @@ public class MovementHelpers {
         return createdRoute;
     }
 
-    private List<LatLong> calculateReportedDataForRoute(List<LatLong> route){
+    private List<LatLong> calculateReportedDataForRoute(List<LatLong> route) {
 
         LatLong previousPosition = null;
         LatLong currentPosition = null;
         int i = 0;
         int n = route.size();
-        while(i < n){
+        while (i < n) {
             currentPosition = route.get(i);
-            if(i == 0){
+            if (i == 0) {
                 previousPosition = route.get(i);
                 i++;
                 continue;
@@ -116,9 +120,9 @@ public class MovementHelpers {
             double distance = distance(previousPosition, currentPosition);
             route.get(i - 1).bearing = bearing;
             route.get(i - 1).distance = distance;
-            route.get(i - 1).speed= calcSpeed(previousPosition, currentPosition);
+            route.get(i - 1).speed = calcSpeed(previousPosition, currentPosition);
 
-            if(i < n){
+            if (i < n) {
                 previousPosition = currentPosition;
             }
             i++;
@@ -137,13 +141,13 @@ public class MovementHelpers {
         List<LatLong> rutt = new ArrayList<>();
         Instant ts = Instant.now();
 
-        double latitude = 57.110 ;
-        double longitude = 12.244  ;
+        double latitude = 57.110;
+        double longitude = 12.244;
 
         double END_LATITUDE = 56.408;
         double END_LONGITUDE = 10.926;
 
-		while (true) {
+        while (true) {
             if (latitude >= END_LATITUDE)
                 latitude = latitude - 0.003;
             if (longitude >= END_LONGITUDE)
@@ -156,7 +160,7 @@ public class MovementHelpers {
         // now when we have a route we must calculate heading and speed
         rutt = calculateReportedDataForRoute(rutt);
 
-		if (numberPositions == -1) {
+        if (numberPositions == -1) {
             return rutt;
         } else {
             return rutt.subList(0, numberPositions);
@@ -169,8 +173,8 @@ public class MovementHelpers {
         List<LatLong> rutt = new ArrayList<>();
         Instant ts = Instant.now();
 
-        double randomFactorLat = rnd.nextDouble() ;
-        double randomFactorLong = rnd.nextDouble() ;
+        double randomFactorLat = rnd.nextDouble();
+        double randomFactorLong = rnd.nextDouble();
 
         double latitude = 57.110 + randomFactorLat;
         double longitude = 12.244 + randomFactorLong;
@@ -199,7 +203,7 @@ public class MovementHelpers {
         // go home
         int n = rutt.size();
         List<LatLong> ruttHome = new ArrayList<>();
-        for(int i = n - 1 ; i > 0 ; i--){
+        for (int i = n - 1; i > 0; i--) {
             LatLong wrk = rutt.get(i);
             ruttHome.add(new LatLong(wrk.latitude + 0.001, wrk.longitude, ts.plusMillis(movementTimeDeltaInMillis)));
         }
@@ -254,14 +258,5 @@ public class MovementHelpers {
         } catch (RuntimeException e) {
             return 0.0;
         }
-    }
-    
-    public static String getRandomIntegers(int length) {
-        return new Random()
-                .ints(0,9)
-                .mapToObj(i -> String.valueOf(i))
-                .limit(length)
-                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
-                .toString();
     }
 }

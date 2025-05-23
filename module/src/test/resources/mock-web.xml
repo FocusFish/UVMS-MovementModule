@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0"
          xmlns="http://java.sun.com/xml/ns/javaee">
-	
+
     <filter>
-		<filter-name>AuthenticationFilter</filter-name>
-		<filter-class>fish.focus.uvms.rest.security.AuthenticationFilter</filter-class>
-		<async-supported>true</async-supported>
-	</filter>
-	<filter-mapping>
-		<filter-name>AuthenticationFilter</filter-name>
-		<url-pattern>/rest/config/*</url-pattern>
-		<url-pattern>/rest/movement/*</url-pattern>
-		<url-pattern>/rest/search/*</url-pattern>
-		<url-pattern>/rest/manualMovement/*</url-pattern>
-		<url-pattern>/rest/alarms/*</url-pattern>
-		<url-pattern>/rest/segment/*</url-pattern>
-		<url-pattern>/rest/track/*</url-pattern>
-		<url-pattern>/rest/sse/*</url-pattern>
-		<url-pattern>/rest/sseV2/*</url-pattern>
-		<url-pattern>/rest/micro/*</url-pattern>
-	</filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>fish.focus.uvms.rest.security.AuthenticationFilter</filter-class>
+        <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/rest/config/*</url-pattern>
+        <url-pattern>/rest/movement/*</url-pattern>
+        <url-pattern>/rest/search/*</url-pattern>
+        <url-pattern>/rest/manualMovement/*</url-pattern>
+        <url-pattern>/rest/alarms/*</url-pattern>
+        <url-pattern>/rest/segment/*</url-pattern>
+        <url-pattern>/rest/track/*</url-pattern>
+        <url-pattern>/rest/sse/*</url-pattern>
+        <url-pattern>/rest/sseV2/*</url-pattern>
+        <url-pattern>/rest/micro/*</url-pattern>
+    </filter-mapping>
 
     <filter>
         <filter-name>MDCFilter</filter-name>
@@ -31,5 +32,5 @@
         <filter-name>MDCFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
 </web-app>

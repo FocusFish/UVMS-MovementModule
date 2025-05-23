@@ -17,13 +17,14 @@ import fish.focus.schema.movement.source.v1.GetTempMovementListResponse;
 import fish.focus.uvms.movement.model.GetMovementListByQueryResponse;
 import fish.focus.uvms.movement.model.dto.ListResponseDto;
 import fish.focus.uvms.movement.model.dto.TempMovementsListResponseDto;
-import java.util.List;
 
+import java.util.List;
 
 public class MovementResponseMapper {
 
-    private MovementResponseMapper() {}
-    
+    private MovementResponseMapper() {
+    }
+
     /**
      * Creates and marshalls a type to a response marshalled as a XML String
      * representation that can be sent as a message on the JSM queue with the
@@ -69,5 +70,4 @@ public class MovementResponseMapper {
         response.setTotalNumberOfPages(responseDto.getTotalNumberOfPages());
         return response;
     }
-
 }

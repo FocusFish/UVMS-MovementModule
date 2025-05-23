@@ -1,12 +1,9 @@
 package fish.focus.uvms.movement.service.bean;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import java.time.Instant;
+import fish.focus.schema.movement.v1.SegmentCategoryType;
+import fish.focus.uvms.movement.service.clients.SpatialRestClient;
+import fish.focus.uvms.movement.service.entity.Movement;
+import fish.focus.uvms.movement.service.entity.Track;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.jts.geom.Coordinate;
@@ -15,21 +12,23 @@ import org.locationtech.jts.geom.Point;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import fish.focus.schema.movement.v1.SegmentCategoryType;
-import fish.focus.uvms.movement.service.bean.TrackService;
-import fish.focus.uvms.movement.service.clients.SpatialRestClient;
-import fish.focus.uvms.movement.service.entity.Movement;
-import fish.focus.uvms.movement.service.entity.Track;
+
+import java.time.Instant;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TrackServiceTest {
 
     @Mock
     private SpatialRestClient spatialClient;
-    
+
     @InjectMocks
     private TrackService trackService;
-    
+
     @Test
     public void nonExistingTrackTest() {
         Movement previous = getMovement();
@@ -39,7 +38,7 @@ public class TrackServiceTest {
         assertThat(current.getTrack(), is(notNullValue()));
         assertThat(previous.getTrack(), is(current.getTrack()));
     }
-    
+
     @Test
     public void exitPortTest() {
         doReturn(SegmentCategoryType.EXIT_PORT).when(spatialClient).getSegmentCategoryType(any(), any());
@@ -51,7 +50,7 @@ public class TrackServiceTest {
         assertThat(current.getTrack(), is(notNullValue()));
         assertThat(previous.getTrack(), is(not(current.getTrack())));
     }
-    
+
     @Test
     public void updateTrackTest() {
         doReturn(SegmentCategoryType.GAP).when(spatialClient).getSegmentCategoryType(any(), any());
@@ -66,7 +65,7 @@ public class TrackServiceTest {
         assertThat(current.getTrack().getDistance(), is(notNullValue()));
         assertThat(current.getTrack().getDuration(), is(notNullValue()));
     }
-    
+
     private Movement getMovement() {
         Movement movement = new Movement();
         Coordinate coordinate = new Coordinate(1, 1);

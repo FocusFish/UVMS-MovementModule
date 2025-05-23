@@ -10,11 +10,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.movement.service.dao;
 
+import fish.focus.uvms.movement.service.entity.group.MovementFilterGroup;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import fish.focus.uvms.movement.service.entity.group.MovementFilterGroup;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class MovementSearchGroupDao {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     public MovementFilterGroup createMovementFilterGroup(MovementFilterGroup filterGroup) {
         em.persist(filterGroup);
         return filterGroup;
@@ -39,9 +40,9 @@ public class MovementSearchGroupDao {
         return query.getResultList();
     }
 
-    public MovementFilterGroup updateMovementFilterGroup(MovementFilterGroup filterGroup){
+    public MovementFilterGroup updateMovementFilterGroup(MovementFilterGroup filterGroup) {
         //Sanity check on id to prevent create operation instead of update operation.
-        if(filterGroup.getId() != null && getMovementFilterGroupById(filterGroup.getId()) != null) {
+        if (filterGroup.getId() != null && getMovementFilterGroupById(filterGroup.getId()) != null) {
             filterGroup = em.merge(filterGroup);
             em.flush();
         } else {

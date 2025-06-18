@@ -4,7 +4,7 @@
     <parent>
         <groupId>fish.focus.uvms.movement</groupId>
         <artifactId>movement</artifactId>
-        <version>5.7.0</version>
+        <version>5.7.1</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -28,7 +28,7 @@
                 <db.outputFile>changelog/generatedChangelog.xml</db.outputFile>
                 <driver.groupId>org.postgresql</driver.groupId>
                 <driver.artifactId>postgresql</driver.artifactId>
-                <driver.version>42.7.5</driver.version>
+                <driver.version>42.7.7</driver.version>
             </properties>
             <dependencies>
                 <dependency>
@@ -45,7 +45,7 @@
                     <plugin>
                         <groupId>org.liquibase</groupId>
                         <artifactId>liquibase-maven-plugin</artifactId>
-                        <version>4.31.1</version>
+                        <version>4.32.0</version>
                         <configuration>
                             <url>${db.docker.url}</url>
                             <migrationSqlOutputFile>${project.build.directory}/full-update.sql</migrationSqlOutputFile>
@@ -65,7 +65,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.6.0</version>
+                        <version>3.6.1</version>
                         <executions>
                             <execution>
                                 <id>attach-artifacts</id>
@@ -99,7 +99,7 @@
                 <plugin>
                     <groupId>org.liquibase</groupId>
                     <artifactId>liquibase-maven-plugin</artifactId>
-                    <version>4.31.1</version>
+                    <version>4.32.0</version>
                     <configuration>
                         <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                         <changeLogFile>${db.changeLogFile}</changeLogFile>

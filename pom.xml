@@ -10,6 +10,7 @@
 
     <groupId>fish.focus.uvms.movement</groupId>
     <artifactId>movement</artifactId>
+    <name>movement</name>
     <version>5.7.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Maven project-archetype for UnionVms modules</description>

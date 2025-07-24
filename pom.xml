@@ -27,7 +27,7 @@
         <user.model.version>2.3.0</user.model.version>
         <audit.model.version>4.4.0</audit.model.version>
         <exchange.model.version>5.4.0</exchange.model.version>
-        <asset.client.version>6.8.37</asset.client.version>
+        <asset.client.version>6.9.0</asset.client.version>
         <movement-rules.model.version>2.5.0</movement-rules.model.version>
         <installAtEnd>false</installAtEnd>
 
